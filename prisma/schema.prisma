@@ -1,32 +1,233 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
+}
+
+// ═══════════════════════════════════════════
+// RBAC: Roles & Permissions
+// ═══════════════════════════════════════════
+
+enum RoleType {
+  SUPER_ADMIN
+  DG
+  DGA
+  DIRECTEUR_TECHNIQUE
+  INGENIEUR_RF
+  ANALYSTE_QOS
+  AUDITEUR
+  OPERATEUR_READONLY
+  PUBLIC
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        RoleType @unique
+  description String?
+  permissions Permission[]
+  users       User[]
+  createdAt   DateTime @default(now())
+}
+
+model Permission {
+  id        String   @id @default(cuid())
+  resource  String
+  action    String
+  role      Role     @relation(fields: [roleId], references: [id])
+  roleId    String
+  createdAt DateTime @default(now())
+
+  @@unique([resource, action, roleId])
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String      @id @default(cuid())
+  email        String      @unique
+  name         String
+  passwordHash String
+  role         Role        @relation(fields: [roleId], references: [id])
+  roleId       String
+  organization String?
+  isActive     Boolean     @default(true)
+  lastLogin    DateTime?
+  auditLogs    AuditLog[]
+  sessions     Session[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 }
 
-model Post {
+// ═══════════════════════════════════════════
+// RLS: Data Access Policies
+// ═══════════════════════════════════════════
+
+model DataAccessPolicy {
   id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
+  roleType  RoleType
+  resource  String
+  scope     String
+  regions   String?
+  operators String?
+  createdBy String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+}
+
+// ═══════════════════════════════════════════
+// Core Telecom Data
+// ═══════════════════════════════════════════
+
+model Operateur {
+  id         String           @id @default(cuid())
+  nom        String
+  code       String           @unique
+  type       String
+  licence    String?
+  isActive   Boolean          @default(true)
+  scores     ScoreOperateur[]
+  mesures    MesureQoS[]
+  campagnes  Campagne[]
+  alertes    Alerte[]
+  createdAt  DateTime         @default(now())
+}
+
+model Region {
+  id         String     @id @default(cuid())
+  code       String     @unique
+  nom        String
+  population Int?
+  superficie Float?
+  centreLat  Float
+  centreLng  Float
+  mesures    MesureQoS[]
+  campagnes  Campagne[]
+  alertes    Alerte[]
+  createdAt  DateTime   @default(now())
+}
+
+model Campagne {
+  id          String      @id @default(cuid())
+  nom         String
+  type        String
+  operateurId String
+  operateur   Operateur   @relation(fields: [operateurId], references: [id])
+  regionId    String
+  region      Region      @relation(fields: [regionId], references: [id])
+  dateDebut   DateTime
+  dateFin     DateTime?
+  statut      String      @default("PLANIFIEE")
+  responsable String?
+  mesures     MesureQoS[]
+  rapport     Rapport?
+  createdAt   DateTime    @default(now())
+}
+
+model MesureQoS {
+  id              String    @id @default(cuid())
+  campagneId      String
+  campagne        Campagne  @relation(fields: [campagneId], references: [id])
+  operateurId     String
+  operateur       Operateur @relation(fields: [operateurId], references: [id])
+  regionId        String
+  region          Region    @relation(fields: [regionId], references: [id])
+  latitude        Float
+  longitude       Float
+  timestamp       DateTime  @default(now())
+
+  rssi            Float?
+  rsrp            Float?
+  rsrq            Float?
+  sinr            Float?
+  debitDescendant Float?
+  debitMontant    Float?
+  latence         Float?
+  gigue           Float?
+  tauxAppelReussi Float?
+  tauxDropCall    Float?
+
+  debitDownload   Float?
+  debitUpload     Float?
+  ping            Float?
+  dnsLookupTime   Float?
+  tcpConnectTime  Float?
+
+  scoreQoE        Float?
+  pageLoadTime    Float?
+  videoBuffering  Float?
+
+  typeMesure      String
+  createdAt       DateTime  @default(now())
+}
+
+model ScoreOperateur {
+  id              String    @id @default(cuid())
+  operateurId     String
+  operateur       Operateur @relation(fields: [operateurId], references: [id])
+  periode         String
+  scoreGlobal     Float
+  scoreCouverture Float
+  scoreQoS        Float
+  scoreQoE        Float
+  scoreConformite Float
+  recommandation  String?
+  createdAt       DateTime  @default(now())
+
+  @@unique([operateurId, periode])
+}
+
+model Alerte {
+  id          String    @id @default(cuid())
+  type        String
+  severity    String
+  operateurId String?
+  operateur   Operateur? @relation(fields: [operateurId], references: [id])
+  regionId    String?
+  region      Region?    @relation(fields: [regionId], references: [id])
+  message     String
+  details     String?
+  isResolved  Boolean   @default(false)
+  resolvedAt  DateTime?
+  createdAt   DateTime  @default(now())
+}
+
+model Rapport {
+  id         String    @id @default(cuid())
+  titre      String
+  type       String
+  format     String
+  campagneId String?   @unique
+  campagne   Campagne? @relation(fields: [campagneId], references: [id])
+  contenu    String?
+  fichierUrl String?
+  generePar  String
+  statut     String    @default("GENERE")
+  isPublic   Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+}
+
+// ═══════════════════════════════════════════
+// Audit Trail
+// ═══════════════════════════════════════════
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  action     String
+  resource   String
+  resourceId String?
+  details    String?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
