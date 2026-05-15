@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>ONIT-PNG - Portail Public Transparence</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #0D1220;
+  color: #F1F5F9;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+}
+
+/* NAV BAR */
+.navbar {
+  height:60px;
+  background: linear-gradient(90deg, #0F172A 0%, #1a2440 50%, #0F172A 100%);
+  border-bottom:1px solid rgba(212,168,67,0.3);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 32px;
+}
+.nav-left { display:flex; align-items:center; gap:16px; }
+.nav-logo {
+  width:40px; height:40px; border-radius:10px;
+  background:linear-gradient(135deg, #D4A843, #B8902E);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:12px; color:#0A0F1E;
+  box-shadow:0 0 25px rgba(212,168,67,0.25);
+}
+.nav-brand { font-size:15px; font-weight:700; }
+.nav-brand-sub { font-size:9px; color:#94A3B8; font-weight:400; letter-spacing:0.5px; }
+.nav-links { display:flex; gap:28px; }
+.nav-link { font-size:13px; color:#94A3B8; font-weight:500; padding:4px 0; border-bottom:2px solid transparent; cursor:pointer; }
+.nav-link.active { color:#D4A843; border-bottom-color:#D4A843; }
+.nav-right { display:flex; gap:16px; align-items:center; }
+.nav-search {
+  padding:7px 14px; border-radius:8px; font-size:12px;
+  background:rgba(30,41,59,0.5); border:1px solid #1E293B;
+  color:#94A3B8; width:200px;
+}
+
+/* HERO SECTION */
+.hero {
+  height:200px;
+  background: linear-gradient(135deg, #0D1220 0%, #132042 40%, #1a2e4a 70%, #0D1220 100%);
+  border-bottom:1px solid #1E293B;
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero-bg-pattern {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(212,168,67,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(16,185,129,0.06) 0%, transparent 60%);
+}
+.hero-content {
+  text-align:center;
+  z-index:1;
+}
+.hero-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(212,168,67,0.1); border:1px solid rgba(212,168,67,0.3);
+  border-radius:20px; padding:5px 16px;
+  font-size:11px; color:#D4A843; font-weight:500;
+  margin-bottom:12px;
+}
+.hero-badge .dot { width:6px; height:6px; border-radius:50%; background:#10B981; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+.hero-title { font-size:32px; font-weight:800; letter-spacing:-0.5px; margin-bottom:8px; }
+.hero-title span { color:#D4A843; }
+.hero-subtitle { font-size:14px; color:#94A3B8; max-width:600px; margin:0 auto; line-height:1.6; }
+
+/* PUBLIC KPIs */
+.public-kpis {
+  display:flex; gap:16px; padding:24px 32px;
+  justify-content:center;
+}
+.pub-kpi {
+  width:280px;
+  background: rgba(17,24,39,0.6);
+  backdrop-filter:blur(12px);
+  border:1px solid #1E293B;
+  border-radius:14px;
+  padding:24px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.pub-kpi::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+}
+.pub-kpi.gold::before { background:linear-gradient(90deg, transparent, #D4A843, transparent); }
+.pub-kpi.green::before { background:linear-gradient(90deg, transparent, #10B981, transparent); }
+.pub-kpi.blue::before { background:linear-gradient(90deg, transparent, #3B82F6, transparent); }
+.pub-kpi.amber::before { background:linear-gradient(90deg, transparent, #F59E0B, transparent); }
+.pub-kpi-icon { font-size:24px; margin-bottom:8px; }
+.pub-kpi-label { font-size:11px; color:#94A3B8; text-transform:uppercase; letter-spacing:1px; font-weight:500; }
+.pub-kpi-value { font-size:40px; font-weight:800; margin:8px 0; }
+.pub-kpi-value.gold { color:#D4A843; text-shadow:0 0 30px rgba(212,168,67,0.25); }
+.pub-kpi-value.green { color:#10B981; }
+.pub-kpi-value.blue { color:#3B82F6; }
+.pub-kpi-value.amber { color:#F59E0B; }
+.pub-kpi-desc { font-size:11px; color:#64748B; line-height:1.4; }
+
+/* MAIN CONTENT AREA */
+.main-content {
+  display:flex; gap:20px; padding:0 32px 24px;
+  flex:1;
+}
+/* LEFT - Map + Reports */
+.left-content { flex:1.2; display:flex; flex-direction:column; gap:16px; }
+
+/* Map card */
+.map-card {
+  background:rgba(17,24,39,0.6);
+  backdrop-filter:blur(12px);
+  border:1px solid #1E293B;
+  border-radius:14px;
+  padding:20px;
+  flex:1;
+}
+.map-card-title { font-size:14px; font-weight:600; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.mini-map {
+  width:100%; height:200px;
+  background:#080C18;
+  border-radius:10px;
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.mini-map-grid {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  background-image:
+    linear-gradient(rgba(30,41,59,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30,41,59,0.1) 1px, transparent 1px);
+  background-size:20px 20px;
+}
+
+/* Reports */
+.reports-card {
+  background:rgba(17,24,39,0.6);
+  backdrop-filter:blur(12px);
+  border:1px solid #1E293B;
+  border-radius:14px;
+  padding:20px;
+}
+.reports-title { font-size:14px; font-weight:600; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; }
+.report-list { display:flex; flex-direction:column; gap:8px; }
+.report-item {
+  display:flex; align-items:center; gap:12px;
+  padding:10px 12px; border-radius:8px;
+  background:rgba(10,15,30,0.5);
+  border:1px solid rgba(30,41,59,0.5);
+  transition:border-color 0.2s;
+}
+.report-item:hover { border-color:#3B82F6; }
+.report-icon {
+  width:36px; height:36px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700;
+  flex-shrink:0;
+}
+.report-icon.pdf { background:rgba(239,68,68,0.15); color:#EF4444; }
+.report-icon.xlsx { background:rgba(16,185,129,0.15); color:#10B981; }
+.report-info { flex:1; }
+.report-name { font-size:12px; font-weight:600; color:#F1F5F9; }
+.report-meta { font-size:10px; color:#64748B; margin-top:2px; }
+.report-dl { font-size:11px; color:#3B82F6; font-weight:500; }
+
+/* RIGHT - Comparison + Button */
+.right-content { flex:1; display:flex; flex-direction:column; gap:16px; }
+
+/* Operator comparison */
+.comparison-card {
+  background:rgba(17,24,39,0.6);
+  backdrop-filter:blur(12px);
+  border:1px solid #1E293B;
+  border-radius:14px;
+  padding:20px;
+  flex:1;
+}
+.comparison-title { font-size:14px; font-weight:600; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.op-compare-row {
+  display:flex; align-items:center; gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(30,41,59,0.4);
+}
+.op-compare-row:last-child { border-bottom:none; }
+.op-compare-badge {
+  width:36px; height:36px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:14px; color:#0A0F1E;
+  flex-shrink:0;
+}
+.op-compare-info { flex:1; }
+.op-compare-name { font-size:13px; font-weight:600; }
+.op-compare-metrics { display:flex; gap:16px; margin-top:4px; }
+.op-metric-mini { font-size:10px; color:#94A3B8; }
+.op-metric-mini span { font-weight:600; }
+.op-compare-score {
+  font-size:28px; font-weight:800; min-width:60px; text-align:center;
+}
+.op-compare-bar {
+  width:100%; height:6px; background:#1E293B; border-radius:3px; margin-top:6px; overflow:hidden;
+}
+.op-compare-fill { height:100%; border-radius:3px; }
+
+/* Report button */
+.report-btn-card {
+  background:linear-gradient(135deg, rgba(212,168,67,0.1) 0%, rgba(16,185,129,0.1) 100%);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(212,168,67,0.3);
+  border-radius:14px;
+  padding:24px;
+  text-align:center;
+}
+.report-btn-title { font-size:16px; font-weight:700; margin-bottom:6px; }
+.report-btn-desc { font-size:12px; color:#94A3B8; margin-bottom:16px; line-height:1.5; }
+.report-btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:12px 28px;
+  background:linear-gradient(135deg, #D4A843, #B8902E);
+  border:none; border-radius:10px;
+  font-size:14px; font-weight:700; color:#0A0F1E;
+  cursor:pointer;
+  box-shadow:0 4px 20px rgba(212,168,67,0.3);
+}
+
+/* Footer bar */
+.footer-bar {
+  height:36px;
+  background:rgba(15,23,42,0.8);
+  border-top:1px solid #1E293B;
+  display:flex; align-items:center; justify-content:center; gap:24px;
+  font-size:10px; color:#64748B;
+}
+.footer-link { color:#94A3B8; text-decoration:none; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="nav-left">
+    <div class="nav-logo">ON</div>
+    <div>
+      <div class="nav-brand">ONIT-PNG</div>
+      <div class="nav-brand-sub">Observatoire National des Télécommunications — Guinée</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <div class="nav-link active">Tableau de Bord</div>
+    <div class="nav-link">Couverture</div>
+    <div class="nav-link">Qualité de Service</div>
+    <div class="nav-link">Opérateurs</div>
+    <div class="nav-link">Rapports</div>
+    <div class="nav-link">Signaler</div>
+  </div>
+  <div class="nav-right">
+    <input type="text" class="nav-search" placeholder="Rechercher...">
+    <span style="font-size:11px; color:#64748B;">FR | EN</span>
+  </div>
+</div>
+
+<!-- HERO SECTION -->
+<div class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Données actualisées en temps réel
+    </div>
+    <div class="hero-title">Observatoire National des <span>Télécommunications</span></div>
+    <div class="hero-subtitle">
+      République de Guinée — Portail Public de Transparence<br>
+      Suivez la couverture, la qualité de service et les performances des opérateurs télécoms en Guinée
+    </div>
+  </div>
+</div>
+
+<!-- PUBLIC KPIs -->
+<div class="public-kpis">
+  <div class="pub-kpi gold">
+    <div class="pub-kpi-icon">📡</div>
+    <div class="pub-kpi-label">Couverture Nationale</div>
+    <div class="pub-kpi-value gold">67%</div>
+    <div class="pub-kpi-desc">De la population couverte en service mobile — Objectif 2026: 80%</div>
+  </div>
+  <div class="pub-kpi green">
+    <div class="pub-kpi-icon">✓</div>
+    <div class="pub-kpi-label">Qualité de Service</div>
+    <div class="pub-kpi-value green">72/100</div>
+    <div class="pub-kpi-desc">Score global QoS — Moyenne pondérée tous opérateurs confondus</div>
+  </div>
+  <div class="pub-kpi blue">
+    <div class="pub-kpi-icon">👥</div>
+    <div class="pub-kpi-label">Population Couverte</div>
+    <div class="pub-kpi-value blue">8.2M</div>
+    <div class="pub-kpi-desc">Habitants avec accès au service mobile sur 13.5M (60.7%)</div>
+  </div>
+  <div class="pub-kpi amber">
+    <div class="pub-kpi-icon">⚠</div>
+    <div class="pub-kpi-label">Zones Blanches</div>
+    <div class="pub-kpi-value amber">234</div>
+    <div class="pub-kpi-desc">Localités sans aucune couverture mobile — En diminution</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+  <!-- LEFT -->
+  <div class="left-content">
+    <!-- Simplified Coverage Map -->
+    <div class="map-card">
+      <div class="map-card-title">
+        <span style="color:#D4A843;">◆</span> Carte de Couverture Simplifiée
+      </div>
+      <div class="mini-map">
+        <div class="mini-map-grid"></div>
+        <svg width="400" height="180" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- Simplified Guinea -->
+          <path d="M60,90 L100,65 L160,50 L220,42 L280,40 L340,45 L380,60 L410,85 L430,120 L440,160 L430,200 L410,230 L380,250 L340,260 L290,265 L240,260 L190,245 L150,220 L120,190 L90,155 L75,120 Z" fill="none" stroke="#2a3f66" stroke-width="2"/>
+          <!-- Regions with coverage colors -->
+          <path d="M45,120 L60,90 L90,100 L80,130 Z" fill="#10B981" opacity="0.4"/>
+          <path d="M90,65 L160,50 L180,80 L150,100 L100,95 Z" fill="#3B82F6" opacity="0.3"/>
+          <path d="M100,100 L150,100 L160,130 L130,150 L95,140 Z" fill="#10B981" opacity="0.3"/>
+          <path d="M160,50 L220,42 L250,65 L240,100 L195,105 L180,80 Z" fill="#3B82F6" opacity="0.25"/>
+          <path d="M220,42 L280,40 L310,60 L300,100 L260,110 L240,100 L250,65 Z" fill="#F59E0B" opacity="0.2"/>
+          <path d="M280,40 L340,45 L370,70 L360,110 L320,120 L300,100 L310,60 Z" fill="#F59E0B" opacity="0.2"/>
+          <path d="M340,45 L380,60 L410,85 L400,130 L370,140 L360,110 L370,70 Z" fill="#EF4444" opacity="0.2"/>
+          <path d="M370,140 L400,130 L430,160 L420,210 L390,240 L360,220 L350,180 Z" fill="#EF4444" opacity="0.25"/>
+          <!-- Labels -->
+          <text x="60" y="115" font-size="7" fill="#10B981" font-family="Inter" font-weight="600">CKY</text>
+          <text x="120" y="82" font-size="7" fill="#3B82F6" font-family="Inter">BK</text>
+          <text x="110" y="130" font-size="7" fill="#10B981" font-family="Inter">KD</text>
+          <text x="210" y="72" font-size="7" fill="#3B82F6" font-family="Inter">LB</text>
+          <text x="260" y="78" font-size="7" fill="#F59E0B" font-family="Inter">MM</text>
+          <text x="320" y="82" font-size="7" fill="#F59E0B" font-family="Inter">FR</text>
+          <text x="380" y="100" font-size="7" fill="#EF4444" font-family="Inter">KN</text>
+          <text x="385" y="195" font-size="7" fill="#EF4444" font-family="Inter">NZ</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Latest Reports -->
+    <div class="reports-card">
+      <div class="reports-title">
+        <span>📋 Derniers Rapports Publics</span>
+        <span style="font-size:11px; color:#3B82F6; font-weight:500;">Voir tous →</span>
+      </div>
+      <div class="report-list">
+        <div class="report-item">
+          <div class="report-icon pdf">PDF</div>
+          <div class="report-info">
+            <div class="report-name">Rapport QoS T4 2024 — Bilan National</div>
+            <div class="report-meta">Janvier 2025 • 48 pages • ARPT Guinée</div>
+          </div>
+          <div class="report-dl">Télécharger</div>
+        </div>
+        <div class="report-item">
+          <div class="report-icon xlsx">XLS</div>
+          <div class="report-info">
+            <div class="report-name">Données Couverture par Région — Q4 2024</div>
+            <div class="report-meta">Janvier 2025 • Données ouvertes • ARPT Guinée</div>
+          </div>
+          <div class="report-dl">Télécharger</div>
+        </div>
+        <div class="report-item">
+          <div class="report-icon pdf">PDF</div>
+          <div class="report-info">
+            <div class="report-name">Scorecard Opérateurs — Décembre 2024</div>
+            <div class="report-meta">Janvier 2025 • 12 pages • ARPT Guinée</div>
+          </div>
+          <div class="report-dl">Télécharger</div>
+        </div>
+        <div class="report-item">
+          <div class="report-icon pdf">PDF</div>
+          <div class="report-info">
+            <div class="report-name">Plan National de Couverture Universelle 2025-2028</div>
+            <div class="report-meta">Février 2025 • 72 pages • ARPT Guinée</div>
+          </div>
+          <div class="report-dl">Télécharger</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-content">
+    <!-- Operator Comparison -->
+    <div class="comparison-card">
+      <div class="comparison-title">
+        <span style="color:#D4A843;">◆</span> Comparaison Opérateurs — Score Global
+      </div>
+
+      <div class="op-compare-row">
+        <div class="op-compare-badge" style="background:#FF6600;">O</div>
+        <div class="op-compare-info">
+          <div class="op-compare-name">Orange Guinée</div>
+          <div class="op-compare-metrics">
+            <div class="op-metric-mini">Couverture: <span style="color:#10B981;">82%</span></div>
+            <div class="op-metric-mini">QoS: <span style="color:#3B82F6;">76/100</span></div>
+            <div class="op-metric-mini">4G: <span style="color:#10B981;">62%</span></div>
+          </div>
+          <div class="op-compare-bar"><div class="op-compare-fill" style="width:78%;background:#10B981;"></div></div>
+        </div>
+        <div class="op-compare-score" style="color:#10B981;">78</div>
+      </div>
+
+      <div class="op-compare-row">
+        <div class="op-compare-badge" style="background:#FFCC00;">M</div>
+        <div class="op-compare-info">
+          <div class="op-compare-name">MTN Guinée</div>
+          <div class="op-compare-metrics">
+            <div class="op-metric-mini">Couverture: <span style="color:#3B82F6;">74%</span></div>
+            <div class="op-metric-mini">QoS: <span style="color:#F59E0B;">69/100</span></div>
+            <div class="op-metric-mini">4G: <span style="color:#3B82F6;">55%</span></div>
+          </div>
+          <div class="op-compare-bar"><div class="op-compare-fill" style="width:71%;background:#3B82F6;"></div></div>
+        </div>
+        <div class="op-compare-score" style="color:#3B82F6;">71</div>
+      </div>
+
+      <div class="op-compare-row">
+        <div class="op-compare-badge" style="background:#00A651;">C</div>
+        <div class="op-compare-info">
+          <div class="op-compare-name">Celcom Guinée</div>
+          <div class="op-compare-metrics">
+            <div class="op-metric-mini">Couverture: <span style="color:#F59E0B;">52%</span></div>
+            <div class="op-metric-mini">QoS: <span style="color:#EF4444;">48/100</span></div>
+            <div class="op-metric-mini">4G: <span style="color:#F59E0B;">38%</span></div>
+          </div>
+          <div class="op-compare-bar"><div class="op-compare-fill" style="width:58%;background:#F59E0B;"></div></div>
+        </div>
+        <div class="op-compare-score" style="color:#F59E0B;">58</div>
+      </div>
+
+      <!-- Legend -->
+      <div style="margin-top:16px; padding-top:12px; border-top:1px solid #1E293B;">
+        <div style="display:flex; gap:20px; font-size:10px; color:#64748B;">
+          <div style="display:flex;align-items:center;gap:4px;">
+            <div style="width:8px;height:8px;border-radius:2px;background:#10B981;"></div>
+            Conforme (≥75)
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <div style="width:8px;height:8px;border-radius:2px;background:#3B82F6;"></div>
+            Acceptable (60-74)
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <div style="width:8px;height:8px;border-radius:2px;background:#F59E0B;"></div>
+            Insuffisant (<60)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Signaler Button -->
+    <div class="report-btn-card">
+      <div class="report-btn-title">Signaler un Problème Télécom</div>
+      <div class="report-btn-desc">
+        Vous rencontrez des problèmes de couverture, de qualité d'appel ou de connexion internet ?
+        Signalez-le à l'ARPT pour une action corrective.
+      </div>
+      <button class="report-btn">
+        📞 Signaler un Problème
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer-bar">
+  <span>© 2025 ARPT Guinée — Autorité de Régulation des Postes et Télécommunications</span>
+  <a class="footer-link" href="#">Mentions légales</a>
+  <a class="footer-link" href="#">Politique de confidentialité</a>
+  <a class="footer-link" href="#">Données ouvertes</a>
+  <a class="footer-link" href="#">Contact</a>
+</div>
+
+</body>
+</html>

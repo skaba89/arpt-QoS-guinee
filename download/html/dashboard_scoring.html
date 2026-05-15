@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>ONIT-PNG - Dashboard Scoring Opérateurs</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #0A0F1E;
+  color: #F1F5F9;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  display:flex; flex-direction:column;
+}
+
+/* TOP BAR */
+.topbar {
+  height:52px;
+  background:linear-gradient(90deg, #0D1325, #111B33, #0D1325);
+  border-bottom:1px solid #1E293B;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 24px; flex-shrink:0;
+}
+.topbar-left { display:flex; align-items:center; gap:14px; }
+.logo-mark {
+  width:30px; height:30px; border-radius:6px;
+  background:linear-gradient(135deg, #D4A843, #B8902E);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:10px; color:#0A0F1E;
+  box-shadow:0 0 20px rgba(212,168,67,0.25);
+}
+.topbar-title { font-size:14px; font-weight:600; }
+.topbar-subtitle { font-size:10px; color:#64748B; }
+.topbar-center { font-size:12px; color:#D4A843; font-weight:500; background:rgba(212,168,67,0.08); border:1px solid rgba(212,168,67,0.2); padding:5px 14px; border-radius:6px; }
+.topbar-right { display:flex; align-items:center; gap:16px; font-size:11px; color:#94A3B8; }
+.live-dot { width:7px; height:7px; border-radius:50%; background:#10B981; display:inline-block; margin-right:5px; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+/* MAIN LAYOUT */
+.main-layout {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:16px 24px;
+  gap:16px;
+  overflow:hidden;
+}
+
+/* TOP ROW - Operator Cards */
+.op-cards-row {
+  display:flex; gap:16px; flex-shrink:0;
+}
+.op-score-card {
+  flex:1;
+  background:rgba(17,24,39,0.7);
+  backdrop-filter:blur(12px);
+  border:1px solid #1E293B;
+  border-radius:14px;
+  padding:20px 24px;
+  display:flex; align-items:center; gap:20px;
+  position:relative;
+  overflow:hidden;
+}
+.op-score-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+}
+.op-score-card.orange-card::before { background:linear-gradient(90deg, #FF6600, #FF8833); }
+.op-score-card.mtn-card::before { background:linear-gradient(90deg, #FFCC00, #FFE033); }
+.op-score-card.celcom-card::before { background:linear-gradient(90deg, #00A651, #00C968); }
+
+.op-badge {
+  width:48px; height:48px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:18px; color:#0A0F1E;
+  flex-shrink:0;
+}
+.op-info { flex:1; }
+.op-name { font-size:16px; font-weight:700; }
+.op-subscribers { font-size:11px; color:#64748B; margin-top:2px; }
+
+/* Circular gauge */
+.circular-gauge {
+  position:relative; width:100px; height:100px; flex-shrink:0;
+}
+.circular-gauge svg { width:100px; height:100px; transform:rotate(-90deg); }
+.gauge-bg-circle { fill:none; stroke:#1E293B; stroke-width:8; }
+.gauge-fill-circle { fill:none; stroke-width:8; stroke-linecap:round; }
+.gauge-center-text {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  text-align:center;
+}
+.gauge-number { font-size:28px; font-weight:800; }
+.gauge-subtext { font-size:8px; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; }
+
+/* Sub-scores */
+.sub-scores {
+  display:flex; flex-direction:column; gap:6px; flex:1; min-width:180px;
+}
+.sub-score { display:flex; align-items:center; gap:8px; }
+.sub-score-label { font-size:10px; color:#94A3B8; width:100px; }
+.sub-score-bar { flex:1; height:5px; background:#1E293B; border-radius:3px; overflow:hidden; }
+.sub-score-fill { height:100%; border-radius:3px; }
+.sub-score-value { font-size:11px; font-weight:600; width:28px; text-align:right; }
+
+/* BOTTOM ROW */
+.bottom-row {
+  flex:1;
+  display:flex; gap:16px;
+  overflow:hidden;
+}
+
+/* RADAR CHART CARD */
+.radar-card {
+  flex:1;
+  background:rgba(17,24,39,0.7);
+  backdrop-filter:blur(12px);
+  border:1px solid #1E293B;
+  border-radius:14px;
+  padding:20px;
+  display:flex; flex-direction:column;
+}
+.radar-title { font-size:13px; font-weight:600; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.radar-container {
+  flex:1;
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.radar-svg { width:100%; max-width:420px; max-height:420px; }
+.radar-axis { stroke:#1E293B; stroke-width:1; }
+.radar-grid { fill:none; stroke:#1E293B; stroke-width:0.5; }
+.radar-data { fill-opacity:0.15; stroke-width:2; }
+.radar-label { font-family:'Inter',sans-serif; font-size:11px; fill:#94A3B8; }
+
+/* TREND CARD */
+.trend-card {
+  width:320px;
+  background:rgba(17,24,39,0.7);
+  backdrop-filter:blur(12px);
+  border:1px solid #1E293B;
+  border-radius:14px;
+  padding:20px;
+  display:flex; flex-direction:column;
+  flex-shrink:0;
+}
+.trend-title { font-size:13px; font-weight:600; margin-bottom:12px; }
+.trend-item {
+  padding:10px 0; border-bottom:1px solid rgba(30,41,59,0.4);
+}
+.trend-item:last-child { border-bottom:none; }
+.trend-operator { font-size:12px; font-weight:600; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+.trend-operator-badge {
+  width:20px; height:20px; border-radius:4px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:9px; font-weight:700; color:#0A0F1E;
+}
+.mini-chart { display:flex; align-items:flex-end; gap:2px; height:40px; margin-top:4px; }
+.mini-bar { width:6px; border-radius:2px; transition:height 0.3s; }
+.trend-stats { display:flex; gap:12px; margin-top:6px; font-size:10px; color:#64748B; }
+.trend-stat-value { font-weight:600; color:#F1F5F9; }
+
+/* RECOMMENDATION PANEL */
+.reco-panel {
+  width:340px;
+  background:rgba(17,24,39,0.7);
+  backdrop-filter:blur(12px);
+  border:1px solid #1E293B;
+  border-radius:14px;
+  padding:20px;
+  display:flex; flex-direction:column;
+  flex-shrink:0;
+}
+.reco-title {
+  font-size:13px; font-weight:600; margin-bottom:12px;
+  display:flex; align-items:center; gap:8px;
+}
+.reco-item {
+  padding:12px 0; border-bottom:1px solid rgba(30,41,59,0.4);
+}
+.reco-item:last-child { border-bottom:none; }
+.reco-priority {
+  display:inline-flex; align-items:center; gap:4px;
+  font-size:9px; font-weight:600; text-transform:uppercase;
+  padding:2px 8px; border-radius:4px; margin-bottom:6px;
+}
+.reco-priority.high { background:rgba(239,68,68,0.15); color:#EF4444; }
+.reco-priority.medium { background:rgba(245,158,11,0.15); color:#F59E0B; }
+.reco-priority.low { background:rgba(59,130,246,0.15); color:#3B82F6; }
+.reco-text { font-size:12px; color:#CBD5E1; line-height:1.5; }
+.reco-meta { font-size:10px; color:#64748B; margin-top:4px; }
+.reco-action {
+  margin-top:6px;
+  padding:5px 10px;
+  background:rgba(59,130,246,0.1);
+  border:1px solid rgba(59,130,246,0.3);
+  border-radius:6px;
+  font-size:10px; color:#3B82F6; font-weight:500;
+  display:inline-block;
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-mark">ON</div>
+    <div>
+      <div class="topbar-title">ONIT-PNG — Scoring Opérateurs</div>
+      <div class="topbar-subtitle">Évaluation & Benchmark des Opérateurs Télécoms — ARPT Guinée</div>
+    </div>
+  </div>
+  <div class="topbar-center">Moteur de Scoring Intelligent — Février 2025</div>
+  <div class="topbar-right">
+    <span><span class="live-dot"></span>Scoring actualisé</span>
+    <span>28 Fév 2025</span>
+    <span style="color:#D4A843;">◆ EXPORT PDF</span>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+  <!-- OPERATOR SCORE CARDS -->
+  <div class="op-cards-row">
+    <!-- Orange -->
+    <div class="op-score-card orange-card">
+      <div class="op-badge" style="background:#FF6600;">O</div>
+      <div class="op-info">
+        <div class="op-name">Orange Guinée</div>
+        <div class="op-subscribers">4.8M abonnés • Leader marché</div>
+      </div>
+      <div class="circular-gauge">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" class="gauge-bg-circle"/>
+          <circle cx="60" cy="60" r="50" class="gauge-fill-circle" stroke="#10B981" stroke-dasharray="314" stroke-dashoffset="69"/>
+        </svg>
+        <div class="gauge-center-text">
+          <div class="gauge-number" style="color:#10B981;">78</div>
+          <div class="gauge-subtext">Score</div>
+        </div>
+      </div>
+      <div class="sub-scores">
+        <div class="sub-score">
+          <span class="sub-score-label">Couverture</span>
+          <div class="sub-score-bar"><div class="sub-score-fill" style="width:82%;background:#10B981;"></div></div>
+          <span class="sub-score-value" style="color:#10B981;">82</span>
+        </div>
+        <div class="sub-score">
+          <span class="sub-score-label">QoS</span>
+          <div class="sub-score-bar"><div class="sub-score-fill" style="width:76%;background:#3B82F6;"></div></div>
+          <span class="sub-score-value" style="color:#3B82F6;">76</span>
+        </div>
+        <div class="sub-score">
+          <span class="sub-score-label">QoE</span>
+          <div class="sub-score-bar"><div class="sub-score-fill" style="width:80%;background:#10B981;"></div></div>
+          <span class="sub-score-value" style="color:#10B981;">80</span>
+        </div>
+        <div class="sub-score">
+          <span class="sub-score-label">Conformité</span>
+          <div class="sub-score-bar"><div class="sub-score-fill" style="width:85%;background:#10B981;"></div></div>
+          <span class="sub-score-value" style="color:#10B981;">85</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MTN -->
+    <div class="op-score-card mtn-card">
+      <div class="op-badge" style="background:#FFCC00;">M</div>
+      <div class="op-info">
+        <div class="op-name">MTN Guinée</div>
+        <div class="op-subscribers">3.2M abonnés • 2ème opérateur</div>
+      </div>
+      <div class="circular-gauge">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" class="gauge-bg-circle"/>
+          <circle cx="60" cy="60" r="50" class="gauge-fill-circle" stroke="#3B82F6" stroke-dasharray="314" stroke-dashoffset="91"/>
+        </svg>
+        <div class="gauge-center-text">
+          <div class="gauge-number" style="color:#3B82F6;">71</div>
+          <div class="gauge-subtext">Score</div>
+        </div>
+      </div>
+      <div class="sub-scores">
+        <div class="sub-score">
+          <span class="sub-score-label">Couverture</span>
+          <div class="sub-score-bar"><div class="sub-score-fill" style="width:74%;background:#3B82F6;"></div></div>
+          <span class="sub-score-value" style="color:#3B82F6;">74</span>
+        </div>
+        <div class="sub-score">
+          <span class="sub-score-label">QoS</span>
+          <div class="sub-score-bar"><div class="sub-score-fill" style="width:69%;background:#F59E0B;"></div></div>
+          <span class="sub-score-value" style="color:#F59E0B;">69</span>
+        </div>
+        <div class="sub-score">
+          <span class="sub-score-label">QoE</span>
+          <div class="sub-score-bar"><div class="sub-score-fill" style="width:72%;background:#3B82F6;"></div></div>
+          <span class="sub-score-value" style="color:#3B82F6;">72</span>
+        </div>
+        <div class="sub-score">
+          <span class="sub-score-label">Conformité</span>
+          <div class="sub-score-bar"><div class="sub-score-fill" style="width:78%;background:#3B82F6;"></div></div>
+          <span class="sub-score-value" style="color:#3B82F6;">78</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Celcom -->
+    <div class="op-score-card celcom-card">
+      <div class="op-badge" style="background:#00A651;">C</div>
+      <div class="op-info">
+        <div class="op-name">Celcom Guinée</div>
+        <div class="op-subscribers">1.5M abonnés • 3ème opérateur</div>
+      </div>
+      <div class="circular-gauge">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" class="gauge-bg-circle"/>
+          <circle cx="60" cy="60" r="50" class="gauge-fill-circle" stroke="#F59E0B" stroke-dasharray="314" stroke-dashoffset="132"/>
+        </svg>
+        <div class="gauge-center-text">
+          <div class="gauge-number" style="color:#F59E0B;">58</div>
+          <div class="gauge-subtext">Score</div>
+        </div>
+      </div>
+      <div class="sub-scores">
+        <div class="sub-score">
+          <span class="sub-score-label">Couverture</span>
+          <div class="sub-score-bar"><div class="sub-score-fill" style="width:52%;background:#F59E0B;"></div></div>
+          <span class="sub-score-value" style="color:#F59E0B;">52</span>
+        </div>
+        <div class="sub-score">
+          <span class="sub-score-label">QoS</span>
+          <div class="sub-score-bar"><div class="sub-score-fill" style="width:48%;background:#EF4444;"></div></div>
+          <span class="sub-score-value" style="color:#EF4444;">48</span>
+        </div>
+        <div class="sub-score">
+          <span class="sub-score-label">QoE</span>
+          <div class="sub-score-bar"><div class="sub-score-fill" style="width:55%;background:#F59E0B;"></div></div>
+          <span class="sub-score-value" style="color:#F59E0B;">55</span>
+        </div>
+        <div class="sub-score">
+          <span class="sub-score-label">Conformité</span>
+          <div class="sub-score-bar"><div class="sub-score-fill" style="width:67%;background:#F59E0B;"></div></div>
+          <span class="sub-score-value" style="color:#F59E0B;">67</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM ROW -->
+  <div class="bottom-row">
+    <!-- RADAR CHART -->
+    <div class="radar-card">
+      <div class="radar-title">
+        <span style="color:#D4A843;">◆</span> Radar Comparatif — Multi-Critères
+        <div style="margin-left:auto; display:flex; gap:12px; font-size:10px; color:#94A3B8;">
+          <div style="display:flex;align-items:center;gap:4px;"><div style="width:8px;height:8px;border-radius:50%;background:#FF6600;"></div>Orange</div>
+          <div style="display:flex;align-items:center;gap:4px;"><div style="width:8px;height:8px;border-radius:50%;background:#FFCC00;"></div>MTN</div>
+          <div style="display:flex;align-items:center;gap:4px;"><div style="width:8px;height:8px;border-radius:50%;background:#00A651;"></div>Celcom</div>
+        </div>
+      </div>
+      <div class="radar-container">
+        <svg class="radar-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+          <!-- Pentagon grid lines -->
+          <!-- Center: 250,250 Radius: 180 -->
+          <!-- 6 axes: Couverture, QoS, QoE, Conformité, Innovation, Investissement -->
+          <!-- Axis angles: -90, -30, 30, 90, 150, 210 degrees -->
+          <!-- Grid levels: 20%, 40%, 60%, 80%, 100% -->
+
+          <!-- Grid polygons -->
+          <polygon class="radar-grid" points="250,214 281,232 281,268 250,286 219,268 219,232" opacity="0.3"/>
+          <polygon class="radar-grid" points="250,178 312,214 312,286 250,322 188,286 188,214" opacity="0.3"/>
+          <polygon class="radar-grid" points="250,142 343,196 343,304 250,358 157,304 157,196" opacity="0.3"/>
+          <polygon class="radar-grid" points="250,106 374,178 374,322 250,394 126,322 126,178" opacity="0.3"/>
+          <polygon class="radar-grid" points="250,70 405,160 405,340 250,430 95,340 95,160" opacity="0.3"/>
+
+          <!-- Axes -->
+          <line class="radar-axis" x1="250" y1="250" x2="250" y2="70"/>
+          <line class="radar-axis" x1="250" y1="250" x2="405" y2="160"/>
+          <line class="radar-axis" x1="250" y1="250" x2="405" y2="340"/>
+          <line class="radar-axis" x1="250" y1="250" x2="250" y2="430"/>
+          <line class="radar-axis" x1="250" y1="250" x2="95" y2="340"/>
+          <line class="radar-axis" x1="250" y1="250" x2="95" y2="160"/>
+
+          <!-- Axis labels -->
+          <text class="radar-label" x="250" y="58" text-anchor="middle" font-weight="600" fill="#D4A843">Couverture</text>
+          <text class="radar-label" x="420" y="155" text-anchor="start" font-weight="600" fill="#D4A843">QoS</text>
+          <text class="radar-label" x="420" y="348" text-anchor="start" font-weight="600" fill="#D4A843">QoE</text>
+          <text class="radar-label" x="250" y="450" text-anchor="middle" font-weight="600" fill="#D4A843">Conformité</text>
+          <text class="radar-label" x="78" y="348" text-anchor="end" font-weight="600" fill="#D4A843">Innovation</text>
+          <text class="radar-label" x="78" y="155" text-anchor="end" font-weight="600" fill="#D4A843">Investissement</text>
+
+          <!-- Orange data polygon (82,76,80,85,65,70) -->
+          <polygon class="radar-data" fill="#FF6600" stroke="#FF6600"
+            points="250,102 377,184 361,322 250,400 160,304 175,198" opacity="0.8"/>
+
+          <!-- MTN data polygon (74,69,72,78,58,62) -->
+          <polygon class="radar-data" fill="#FFCC00" stroke="#FFCC00"
+            points="250,117 367,194 349,316 250,384 151,298 159,204" opacity="0.7"/>
+
+          <!-- Celcom data polygon (52,48,55,67,35,40) -->
+          <polygon class="radar-data" fill="#00A651" stroke="#00A651"
+            points="250,157 326,220 325,278 250,352 126,298 148,226" opacity="0.6"/>
+
+          <!-- Data points -->
+          <!-- Orange -->
+          <circle cx="250" cy="102" r="4" fill="#FF6600"/>
+          <circle cx="377" cy="184" r="4" fill="#FF6600"/>
+          <circle cx="361" cy="322" r="4" fill="#FF6600"/>
+          <circle cx="250" cy="400" r="4" fill="#FF6600"/>
+          <circle cx="160" cy="304" r="4" fill="#FF6600"/>
+          <circle cx="175" cy="198" r="4" fill="#FF6600"/>
+          <!-- MTN -->
+          <circle cx="250" cy="117" r="4" fill="#FFCC00"/>
+          <circle cx="367" cy="194" r="4" fill="#FFCC00"/>
+          <circle cx="349" cy="316" r="4" fill="#FFCC00"/>
+          <circle cx="250" cy="384" r="4" fill="#FFCC00"/>
+          <circle cx="151" cy="298" r="4" fill="#FFCC00"/>
+          <circle cx="159" cy="204" r="4" fill="#FFCC00"/>
+          <!-- Celcom -->
+          <circle cx="250" cy="157" r="4" fill="#00A651"/>
+          <circle cx="326" cy="220" r="4" fill="#00A651"/>
+          <circle cx="325" cy="278" r="4" fill="#00A651"/>
+          <circle cx="250" cy="352" r="4" fill="#00A651"/>
+          <circle cx="126" cy="298" r="4" fill="#00A651"/>
+          <circle cx="148" cy="226" r="4" fill="#00A651"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- TREND MINI-CHARTS -->
+    <div class="trend-card">
+      <div class="trend-title">
+        <span style="color:#D4A843;">◆</span> Tendance Historique — 12 mois
+      </div>
+
+      <div class="trend-item">
+        <div class="trend-operator">
+          <div class="trend-operator-badge" style="background:#FF6600;">O</div>
+          Orange Guinée
+          <span style="margin-left:auto; font-size:14px; font-weight:700; color:#10B981;">78</span>
+          <span style="font-size:10px; color:#10B981;">▲ +5</span>
+        </div>
+        <div class="mini-chart">
+          <div class="mini-bar" style="height:55%;background:#FF6600;opacity:0.4;"></div>
+          <div class="mini-bar" style="height:58%;background:#FF6600;opacity:0.4;"></div>
+          <div class="mini-bar" style="height:52%;background:#FF6600;opacity:0.4;"></div>
+          <div class="mini-bar" style="height:60%;background:#FF6600;opacity:0.5;"></div>
+          <div class="mini-bar" style="height:63%;background:#FF6600;opacity:0.5;"></div>
+          <div class="mini-bar" style="height:58%;background:#FF6600;opacity:0.5;"></div>
+          <div class="mini-bar" style="height:65%;background:#FF6600;opacity:0.6;"></div>
+          <div class="mini-bar" style="height:68%;background:#FF6600;opacity:0.6;"></div>
+          <div class="mini-bar" style="height:70%;background:#FF6600;opacity:0.7;"></div>
+          <div class="mini-bar" style="height:72%;background:#FF6600;opacity:0.7;"></div>
+          <div class="mini-bar" style="height:74%;background:#FF6600;opacity:0.8;"></div>
+          <div class="mini-bar" style="height:78%;background:#FF6600;opacity:1;"></div>
+        </div>
+        <div class="trend-stats">
+          <span>Min: <span class="trend-stat-value">52</span></span>
+          <span>Max: <span class="trend-stat-value">78</span></span>
+          <span>Moy: <span class="trend-stat-value">65</span></span>
+        </div>
+      </div>
+
+      <div class="trend-item">
+        <div class="trend-operator">
+          <div class="trend-operator-badge" style="background:#FFCC00;">M</div>
+          MTN Guinée
+          <span style="margin-left:auto; font-size:14px; font-weight:700; color:#3B82F6;">71</span>
+          <span style="font-size:10px; color:#3B82F6;">▲ +3</span>
+        </div>
+        <div class="mini-chart">
+          <div class="mini-bar" style="height:50%;background:#FFCC00;opacity:0.4;"></div>
+          <div class="mini-bar" style="height:52%;background:#FFCC00;opacity:0.4;"></div>
+          <div class="mini-bar" style="height:48%;background:#FFCC00;opacity:0.4;"></div>
+          <div class="mini-bar" style="height:55%;background:#FFCC00;opacity:0.5;"></div>
+          <div class="mini-bar" style="height:58%;background:#FFCC00;opacity:0.5;"></div>
+          <div class="mini-bar" style="height:54%;background:#FFCC00;opacity:0.5;"></div>
+          <div class="mini-bar" style="height:60%;background:#FFCC00;opacity:0.6;"></div>
+          <div class="mini-bar" style="height:62%;background:#FFCC00;opacity:0.6;"></div>
+          <div class="mini-bar" style="height:65%;background:#FFCC00;opacity:0.7;"></div>
+          <div class="mini-bar" style="height:68%;background:#FFCC00;opacity:0.7;"></div>
+          <div class="mini-bar" style="height:70%;background:#FFCC00;opacity:0.8;"></div>
+          <div class="mini-bar" style="height:71%;background:#FFCC00;opacity:1;"></div>
+        </div>
+        <div class="trend-stats">
+          <span>Min: <span class="trend-stat-value">48</span></span>
+          <span>Max: <span class="trend-stat-value">71</span></span>
+          <span>Moy: <span class="trend-stat-value">60</span></span>
+        </div>
+      </div>
+
+      <div class="trend-item">
+        <div class="trend-operator">
+          <div class="trend-operator-badge" style="background:#00A651;">C</div>
+          Celcom Guinée
+          <span style="margin-left:auto; font-size:14px; font-weight:700; color:#F59E0B;">58</span>
+          <span style="font-size:10px; color:#EF4444;">▼ -3</span>
+        </div>
+        <div class="mini-chart">
+          <div class="mini-bar" style="height:45%;background:#00A651;opacity:0.4;"></div>
+          <div class="mini-bar" style="height:48%;background:#00A651;opacity:0.4;"></div>
+          <div class="mini-bar" style="height:50%;background:#00A651;opacity:0.5;"></div>
+          <div class="mini-bar" style="height:52%;background:#00A651;opacity:0.5;"></div>
+          <div class="mini-bar" style="height:55%;background:#00A651;opacity:0.5;"></div>
+          <div class="mini-bar" style="height:58%;background:#00A651;opacity:0.6;"></div>
+          <div class="mini-bar" style="height:62%;background:#00A651;opacity:0.6;"></div>
+          <div class="mini-bar" style="height:60%;background:#00A651;opacity:0.6;"></div>
+          <div class="mini-bar" style="height:58%;background:#00A651;opacity:0.7;"></div>
+          <div class="mini-bar" style="height:55%;background:#00A651;opacity:0.7;"></div>
+          <div class="mini-bar" style="height:56%;background:#00A651;opacity:0.8;"></div>
+          <div class="mini-bar" style="height:58%;background:#00A651;opacity:1;"></div>
+        </div>
+        <div class="trend-stats">
+          <span>Min: <span class="trend-stat-value">45</span></span>
+          <span>Max: <span class="trend-stat-value">62</span></span>
+          <span>Moy: <span class="trend-stat-value">55</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECOMMENDATION PANEL -->
+    <div class="reco-panel">
+      <div class="reco-title">
+        <span style="color:#D4A843;">◆</span> Recommandations du Moteur
+      </div>
+
+      <div class="reco-item">
+        <div class="reco-priority high">● PRIORITÉ HAUTE</div>
+        <div class="reco-text">
+          <strong>Celcom Guinée</strong> — Score QoS en dessous du seuil réglementaire (48/100 vs 60 minimum). Mesures correctives requises dans les 30 jours.
+        </div>
+        <div class="reco-meta">Détecté: 15 Fév 2025 • Référence: ARPT-2025-REC-012</div>
+        <div class="reco-action">→ Voir plan d'action correctif</div>
+      </div>
+
+      <div class="reco-item">
+        <div class="reco-priority high">● PRIORITÉ HAUTE</div>
+        <div class="reco-text">
+          <strong>Celcom — N'Zérékoré</strong> — Taux d'appel réussi < 60% pendant 14 jours consécutifs. Non-conformité article 12 des spécifications QoS.
+        </div>
+        <div class="reco-meta">Détecté: 20 Fév 2025 • Référence: ARPT-2025-REC-018</div>
+        <div class="reco-action">→ Générer rapport de non-conformité</div>
+      </div>
+
+      <div class="reco-item">
+        <div class="reco-priority medium">● PRIORITÉ MOYENNE</div>
+        <div class="reco-text">
+          <strong>MTN Guinée</strong> — Latence en hausse continue sur l'axe Conakry-Kankan (78ms → 95ms en 2 semaines). Risque de franchissement du seuil.
+        </div>
+        <div class="reco-meta">Détecté: 25 Fév 2025 • Référence: ARPT-2025-REC-024</div>
+        <div class="reco-action">→ Suivi technique recommandé</div>
+      </div>
+
+      <div class="reco-item">
+        <div class="reco-priority low">● PRIORITÉ BASSE</div>
+        <div class="reco-text">
+          <strong>Orange Guinée</strong> — Score global en progression (+5 pts). Encourager le maintien des investissements en couverture rurale.
+        </div>
+        <div class="reco-meta">Détecté: 28 Fév 2025 • Référence: ARPT-2025-REC-031</div>
+        <div class="reco-action">→ Positif — Aucune action requise</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

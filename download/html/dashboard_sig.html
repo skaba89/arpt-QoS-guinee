@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>ONIT-PNG - Dashboard Cartographie SIG</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #0A0F1E;
+  color: #F1F5F9;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+/* TOP BAR */
+.topbar {
+  height:52px;
+  background: linear-gradient(90deg, #0D1325, #111B33, #0D1325);
+  border-bottom:1px solid #1E293B;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 24px; flex-shrink:0;
+}
+.topbar-left { display:flex; align-items:center; gap:14px; }
+.logo-mark {
+  width:30px; height:30px; border-radius:6px;
+  background:linear-gradient(135deg, #D4A843, #B8902E);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:10px; color:#0A0F1E;
+}
+.topbar-title { font-size:14px; font-weight:600; }
+.topbar-subtitle { font-size:10px; color:#64748B; }
+.topbar-center { font-size:12px; color:#D4A843; font-weight:500; background:rgba(212,168,67,0.08); border:1px solid rgba(212,168,67,0.2); padding:5px 14px; border-radius:6px; }
+.topbar-right { display:flex; align-items:center; gap:16px; font-size:11px; color:#94A3B8; }
+.live-dot { width:7px; height:7px; border-radius:50%; background:#10B981; display:inline-block; margin-right:5px; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+/* MAIN LAYOUT */
+.main-layout {
+  flex:1;
+  display:flex;
+  overflow:hidden;
+}
+
+/* MAP AREA */
+.map-area {
+  flex:1;
+  position:relative;
+  background: #080C18;
+  overflow:hidden;
+}
+.map-bg-grid {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  background-image:
+    linear-gradient(rgba(30,41,59,0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30,41,59,0.15) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Guinea Map SVG centered */
+.map-center {
+  position:absolute; top:50%; left:45%;
+  transform:translate(-50%,-50%);
+  width:700px; height:600px;
+}
+.guinea-svg {
+  width:100%; height:100%;
+  filter: drop-shadow(0 0 60px rgba(59,130,246,0.1));
+}
+.region-path {
+  stroke:#2a3f66; stroke-width:1.5;
+  transition:fill 0.3s, stroke 0.3s;
+}
+.region-label {
+  font-family:'Inter',sans-serif;
+  font-size:10px;
+  fill:#94A3B8;
+  pointer-events:none;
+}
+/* Coverage layer dots on map */
+.coverage-dot {
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+}
+.tower-icon {
+  position:absolute;
+  font-size:8px;
+  color:#10B981;
+  pointer-events:none;
+}
+
+/* OVERLAY CONTROLS - TOP LEFT */
+.overlay-controls {
+  position:absolute; top:16px; left:16px;
+  display:flex; flex-direction:column; gap:6px;
+  z-index:10;
+}
+.overlay-btn {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 14px;
+  background:rgba(10,15,30,0.85);
+  backdrop-filter:blur(8px);
+  border:1px solid #1E293B;
+  border-radius:8px;
+  font-size:11px; color:#94A3B8;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.overlay-btn.active {
+  border-color:#3B82F6;
+  color:#3B82F6;
+  background:rgba(59,130,246,0.1);
+}
+.overlay-dot {
+  width:10px; height:10px; border-radius:50%;
+  border:2px solid currentColor;
+}
+.overlay-dot.filled { background:currentColor; }
+
+/* OPERATOR FILTER - TOP */
+.operator-filters {
+  position:absolute; top:16px; left:50%; transform:translateX(-50%);
+  display:flex; gap:6px; z-index:10;
+}
+.op-filter {
+  padding:6px 16px; border-radius:20px;
+  font-size:11px; font-weight:500;
+  background:rgba(10,15,30,0.85);
+  backdrop-filter:blur(8px);
+  border:1px solid #1E293B;
+  color:#94A3B8;
+  cursor:pointer;
+}
+.op-filter.active-all { border-color:#3B82F6; color:#3B82F6; }
+.op-filter.orange { border-color:#FF6600; color:#FF6600; }
+.op-filter.mtn { border-color:#FFCC00; color:#FFCC00; }
+.op-filter.celcom { border-color:#00A651; color:#00A651; }
+
+/* RIGHT LEGEND PANEL */
+.legend-panel {
+  width:260px;
+  background:rgba(17,24,39,0.85);
+  backdrop-filter:blur(12px);
+  border-left:1px solid #1E293B;
+  padding:20px;
+  overflow-y:auto;
+  flex-shrink:0;
+}
+.legend-title { font-size:13px; font-weight:600; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.legend-section { margin-bottom:20px; }
+.legend-section-title { font-size:10px; color:#64748B; text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-bottom:10px; }
+.legend-item { display:flex; align-items:center; gap:10px; padding:5px 0; font-size:12px; color:#CBD5E1; }
+.legend-color { width:24px; height:12px; border-radius:3px; flex-shrink:0; }
+.legend-gradient { width:24px; height:12px; border-radius:3px; flex-shrink:0; }
+.legend-value { margin-left:auto; font-size:11px; color:#94A3B8; font-weight:500; }
+
+/* Map stats overlays */
+.map-stats-overlay {
+  position:absolute; bottom:140px; left:16px;
+  display:flex; flex-direction:column; gap:6px;
+  z-index:10;
+}
+.map-stat-card {
+  background:rgba(10,15,30,0.85);
+  backdrop-filter:blur(8px);
+  border:1px solid #1E293B;
+  border-radius:8px;
+  padding:10px 14px;
+}
+.map-stat-label { font-size:9px; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; }
+.map-stat-value { font-size:18px; font-weight:700; margin-top:2px; }
+.map-stat-sub { font-size:9px; color:#64748B; margin-top:1px; }
+
+/* BOTTOM STATS BAR */
+.bottom-stats {
+  height:130px;
+  background:rgba(17,24,39,0.85);
+  backdrop-filter:blur(12px);
+  border-top:1px solid #1E293B;
+  display:flex;
+  align-items:center;
+  padding:0 24px;
+  gap:16px;
+  flex-shrink:0;
+}
+.region-stat-card {
+  flex:1;
+  background:rgba(10,15,30,0.6);
+  border:1px solid #1E293B;
+  border-radius:10px;
+  padding:14px 16px;
+}
+.region-stat-name { font-size:11px; font-weight:600; color:#F1F5F9; margin-bottom:8px; }
+.region-stat-bars { display:flex; flex-direction:column; gap:5px; }
+.region-bar { display:flex; align-items:center; gap:8px; }
+.region-bar-label { font-size:9px; color:#64748B; width:55px; }
+.region-bar-track { flex:1; height:5px; background:#1E293B; border-radius:3px; overflow:hidden; }
+.region-bar-fill { height:100%; border-radius:3px; }
+.region-bar-value { font-size:9px; color:#94A3B8; font-weight:500; width:30px; text-align:right; }
+
+/* Zoom controls */
+.zoom-controls {
+  position:absolute; bottom:150px; right:16px;
+  display:flex; flex-direction:column; gap:4px;
+  z-index:10;
+}
+.zoom-btn {
+  width:32px; height:32px;
+  background:rgba(10,15,30,0.85);
+  backdrop-filter:blur(8px);
+  border:1px solid #1E293B;
+  border-radius:6px;
+  display:flex; align-items:center; justify-content:center;
+  color:#94A3B8; font-size:16px; cursor:pointer;
+}
+.zoom-btn:hover { border-color:#3B82F6; color:#3B82F6; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-mark">ON</div>
+    <div>
+      <div class="topbar-title">ONIT-PNG — Cartographie SIG</div>
+      <div class="topbar-subtitle">Système d'Information Géographique — ARPT Guinée</div>
+    </div>
+  </div>
+  <div class="topbar-center">Carte Interactive de Couverture & QoS</div>
+  <div class="topbar-right">
+    <span><span class="live-dot"></span>Données temps réel</span>
+    <span>28 Fév 2025 — 14:32 GMT</span>
+    <span style="color:#D4A843;">◆ EXPORT</span>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+  <!-- MAP AREA -->
+  <div class="map-area">
+    <div class="map-bg-grid"></div>
+
+    <!-- Guinea Map -->
+    <div class="map-center">
+      <svg class="guinea-svg" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg">
+        <!-- Region shapes with coverage coloring -->
+        <!-- Conakry - high coverage -->
+        <path class="region-path" d="M130,280 L150,260 L165,268 L160,288 L140,295 Z" fill="#065f46" opacity="0.7"/>
+        <text class="region-label" x="140" y="280" font-size="9" fill="#10B981" font-weight="600">Conakry</text>
+
+        <!-- Boké -->
+        <path class="region-path" d="M70,180 L120,150 L175,130 L210,155 L195,200 L160,220 L110,210 Z" fill="#0e7490" opacity="0.5"/>
+        <text class="region-label" x="130" y="180" font-size="10">Boké</text>
+
+        <!-- Kindia -->
+        <path class="region-path" d="M110,230 L160,220 L195,240 L185,280 L160,310 L120,300 Z" fill="#065f46" opacity="0.6"/>
+        <text class="region-label" x="145" y="270" font-size="10">Kindia</text>
+
+        <!-- Labé -->
+        <path class="region-path" d="M175,130 L230,110 L290,100 L310,130 L290,175 L250,185 L210,175 L195,155 Z" fill="#1e3a5f" opacity="0.5"/>
+        <text class="region-label" x="245" y="145" font-size="10">Labé</text>
+
+        <!-- Mamou -->
+        <path class="region-path" d="M210,200 L250,185 L290,195 L310,220 L290,260 L250,280 L220,260 Z" fill="#1e3a5f" opacity="0.45"/>
+        <text class="region-label" x="255" y="235" font-size="10">Mamou</text>
+
+        <!-- Faranah -->
+        <path class="region-path" d="M290,100 L350,90 L400,110 L420,150 L400,200 L370,210 L340,195 L310,180 L290,175 L310,130 Z" fill="#1e3a5f" opacity="0.4"/>
+        <text class="region-label" x="350" y="155" font-size="10">Faranah</text>
+
+        <!-- Kankan -->
+        <path class="region-path" d="M400,110 L440,95 L490,110 L520,150 L530,200 L510,250 L470,270 L430,250 L400,220 L370,210 L400,200 L420,150 Z" fill="#3b1818" opacity="0.4"/>
+        <text class="region-label" x="455" y="180" font-size="10">Kankan</text>
+
+        <!-- N'Zérékoré -->
+        <path class="region-path" d="M430,270 L470,280 L510,310 L530,360 L520,410 L490,440 L450,450 L410,430 L380,390 L360,340 L370,300 Z" fill="#3b1818" opacity="0.5"/>
+        <text class="region-label" x="440" y="365" font-size="10">N'Zérékoré</text>
+
+        <!-- Coverage heatmap overlays -->
+        <!-- Conakry hot spot -->
+        <circle cx="148" cy="278" r="25" fill="#10B981" opacity="0.15"/>
+        <circle cx="148" cy="278" r="12" fill="#10B981" opacity="0.25"/>
+        <!-- Kindia -->
+        <circle cx="155" cy="268" r="30" fill="#10B981" opacity="0.1"/>
+        <!-- Boké -->
+        <circle cx="140" cy="178" r="25" fill="#3B82F6" opacity="0.1"/>
+        <!-- Labé -->
+        <circle cx="250" cy="148" r="28" fill="#3B82F6" opacity="0.08"/>
+        <!-- Kankan -->
+        <circle cx="460" cy="185" r="30" fill="#EF4444" opacity="0.1"/>
+        <!-- N'Zérékoré -->
+        <circle cx="445" cy="370" r="32" fill="#EF4444" opacity="0.12"/>
+        <!-- Mamou -->
+        <circle cx="260" cy="235" r="22" fill="#F59E0B" opacity="0.08"/>
+        <!-- Faranah -->
+        <circle cx="365" cy="155" r="25" fill="#F59E0B" opacity="0.08"/>
+
+        <!-- Tower markers -->
+        <g fill="#10B981" font-size="8" font-family="Inter">
+          <circle cx="145" cy="275" r="3" fill="#10B981" opacity="0.8"/>
+          <circle cx="200" cy="165" r="3" fill="#3B82F6" opacity="0.8"/>
+          <circle cx="258" cy="140" r="3" fill="#3B82F6" opacity="0.8"/>
+          <circle cx="365" cy="148" r="3" fill="#F59E0B" opacity="0.8"/>
+          <circle cx="460" cy="178" r="3" fill="#EF4444" opacity="0.8"/>
+          <circle cx="448" cy="365" r="3" fill="#EF4444" opacity="0.8"/>
+          <circle cx="258" cy="230" r="3" fill="#F59E0B" opacity="0.8"/>
+          <circle cx="155" cy="260" r="3" fill="#10B981" opacity="0.8"/>
+        </g>
+        <!-- Tower signal rings -->
+        <circle cx="145" cy="275" r="20" fill="none" stroke="#10B981" stroke-width="0.5" opacity="0.3"/>
+        <circle cx="145" cy="275" r="35" fill="none" stroke="#10B981" stroke-width="0.3" opacity="0.15"/>
+        <circle cx="460" cy="178" r="20" fill="none" stroke="#EF4444" stroke-width="0.5" opacity="0.3"/>
+
+        <!-- Zone blanche markers (red X) -->
+        <g fill="#EF4444" font-size="6" font-family="Inter" font-weight="700">
+          <text x="480" y="200">✕</text>
+          <text x="470" y="235">✕</text>
+          <text x="500" y="350">✕</text>
+          <text x="425" y="400">✕</text>
+          <text x="390" y="320">✕</text>
+        </g>
+
+        <!-- Road axes -->
+        <path d="M145,278 L155,265 L200,240 L260,230 L310,220 L370,210 L420,220 L460,200" fill="none" stroke="#D4A843" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.4"/>
+        <path d="M260,230 L260,280 L260,340 L300,370 L360,370 L430,370" fill="none" stroke="#D4A843" stroke-width="1" stroke-dasharray="3,4" opacity="0.3"/>
+        <text x="300" y="215" font-size="8" fill="#D4A843" opacity="0.6" font-family="Inter">Axe Conakry-Kankan</text>
+
+        <!-- Country outline -->
+        <path d="M70,180 L120,150 L175,130 L230,110 L290,100 L350,90 L400,110 L440,95 L490,110 L520,150 L530,200 L510,250 L530,360 L520,410 L490,440 L450,450 L410,430 L380,390 L360,340 L370,300 L340,270 L290,260 L250,280 L220,280 L185,280 L160,310 L120,300 L110,260 L100,230 Z" fill="none" stroke="#2a3f66" stroke-width="2.5" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <!-- Overlay controls -->
+    <div class="overlay-controls">
+      <div class="overlay-btn active">
+        <div class="overlay-dot filled" style="color:#10B981;"></div>
+        Couverture Mobile
+      </div>
+      <div class="overlay-btn active">
+        <div class="overlay-dot filled" style="color:#3B82F6;"></div>
+        Heatmap QoS
+      </div>
+      <div class="overlay-btn active">
+        <div class="overlay-dot filled" style="color:#EF4444;"></div>
+        Zones Blanches
+      </div>
+      <div class="overlay-btn">
+        <div class="overlay-dot" style="color:#D4A843;"></div>
+        Axes Routiers
+      </div>
+      <div class="overlay-btn">
+        <div class="overlay-dot" style="color:#8B5CF6;"></div>
+        Stations 4G/5G
+      </div>
+      <div class="overlay-btn">
+        <div class="overlay-dot" style="color:#EC4899;"></div>
+        Populations Non Desservies
+      </div>
+    </div>
+
+    <!-- Operator filter buttons -->
+    <div class="operator-filters">
+      <div class="op-filter active-all">Tous Opérateurs</div>
+      <div class="op-filter orange">Orange</div>
+      <div class="op-filter mtn">MTN</div>
+      <div class="op-filter celcom">Celcom</div>
+    </div>
+
+    <!-- Map stats overlay -->
+    <div class="map-stats-overlay">
+      <div class="map-stat-card">
+        <div class="map-stat-label">Stations Actives</div>
+        <div class="map-stat-value" style="color:#3B82F6;">1,247</div>
+        <div class="map-stat-sub">+23 ce mois</div>
+      </div>
+      <div class="map-stat-card">
+        <div class="map-stat-label">Zones Blanches</div>
+        <div class="map-stat-value" style="color:#EF4444;">234</div>
+        <div class="map-stat-sub">12 de moins vs Q4</div>
+      </div>
+      <div class="map-stat-card">
+        <div class="map-stat-label">Couverture 4G</div>
+        <div class="map-stat-value" style="color:#10B981;">54%</div>
+        <div class="map-stat-sub">Objectif: 65% fin 2025</div>
+      </div>
+    </div>
+
+    <!-- Zoom controls -->
+    <div class="zoom-controls">
+      <div class="zoom-btn">+</div>
+      <div class="zoom-btn">−</div>
+      <div class="zoom-btn">⌂</div>
+    </div>
+  </div>
+
+  <!-- RIGHT LEGEND PANEL -->
+  <div class="legend-panel">
+    <div class="legend-title">
+      <span style="color:#D4A843;">◆</span> Légende & Données
+    </div>
+
+    <div class="legend-section">
+      <div class="legend-section-title">Couverture Mobile</div>
+      <div class="legend-item">
+        <div class="legend-gradient" style="background:#065f46;"></div>
+        Excellente (>80%) <span class="legend-value">3 régions</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-gradient" style="background:#0e7490;"></div>
+        Bonne (60-80%) <span class="legend-value">2 régions</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-gradient" style="background:#1e3a5f;"></div>
+        Moyenne (40-60%) <span class="legend-value">1 région</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-gradient" style="background:#3b1818;"></div>
+        Faible (<40%) <span class="legend-value">2 régions</span>
+      </div>
+    </div>
+
+    <div class="legend-section">
+      <div class="legend-section-title">Marqueurs Carte</div>
+      <div class="legend-item">
+        <div style="width:10px;height:10px;border-radius:50%;background:#10B981;"></div>
+        Station active
+      </div>
+      <div class="legend-item">
+        <div style="color:#EF4444;font-weight:700;font-size:14px;">✕</div>
+        Zone blanche
+      </div>
+      <div class="legend-item">
+        <div style="width:16px;height:0;border-top:2px dashed #D4A843;"></div>
+        Axe routier principal
+      </div>
+      <div class="legend-item">
+        <div style="width:10px;height:10px;border-radius:50%;border:1.5px solid #10B981;"></div>
+        Rayon couverture
+      </div>
+    </div>
+
+    <div class="legend-section">
+      <div class="legend-section-title">Opérateurs par Couverture</div>
+      <div class="legend-item">
+        <div style="width:10px;height:10px;border-radius:2px;background:#FF6600;"></div>
+        Orange Guinée
+        <span class="legend-value" style="color:#FF6600;">82%</span>
+      </div>
+      <div class="legend-item">
+        <div style="width:10px;height:10px;border-radius:2px;background:#FFCC00;"></div>
+        MTN Guinée
+        <span class="legend-value" style="color:#FFCC00;">74%</span>
+      </div>
+      <div class="legend-item">
+        <div style="width:10px;height:10px;border-radius:2px;background:#00A651;"></div>
+        Celcom Guinée
+        <span class="legend-value" style="color:#00A651;">52%</span>
+      </div>
+    </div>
+
+    <div class="legend-section">
+      <div class="legend-section-title">Statistiques Rapides</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:11px;">
+          <span style="color:#94A3B8;">Population couverte 2G</span>
+          <span style="color:#10B981;font-weight:600;">89%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;">
+          <span style="color:#94A3B8;">Population couverte 3G</span>
+          <span style="color:#3B82F6;font-weight:600;">67%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;">
+          <span style="color:#94A3B8;">Population couverte 4G</span>
+          <span style="color:#F59E0B;font-weight:600;">54%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;">
+          <span style="color:#94A3B8;">Couverture 5G</span>
+          <span style="color:#EF4444;font-weight:600;">2%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;">
+          <span style="color:#94A3B8;">Localités desservies</span>
+          <span style="color:#F1F5F9;font-weight:600;">3,412</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="legend-section">
+      <div class="legend-section-title">Dernière Mise à Jour</div>
+      <div style="font-size:11px;color:#94A3B8;">
+        Données sonde: <span style="color:#10B981;">14:30 GMT</span><br>
+        Données opérateurs: <span style="color:#F59E0B;">12:00 GMT</span><br>
+        Prochaine sync: <span style="color:#3B82F6;">15:00 GMT</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM STATS BAR -->
+<div class="bottom-stats">
+  <div class="region-stat-card">
+    <div class="region-stat-name">Conakry</div>
+    <div class="region-stat-bars">
+      <div class="region-bar">
+        <span class="region-bar-label">Couverture</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:95%;background:#10B981;"></div></div>
+        <span class="region-bar-value">95%</span>
+      </div>
+      <div class="region-bar">
+        <span class="region-bar-label">QoS</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:88%;background:#3B82F6;"></div></div>
+        <span class="region-bar-value">88%</span>
+      </div>
+    </div>
+  </div>
+  <div class="region-stat-card">
+    <div class="region-stat-name">Kindia</div>
+    <div class="region-stat-bars">
+      <div class="region-bar">
+        <span class="region-bar-label">Couverture</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:78%;background:#10B981;"></div></div>
+        <span class="region-bar-value">78%</span>
+      </div>
+      <div class="region-bar">
+        <span class="region-bar-label">QoS</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:72%;background:#3B82F6;"></div></div>
+        <span class="region-bar-value">72%</span>
+      </div>
+    </div>
+  </div>
+  <div class="region-stat-card">
+    <div class="region-stat-name">Boké</div>
+    <div class="region-stat-bars">
+      <div class="region-bar">
+        <span class="region-bar-label">Couverture</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:72%;background:#3B82F6;"></div></div>
+        <span class="region-bar-value">72%</span>
+      </div>
+      <div class="region-bar">
+        <span class="region-bar-label">QoS</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:65%;background:#F59E0B;"></div></div>
+        <span class="region-bar-value">65%</span>
+      </div>
+    </div>
+  </div>
+  <div class="region-stat-card">
+    <div class="region-stat-name">Labé</div>
+    <div class="region-stat-bars">
+      <div class="region-bar">
+        <span class="region-bar-label">Couverture</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:65%;background:#3B82F6;"></div></div>
+        <span class="region-bar-value">65%</span>
+      </div>
+      <div class="region-bar">
+        <span class="region-bar-label">QoS</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:58%;background:#F59E0B;"></div></div>
+        <span class="region-bar-value">58%</span>
+      </div>
+    </div>
+  </div>
+  <div class="region-stat-card">
+    <div class="region-stat-name">Mamou</div>
+    <div class="region-stat-bars">
+      <div class="region-bar">
+        <span class="region-bar-label">Couverture</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:58%;background:#F59E0B;"></div></div>
+        <span class="region-bar-value">58%</span>
+      </div>
+      <div class="region-bar">
+        <span class="region-bar-label">QoS</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:52%;background:#F59E0B;"></div></div>
+        <span class="region-bar-value">52%</span>
+      </div>
+    </div>
+  </div>
+  <div class="region-stat-card">
+    <div class="region-stat-name">Faranah</div>
+    <div class="region-stat-bars">
+      <div class="region-bar">
+        <span class="region-bar-label">Couverture</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:50%;background:#F59E0B;"></div></div>
+        <span class="region-bar-value">50%</span>
+      </div>
+      <div class="region-bar">
+        <span class="region-bar-label">QoS</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:45%;background:#EF4444;"></div></div>
+        <span class="region-bar-value">45%</span>
+      </div>
+    </div>
+  </div>
+  <div class="region-stat-card">
+    <div class="region-stat-name">Kankan</div>
+    <div class="region-stat-bars">
+      <div class="region-bar">
+        <span class="region-bar-label">Couverture</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:42%;background:#EF4444;"></div></div>
+        <span class="region-bar-value">42%</span>
+      </div>
+      <div class="region-bar">
+        <span class="region-bar-label">QoS</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:38%;background:#EF4444;"></div></div>
+        <span class="region-bar-value">38%</span>
+      </div>
+    </div>
+  </div>
+  <div class="region-stat-card">
+    <div class="region-stat-name">N'Zérékoré</div>
+    <div class="region-stat-bars">
+      <div class="region-bar">
+        <span class="region-bar-label">Couverture</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:35%;background:#EF4444;"></div></div>
+        <span class="region-bar-value">35%</span>
+      </div>
+      <div class="region-bar">
+        <span class="region-bar-label">QoS</span>
+        <div class="region-bar-track"><div class="region-bar-fill" style="width:30%;background:#EF4444;"></div></div>
+        <span class="region-bar-value">30%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

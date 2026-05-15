@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>ONIT-PNG - Tableau de Bord Directeur Général</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #0A0F1E;
+  color: #F1F5F9;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+}
+/* TOP BAR */
+.topbar {
+  height: 56px;
+  background: linear-gradient(90deg, #0D1325 0%, #111B33 50%, #0D1325 100%);
+  border-bottom: 1px solid #1E293B;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  justify-content: space-between;
+}
+.topbar-left { display:flex; align-items:center; gap:16px; }
+.logo-mark {
+  width:36px; height:36px; border-radius:8px;
+  background: linear-gradient(135deg, #D4A843 0%, #B8902E 100%);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:14px; color:#0A0F1E; letter-spacing:-0.5px;
+  box-shadow: 0 0 20px rgba(212,168,67,0.3);
+}
+.topbar-title {
+  font-size:16px; font-weight:600; color:#F1F5F9; letter-spacing:0.5px;
+}
+.topbar-subtitle {
+  font-size:11px; color:#94A3B8; font-weight:400; margin-top:1px;
+}
+.topbar-center {
+  font-size:13px; color:#D4A843; font-weight:500;
+  background: rgba(212,168,67,0.08); border:1px solid rgba(212,168,67,0.2);
+  padding:6px 16px; border-radius:6px;
+}
+.topbar-right { display:flex; align-items:center; gap:20px; }
+.topbar-right span { font-size:12px; color:#94A3B8; }
+.status-dot {
+  width:8px; height:8px; border-radius:50%; background:#10B981;
+  display:inline-block; margin-right:6px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; }
+  50% { opacity:0.4; }
+}
+
+/* KPI ROW */
+.kpi-row {
+  display:flex; gap:16px; padding:20px 24px 12px;
+}
+.kpi-card {
+  flex:1;
+  background: rgba(17,24,39,0.7);
+  backdrop-filter: blur(12px);
+  border:1px solid #1E293B;
+  border-radius:12px;
+  padding:20px 24px;
+  position:relative;
+  overflow:hidden;
+}
+.kpi-card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg, transparent, #3B82F6, transparent);
+}
+.kpi-card.gold::before {
+  background: linear-gradient(90deg, transparent, #D4A843, transparent);
+}
+.kpi-label { font-size:11px; color:#94A3B8; font-weight:500; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+.kpi-value { font-size:36px; font-weight:800; letter-spacing:-1px; }
+.kpi-value.gold { color:#D4A843; text-shadow:0 0 30px rgba(212,168,67,0.3); }
+.kpi-value.blue { color:#3B82F6; }
+.kpi-value.green { color:#10B981; }
+.kpi-value.red { color:#EF4444; }
+.kpi-change { font-size:12px; margin-top:6px; display:flex; align-items:center; gap:4px; }
+.kpi-change.up { color:#10B981; }
+.kpi-change.down { color:#EF4444; }
+.kpi-sub { font-size:11px; color:#64748B; margin-top:2px; }
+
+/* MAIN CONTENT */
+.main-content {
+  display:flex; gap:16px; padding:12px 24px; height:calc(1080px - 56px - 140px - 36px);
+}
+/* MAP AREA */
+.map-area {
+  flex:2;
+  background: rgba(17,24,39,0.7);
+  backdrop-filter: blur(12px);
+  border:1px solid #1E293B;
+  border-radius:12px;
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+}
+.map-title {
+  font-size:13px; font-weight:600; color:#F1F5F9; margin-bottom:12px;
+  display:flex; align-items:center; gap:8px;
+}
+.map-title .icon { color:#D4A843; }
+.guinea-map-container {
+  width:100%; height:calc(100% - 40px);
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.guinea-svg {
+  width: 420px; height: 380px;
+  filter: drop-shadow(0 0 40px rgba(59,130,246,0.15));
+}
+.guinea-region {
+  fill: #1a2744;
+  stroke: #2a3f66;
+  stroke-width: 1.5;
+  transition: fill 0.3s;
+}
+.guinea-region.high { fill: #065f46; }
+.guinea-region.medium { fill: #1e3a5f; }
+.guinea-region.low { fill: #3b1818; }
+.map-overlay-stats {
+  position:absolute; top:16px; right:16px;
+  display:flex; flex-direction:column; gap:8px;
+}
+.map-stat {
+  background: rgba(10,15,30,0.85);
+  border:1px solid #1E293B;
+  border-radius:8px;
+  padding:8px 14px;
+  font-size:11px;
+}
+.map-stat-label { color:#94A3B8; font-size:10px; }
+.map-stat-value { color:#F1F5F9; font-weight:600; font-size:14px; }
+.heatmap-dots {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  pointer-events:none;
+}
+.heat-dot {
+  position:absolute;
+  border-radius:50%;
+  filter:blur(12px);
+  opacity:0.4;
+}
+
+/* RIGHT PANEL */
+.right-panel {
+  flex:1;
+  display:flex; flex-direction:column; gap:16px;
+}
+.operator-card {
+  background: rgba(17,24,39,0.7);
+  backdrop-filter: blur(12px);
+  border:1px solid #1E293B;
+  border-radius:12px;
+  padding:18px 20px;
+  flex:1;
+}
+.operator-header {
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;
+}
+.operator-name {
+  font-size:14px; font-weight:600; display:flex; align-items:center; gap:10px;
+}
+.operator-badge {
+  width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:13px; color:#0A0F1E;
+}
+.badge-orange { background: #FF6600; }
+.badge-mtn { background: #FFCC00; }
+.badge-celcom { background: #00A651; }
+.operator-score {
+  font-size:28px; font-weight:800;
+}
+.operator-score-excellent { color:#10B981; }
+.operator-score-good { color:#3B82F6; }
+.operator-score-warning { color:#F59E0B; }
+.operator-metrics {
+  display:flex; flex-direction:column; gap:8px;
+}
+.op-metric {
+  display:flex; align-items:center; justify-content:space-between;
+}
+.op-metric-label { font-size:11px; color:#94A3B8; }
+.op-metric-bar {
+  width:80px; height:4px; background:#1E293B; border-radius:2px; overflow:hidden;
+}
+.op-metric-fill { height:100%; border-radius:2px; transition: width 0.5s; }
+.fill-green { background:#10B981; }
+.fill-blue { background:#3B82F6; }
+.fill-amber { background:#F59E0B; }
+.fill-red { background:#EF4444; }
+.op-metric-value { font-size:11px; color:#F1F5F9; font-weight:500; min-width:32px; text-align:right; }
+.operator-trend {
+  display:flex; align-items:center; gap:4px; font-size:12px; font-weight:500;
+}
+
+/* BOTTOM BAR */
+.bottom-bar {
+  display:flex; gap:16px; padding:0 24px 16px; height:220px;
+}
+.alert-feed {
+  flex:1;
+  background: rgba(17,24,39,0.7);
+  backdrop-filter: blur(12px);
+  border:1px solid #1E293B;
+  border-radius:12px;
+  padding:16px 20px;
+  overflow:hidden;
+}
+.alert-title {
+  font-size:12px; font-weight:600; color:#F1F5F9; margin-bottom:12px;
+  display:flex; align-items:center; gap:8px;
+}
+.alert-item {
+  display:flex; align-items:center; gap:12px; padding:8px 0;
+  border-bottom:1px solid rgba(30,41,59,0.5);
+}
+.alert-dot {
+  width:8px; height:8px; border-radius:50%; flex-shrink:0;
+}
+.alert-dot.critical { background:#EF4444; box-shadow:0 0 8px rgba(239,68,68,0.5); }
+.alert-dot.warning { background:#F59E0B; box-shadow:0 0 8px rgba(245,158,11,0.5); }
+.alert-dot.info { background:#3B82F6; }
+.alert-text { font-size:12px; color:#CBD5E1; flex:1; }
+.alert-time { font-size:10px; color:#64748B; }
+
+.sla-panel {
+  width:340px;
+  background: rgba(17,24,39,0.7);
+  backdrop-filter: blur(12px);
+  border:1px solid #1E293B;
+  border-radius:12px;
+  padding:16px 20px;
+}
+.sla-title {
+  font-size:12px; font-weight:600; color:#F1F5F9; margin-bottom:16px;
+}
+.gauge-container {
+  display:flex; align-items:center; justify-content:center; gap:24px;
+}
+.gauge {
+  position:relative; width:120px; height:120px;
+}
+.gauge svg { width:120px; height:120px; transform:rotate(-90deg); }
+.gauge-bg { fill:none; stroke:#1E293B; stroke-width:8; }
+.gauge-fill { fill:none; stroke:#10B981; stroke-width:8; stroke-linecap:round; stroke-dasharray:314; }
+.gauge-center {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  text-align:center;
+}
+.gauge-value { font-size:28px; font-weight:800; color:#10B981; }
+.gauge-label { font-size:10px; color:#94A3B8; }
+.sla-details { display:flex; flex-direction:column; gap:8px; }
+.sla-item { display:flex; justify-content:space-between; align-items:center; }
+.sla-item-label { font-size:11px; color:#94A3B8; }
+.sla-item-value { font-size:13px; font-weight:600; }
+.sla-item-value.pass { color:#10B981; }
+.sla-item-value.fail { color:#EF4444; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-mark">ON</div>
+    <div>
+      <div class="topbar-title">ONIT-PNG</div>
+      <div class="topbar-subtitle">Observatoire National Intelligent des Télécommunications</div>
+    </div>
+  </div>
+  <div class="topbar-center">
+    Tableau de Bord Directeur Général — ARPT Guinée
+  </div>
+  <div class="topbar-right">
+    <span><span class="status-dot"></span> Système actif</span>
+    <span>28 Février 2025 — 14:32 GMT</span>
+    <span style="color:#D4A843;font-weight:500;">⬤ Données en temps réel</span>
+  </div>
+</div>
+
+<!-- KPI ROW -->
+<div class="kpi-row">
+  <div class="kpi-card gold">
+    <div class="kpi-label">Couverture Nationale</div>
+    <div class="kpi-value gold">67%</div>
+    <div class="kpi-change up">▲ +3.2% vs T3 2024</div>
+    <div class="kpi-sub">Objectif ARPT: 80% d'ici 2026</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Score QoS Global</div>
+    <div class="kpi-value blue">72<span style="font-size:20px;color:#94A3B8">/100</span></div>
+    <div class="kpi-change up">▲ +5 pts vs mois précédent</div>
+    <div class="kpi-sub">Moyenne pondérée tous opérateurs</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Zones Blanches</div>
+    <div class="kpi-value red">234</div>
+    <div class="kpi-change down">▼ -12 vs Q4 2024</div>
+    <div class="kpi-sub">Localités sans couverture mobile</div>
+  </div>
+  <div class="kpi-card gold">
+    <div class="kpi-label">Population Couverte</div>
+    <div class="kpi-value gold">8.2<span style="font-size:20px">M</span></div>
+    <div class="kpi-change up">▲ +420K vs année précédente</div>
+    <div class="kpi-sub">Sur 13.5M habitants (60.7%)</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+  <!-- MAP AREA -->
+  <div class="map-area">
+    <div class="map-title">
+      <span class="icon">◆</span> Carte de Couverture Nationale — Heatmap QoS
+    </div>
+    <div class="guinea-map-container">
+      <svg class="guinea-svg" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg">
+        <!-- Guinea country outline - simplified but recognizable shape -->
+        <path class="guinea-region high" d="M120,180 L140,140 L180,120 L220,110 L260,100 L300,95 L340,100 L370,110 L400,130 L420,160 L440,180 L450,210 L460,250 L455,290 L440,320 L420,350 L400,370 L370,380 L340,390 L310,400 L280,410 L250,400 L220,380 L190,360 L160,330 L140,300 L125,270 L115,240 L110,210 Z" />
+        <!-- Conakry region -->
+        <path class="guinea-region high" d="M90,230 L105,210 L115,220 L120,240 L110,255 L95,250 Z" fill="#10B981" opacity="0.8"/>
+        <!-- Boké region -->
+        <path d="M115,170 L140,140 L180,120 L200,140 L190,180 L160,200 L130,195 Z" fill="#0e7490" opacity="0.6"/>
+        <!-- Kankan region -->
+        <path d="M340,100 L370,110 L400,130 L420,160 L400,200 L370,190 L340,170 L320,140 Z" fill="#1e3a5f" opacity="0.7"/>
+        <!-- N'Zérékoré region -->
+        <path d="M370,280 L400,270 L420,290 L440,320 L420,350 L400,370 L370,380 L350,350 L340,320 L350,290 Z" fill="#3b1818" opacity="0.6"/>
+        <!-- Kindia region -->
+        <path d="M120,200 L160,200 L190,220 L180,260 L150,270 L120,250 Z" fill="#065f46" opacity="0.7"/>
+        <!-- Labe region -->
+        <path d="M180,120 L220,110 L260,100 L280,130 L260,170 L220,180 L190,170 Z" fill="#1e3a5f" opacity="0.6"/>
+        <!-- Faranah region -->
+        <path d="M280,130 L320,140 L340,170 L330,210 L300,220 L270,200 L260,170 Z" fill="#1e3a5f" opacity="0.5"/>
+        <!-- Mamou region -->
+        <path d="M190,220 L220,210 L260,200 L270,230 L250,270 L220,280 L190,260 Z" fill="#065f46" opacity="0.5"/>
+        <!-- Network coverage dots -->
+        <circle cx="100" cy="235" r="15" fill="#10B981" opacity="0.2"/>
+        <circle cx="100" cy="235" r="8" fill="#10B981" opacity="0.4"/>
+        <circle cx="200" cy="155" r="12" fill="#3B82F6" opacity="0.2"/>
+        <circle cx="300" cy="140" r="10" fill="#3B82F6" opacity="0.15"/>
+        <circle cx="380" cy="160" r="14" fill="#3B82F6" opacity="0.2"/>
+        <circle cx="350" cy="250" r="8" fill="#F59E0B" opacity="0.15"/>
+        <circle cx="390" cy="340" r="12" fill="#EF4444" opacity="0.2"/>
+        <circle cx="280" cy="190" r="10" fill="#10B981" opacity="0.15"/>
+        <circle cx="230" cy="240" r="8" fill="#10B981" opacity="0.2"/>
+        <circle cx="170" cy="280" r="6" fill="#3B82F6" opacity="0.2"/>
+        <!-- Tower icons -->
+        <text x="95" y="240" font-size="10" fill="#10B981">▕▏</text>
+        <text x="195" y="160" font-size="10" fill="#3B82F6">▕▏</text>
+        <text x="375" y="165" font-size="10" fill="#3B82F6">▕▏</text>
+        <!-- Region labels -->
+        <text x="80" y="265" font-size="9" fill="#94A3B8" font-family="Inter">Conakry</text>
+        <text x="140" y="160" font-size="9" fill="#94A3B8" font-family="Inter">Boké</text>
+        <text x="230" y="125" font-size="9" fill="#94A3B8" font-family="Inter">Labé</text>
+        <text x="360" y="125" font-size="9" fill="#94A3B8" font-family="Inter">Kankan</text>
+        <text x="375" y="360" font-size="9" fill="#94A3B8" font-family="Inter">N'Zérékoré</text>
+        <text x="155" y="240" font-size="9" fill="#94A3B8" font-family="Inter">Kindia</text>
+        <text x="270" y="175" font-size="9" fill="#94A3B8" font-family="Inter">Faranah</text>
+        <text x="215" y="265" font-size="9" fill="#94A3B8" font-family="Inter">Mamou</text>
+      </svg>
+      <!-- Heatmap overlay dots -->
+      <div class="heat-dot" style="width:80px;height:80px;background:#10B981;left:12%;top:45%;opacity:0.25;"></div>
+      <div class="heat-dot" style="width:100px;height:100px;background:#3B82F6;left:35%;top:30%;opacity:0.15;"></div>
+      <div class="heat-dot" style="width:60px;height:60px;background:#EF4444;left:68%;top:65%;opacity:0.2;"></div>
+      <div class="heat-dot" style="width:70px;height:70px;background:#3B82F6;left:60%;top:25%;opacity:0.15;"></div>
+      <!-- Map overlay stats -->
+      <div class="map-overlay-stats">
+        <div class="map-stat">
+          <div class="map-stat-label">Régions surveillées</div>
+          <div class="map-stat-value">8 / 8</div>
+        </div>
+        <div class="map-stat">
+          <div class="map-stat-label">Stations actives</div>
+          <div class="map-stat-value">1,247</div>
+        </div>
+        <div class="map-stat">
+          <div class="map-stat-label">Dernière collecte</div>
+          <div class="map-stat-value">14:30 GMT</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL - OPERATORS -->
+  <div class="right-panel">
+    <div class="operator-card">
+      <div class="operator-header">
+        <div class="operator-name">
+          <div class="operator-badge badge-orange">O</div>
+          Orange Guinée
+        </div>
+        <div>
+          <div class="operator-score operator-score-excellent">78</div>
+          <div class="operator-trend" style="color:#10B981;">▲ +2</div>
+        </div>
+      </div>
+      <div class="operator-metrics">
+        <div class="op-metric">
+          <span class="op-metric-label">Couverture</span>
+          <div class="op-metric-bar"><div class="op-metric-fill fill-green" style="width:82%"></div></div>
+          <span class="op-metric-value">82%</span>
+        </div>
+        <div class="op-metric">
+          <span class="op-metric-label">QoS Mobile</span>
+          <div class="op-metric-bar"><div class="op-metric-fill fill-green" style="width:76%"></div></div>
+          <span class="op-metric-value">76%</span>
+        </div>
+        <div class="op-metric">
+          <span class="op-metric-label">QoS Internet</span>
+          <div class="op-metric-bar"><div class="op-metric-fill fill-blue" style="width:71%"></div></div>
+          <span class="op-metric-value">71%</span>
+        </div>
+        <div class="op-metric">
+          <span class="op-metric-label">Conformité</span>
+          <div class="op-metric-bar"><div class="op-metric-fill fill-green" style="width:85%"></div></div>
+          <span class="op-metric-value">85%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="operator-card">
+      <div class="operator-header">
+        <div class="operator-name">
+          <div class="operator-badge badge-mtn">M</div>
+          MTN Guinée
+        </div>
+        <div>
+          <div class="operator-score operator-score-good">71</div>
+          <div class="operator-trend" style="color:#3B82F6;">▲ +1</div>
+        </div>
+      </div>
+      <div class="operator-metrics">
+        <div class="op-metric">
+          <span class="op-metric-label">Couverture</span>
+          <div class="op-metric-bar"><div class="op-metric-fill fill-blue" style="width:74%"></div></div>
+          <span class="op-metric-value">74%</span>
+        </div>
+        <div class="op-metric">
+          <span class="op-metric-label">QoS Mobile</span>
+          <div class="op-metric-bar"><div class="op-metric-fill fill-blue" style="width:69%"></div></div>
+          <span class="op-metric-value">69%</span>
+        </div>
+        <div class="op-metric">
+          <span class="op-metric-label">QoS Internet</span>
+          <div class="op-metric-bar"><div class="op-metric-fill fill-amber" style="width:65%"></div></div>
+          <span class="op-metric-value">65%</span>
+        </div>
+        <div class="op-metric">
+          <span class="op-metric-label">Conformité</span>
+          <div class="op-metric-bar"><div class="op-metric-fill fill-blue" style="width:78%"></div></div>
+          <span class="op-metric-value">78%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="operator-card">
+      <div class="operator-header">
+        <div class="operator-name">
+          <div class="operator-badge badge-celcom">C</div>
+          Celcom Guinée
+        </div>
+        <div>
+          <div class="operator-score operator-score-warning">58</div>
+          <div class="operator-trend" style="color:#EF4444;">▼ -3</div>
+        </div>
+      </div>
+      <div class="operator-metrics">
+        <div class="op-metric">
+          <span class="op-metric-label">Couverture</span>
+          <div class="op-metric-bar"><div class="op-metric-fill fill-amber" style="width:52%"></div></div>
+          <span class="op-metric-value">52%</span>
+        </div>
+        <div class="op-metric">
+          <span class="op-metric-label">QoS Mobile</span>
+          <div class="op-metric-bar"><div class="op-metric-fill fill-red" style="width:48%"></div></div>
+          <span class="op-metric-value">48%</span>
+        </div>
+        <div class="op-metric">
+          <span class="op-metric-label">QoS Internet</span>
+          <div class="op-metric-bar"><div class="op-metric-fill fill-amber" style="width:61%"></div></div>
+          <span class="op-metric-value">61%</span>
+        </div>
+        <div class="op-metric">
+          <span class="op-metric-label">Conformité</span>
+          <div class="op-metric-bar"><div class="op-metric-fill fill-amber" style="width:67%"></div></div>
+          <span class="op-metric-value">67%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <div class="alert-feed">
+    <div class="alert-title">
+      <span style="color:#EF4444;">●</span> Alertes QoS — Dernières dégradations
+    </div>
+    <div class="alert-item">
+      <div class="alert-dot critical"></div>
+      <span class="alert-text"><strong>Critique:</strong> Celcom — Taux d'appel réussi < 60% à N'Zérékoré</span>
+      <span class="alert-time">il y a 12 min</span>
+    </div>
+    <div class="alert-item">
+      <div class="alert-dot warning"></div>
+      <span class="alert-text"><strong>Attention:</strong> MTN — Latence > 120ms sur axe Conakry-Kankan</span>
+      <span class="alert-time">il y a 28 min</span>
+    </div>
+    <div class="alert-item">
+      <div class="alert-dot warning"></div>
+      <span class="alert-text"><strong>Attention:</strong> Orange — Débit descendant < 5Mbps à Labé</span>
+      <span class="alert-time">il y a 45 min</span>
+    </div>
+    <div class="alert-item">
+      <div class="alert-dot info"></div>
+      <span class="alert-text"><strong>Info:</strong> Maintenance planifiée Celcom — Region de Kindia (02 Mars)</span>
+      <span class="alert-time">il y a 2h</span>
+    </div>
+    <div class="alert-item">
+      <div class="alert-dot info"></div>
+      <span class="alert-text"><strong>Info:</strong> Nouvelle station 4G+ Orange active à Kankan</span>
+      <span class="alert-time">il y a 3h</span>
+    </div>
+  </div>
+
+  <div class="sla-panel">
+    <div class="sla-title">Conformité SLA — T4 2024</div>
+    <div class="gauge-container">
+      <div class="gauge">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" class="gauge-bg"/>
+          <circle cx="60" cy="60" r="50" class="gauge-fill" style="stroke-dashoffset:94;"/>
+        </svg>
+        <div class="gauge-center">
+          <div class="gauge-value">70%</div>
+          <div class="gauge-label">Conformité</div>
+        </div>
+      </div>
+      <div class="sla-details">
+        <div class="sla-item">
+          <span class="sla-item-label">Disponibilité réseau</span>
+          <span class="sla-item-value pass">98.2%</span>
+        </div>
+        <div class="sla-item">
+          <span class="sla-item-label">Taux d'appel réussi</span>
+          <span class="sla-item-value pass">91.5%</span>
+        </div>
+        <div class="sla-item">
+          <span class="sla-item-label">Latence moyenne</span>
+          <span class="sla-item-value pass">78ms</span>
+        </div>
+        <div class="sla-item">
+          <span class="sla-item-label">Débit minimum</span>
+          <span class="sla-item-value fail">3.2Mbps</span>
+        </div>
+        <div class="sla-item">
+          <span class="sla-item-label">Couverture rurale</span>
+          <span class="sla-item-value fail">42%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

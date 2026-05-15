@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>ONIT-PNG - Dashboard Technique QoS</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #0A0F1E;
+  color: #F1F5F9;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  display:flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 220px;
+  background: linear-gradient(180deg, #0D1325 0%, #0A0F1E 100%);
+  border-right: 1px solid #1E293B;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid #1E293B;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.sidebar-logo-mark {
+  width:32px; height:32px; border-radius:6px;
+  background: linear-gradient(135deg, #D4A843, #B8902E);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:11px; color:#0A0F1E;
+}
+.sidebar-logo-text { font-size:13px; font-weight:600; }
+.sidebar-logo-sub { font-size:9px; color:#64748B; }
+.nav-section { padding:0 12px; margin-bottom:8px; }
+.nav-section-title { font-size:9px; color:#64748B; text-transform:uppercase; letter-spacing:1.5px; padding:8px 12px; font-weight:600; }
+.nav-item {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 16px; border-radius:8px;
+  font-size:13px; color:#94A3B8; cursor:pointer;
+  transition: all 0.2s;
+}
+.nav-item:hover { background:rgba(59,130,246,0.08); color:#F1F5F9; }
+.nav-item.active {
+  background:rgba(59,130,246,0.12);
+  color:#3B82F6;
+  border-left:3px solid #3B82F6;
+}
+.nav-icon { font-size:16px; width:20px; text-align:center; }
+.sidebar-bottom {
+  margin-top:auto; padding:16px 20px;
+  border-top:1px solid #1E293B;
+}
+.sidebar-status { font-size:11px; color:#64748B; }
+.sidebar-status .dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:#10B981; margin-right:6px; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+/* MAIN AREA */
+.main-area {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* HEADER */
+.header {
+  height:56px;
+  border-bottom:1px solid #1E293B;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 24px;
+}
+.header-left { display:flex; align-items:center; gap:16px; }
+.header-title { font-size:16px; font-weight:600; }
+.header-subtitle { font-size:11px; color:#94A3B8; }
+.filters { display:flex; gap:10px; align-items:center; }
+.filter-btn {
+  padding:6px 14px; border-radius:6px;
+  font-size:12px; font-weight:500;
+  background:rgba(30,41,59,0.5);
+  border:1px solid #1E293B;
+  color:#94A3B8; cursor:pointer;
+}
+.filter-btn.active {
+  background:rgba(59,130,246,0.15);
+  border-color:#3B82F6;
+  color:#3B82F6;
+}
+.filter-select {
+  padding:6px 12px; border-radius:6px;
+  background:rgba(30,41,59,0.5);
+  border:1px solid #1E293B;
+  color:#94A3B8; font-size:12px; font-family:Inter;
+  appearance:none;
+}
+.header-right { display:flex; gap:12px; align-items:center; }
+.time-range { display:flex; gap:4px; }
+.time-btn {
+  padding:5px 10px; border-radius:4px; font-size:11px;
+  background:transparent; border:1px solid #1E293B; color:#64748B;
+}
+.time-btn.active { background:rgba(59,130,246,0.15); border-color:#3B82F6; color:#3B82F6; }
+
+/* KPI ROW */
+.kpi-row {
+  display:flex; gap:14px; padding:16px 24px 8px;
+}
+.kpi-card {
+  flex:1;
+  background: rgba(17,24,39,0.7);
+  backdrop-filter:blur(12px);
+  border:1px solid #1E293B;
+  border-radius:10px;
+  padding:16px 20px;
+}
+.kpi-label { font-size:10px; color:#94A3B8; text-transform:uppercase; letter-spacing:0.8px; font-weight:500; }
+.kpi-value-row { display:flex; align-items:baseline; gap:8px; margin-top:6px; }
+.kpi-value { font-size:30px; font-weight:800; }
+.kpi-unit { font-size:13px; color:#64748B; font-weight:500; }
+.kpi-trend { font-size:11px; font-weight:600; display:flex; align-items:center; gap:3px; }
+.trend-up { color:#10B981; }
+.trend-down { color:#EF4444; }
+.kpi-bar { margin-top:8px; height:3px; background:#1E293B; border-radius:2px; }
+.kpi-bar-fill { height:100%; border-radius:2px; }
+
+/* CHARTS AREA */
+.charts-area {
+  flex:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:14px;
+  padding:8px 24px 16px;
+}
+.chart-card {
+  background:rgba(17,24,39,0.7);
+  backdrop-filter:blur(12px);
+  border:1px solid #1E293B;
+  border-radius:10px;
+  padding:18px 20px;
+  display:flex;
+  flex-direction:column;
+}
+.chart-title {
+  font-size:12px; font-weight:600; color:#F1F5F9;
+  margin-bottom:4px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.chart-legend { display:flex; gap:12px; font-size:10px; color:#94A3B8; }
+.legend-item { display:flex; align-items:center; gap:4px; }
+.legend-dot { width:8px; height:8px; border-radius:50%; }
+.chart-body { flex:1; position:relative; margin-top:8px; }
+
+/* LINE CHART */
+.line-chart {
+  width:100%; height:100%;
+  position:relative;
+}
+.chart-grid { position:absolute; top:0; left:0; width:100%; height:100%; }
+.grid-line { position:absolute; left:0; right:0; height:1px; background:rgba(30,41,59,0.5); }
+.grid-label { position:absolute; left:-4px; font-size:9px; color:#64748B; transform:translateX(-100%); }
+.chart-lines { position:absolute; top:0; left:0; width:100%; height:calc(100% - 20px); }
+.chart-line-svg { width:100%; height:100%; }
+.x-labels { position:absolute; bottom:0; left:0; width:100%; display:flex; justify-content:space-between; padding:4px 0; }
+.x-label { font-size:9px; color:#64748B; }
+
+/* BAR CHART */
+.bar-chart { display:flex; align-items:flex-end; gap:8px; height:calc(100% - 20px); padding:0 10px; }
+.bar-group { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+.bar-stack { display:flex; gap:3px; align-items:flex-end; height:100%; }
+.bar {
+  width:18px; border-radius:3px 3px 0 0;
+  transition:height 0.5s;
+}
+.bar-label { font-size:9px; color:#64748B; text-align:center; }
+.bar-value { font-size:8px; color:#94A3B8; text-align:center; }
+
+/* HEATMAP */
+.heatmap { display:grid; grid-template-columns:repeat(8,1fr); grid-template-rows:repeat(6,1fr); gap:4px; height:calc(100% - 30px); }
+.heat-cell {
+  border-radius:4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:9px;
+  font-weight:500;
+}
+.heat-label { font-size:9px; color:#64748B; }
+.heatmap-y-labels { position:absolute; left:0; top:0; height:100%; display:flex; flex-direction:column; justify-content:space-around; }
+.heatmap-x-labels { position:absolute; bottom:0; left:0; width:100%; display:flex; justify-content:space-around; }
+
+/* MINI SPARKLINE */
+.sparkline { display:flex; align-items:flex-end; gap:2px; height:24px; }
+.spark-bar { width:3px; border-radius:1px; background:#3B82F6; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-mark">ON</div>
+    <div>
+      <div class="sidebar-logo-text">ONIT-PNG</div>
+      <div class="sidebar-logo-sub">ARPT Guinée</div>
+    </div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Surveillance</div>
+    <div class="nav-item active">
+      <span class="nav-icon">📊</span> QoS Mobile
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">🌐</span> QoS Internet
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">📡</span> FAI / Fixe
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">⚖️</span> Benchmarks
+    </div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Analyse</div>
+    <div class="nav-item">
+      <span class="nav-icon">🗺️</span> Cartographie SIG
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">📈</span> Tendances
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">🏆</span> Scoring
+    </div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Rapports</div>
+    <div class="nav-item">
+      <span class="nav-icon">📋</span> Rapports mensuels
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">🔔</span> Alertes
+    </div>
+  </div>
+  <div class="sidebar-bottom">
+    <div class="sidebar-status"><span class="dot"></span> Collecte active — 1,247 sondes</div>
+  </div>
+</div>
+
+<!-- MAIN AREA -->
+<div class="main-area">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div>
+        <div class="header-title">Qualité de Service — Mobile</div>
+        <div class="header-subtitle">Monitoring en temps réel des indicateurs QoS par opérateur</div>
+      </div>
+    </div>
+    <div class="filters">
+      <div class="filter-btn active">Tous opérateurs</div>
+      <div class="filter-btn">Orange</div>
+      <div class="filter-btn">MTN</div>
+      <div class="filter-btn">Celcom</div>
+      <select class="filter-select">
+        <option>Toutes régions</option>
+        <option>Conakry</option>
+        <option>Kankan</option>
+        <option>Kindia</option>
+      </select>
+    </div>
+    <div class="header-right">
+      <div class="time-range">
+        <div class="time-btn">24h</div>
+        <div class="time-btn active">7j</div>
+        <div class="time-btn">30j</div>
+        <div class="time-btn">90j</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI ROW -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">Latence Moyenne</div>
+      <div class="kpi-value-row">
+        <span class="kpi-value" style="color:#3B82F6;">78</span>
+        <span class="kpi-unit">ms</span>
+        <span class="kpi-trend trend-down">▲ +5ms</span>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:62%;background:#3B82F6;"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Débit Descendant</div>
+      <div class="kpi-value-row">
+        <span class="kpi-value" style="color:#10B981;">12.4</span>
+        <span class="kpi-unit">Mbps</span>
+        <span class="kpi-trend trend-up">▲ +1.2</span>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:55%;background:#10B981;"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Taux d'Appel Réussi</div>
+      <div class="kpi-value-row">
+        <span class="kpi-value" style="color:#10B981;">91.5</span>
+        <span class="kpi-unit">%</span>
+        <span class="kpi-trend trend-up">▲ +0.8%</span>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:91.5%;background:#10B981;"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Jitter</div>
+      <div class="kpi-value-row">
+        <span class="kpi-value" style="color:#F59E0B;">24</span>
+        <span class="kpi-unit">ms</span>
+        <span class="kpi-trend trend-down">▲ +3ms</span>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:48%;background:#F59E0B;"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Disponibilité Réseau</div>
+      <div class="kpi-value-row">
+        <span class="kpi-value" style="color:#10B981;">98.2</span>
+        <span class="kpi-unit">%</span>
+        <span class="kpi-trend trend-up">▲ +0.1%</span>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:98%;background:#10B981;"></div></div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-area">
+    <!-- LINE CHART - QoS Trends -->
+    <div class="chart-card">
+      <div class="chart-title">
+        Tendance QoS par Opérateur (7 jours)
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#FF6600;"></div>Orange</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FFCC00;"></div>MTN</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#00A651;"></div>Celcom</div>
+        </div>
+      </div>
+      <div class="chart-body">
+        <div class="line-chart">
+          <div class="chart-grid">
+            <div class="grid-line" style="top:0%;"><span class="grid-label" style="top:-4px;">100</span></div>
+            <div class="grid-line" style="top:25%;"><span class="grid-label" style="top:-4px;">75</span></div>
+            <div class="grid-line" style="top:50%;"><span class="grid-label" style="top:-4px;">50</span></div>
+            <div class="grid-line" style="top:75%;"><span class="grid-label" style="top:-4px;">25</span></div>
+            <div class="grid-line" style="top:100%;"><span class="grid-label" style="top:-4px;">0</span></div>
+          </div>
+          <div class="chart-lines">
+            <svg class="chart-line-svg" viewBox="0 0 700 200" preserveAspectRatio="none">
+              <!-- Orange line -->
+              <polyline fill="none" stroke="#FF6600" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                points="0,60 100,55 200,50 300,48 400,52 500,46 600,44 700,42" />
+              <polyline fill="url(#orangeGrad)" stroke="none"
+                points="0,60 100,55 200,50 300,48 400,52 500,46 600,44 700,42 700,200 0,200" />
+              <!-- MTN line -->
+              <polyline fill="none" stroke="#FFCC00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                points="0,80 100,78 200,72 300,74 400,70 500,72 600,68 700,66" />
+              <polyline fill="url(#mtnGrad)" stroke="none"
+                points="0,80 100,78 200,72 300,74 400,70 500,72 600,68 700,66 700,200 0,200" />
+              <!-- Celcom line -->
+              <polyline fill="none" stroke="#00A651" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                points="0,110 100,108 200,112 300,115 400,118 500,116 600,120 700,118" />
+              <polyline fill="url(#celcomGrad)" stroke="none"
+                points="0,110 100,108 200,112 300,115 400,118 500,116 600,120 700,118 700,200 0,200" />
+              <!-- Gradient defs -->
+              <defs>
+                <linearGradient id="orangeGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#FF6600" stop-opacity="0.2"/>
+                  <stop offset="100%" stop-color="#FF6600" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="mtnGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#FFCC00" stop-opacity="0.15"/>
+                  <stop offset="100%" stop-color="#FFCC00" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="celcomGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#00A651" stop-opacity="0.15"/>
+                  <stop offset="100%" stop-color="#00A651" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Data points -->
+              <circle cx="700" cy="42" r="4" fill="#FF6600"/>
+              <circle cx="700" cy="66" r="4" fill="#FFCC00"/>
+              <circle cx="700" cy="118" r="4" fill="#00A651"/>
+            </svg>
+          </div>
+          <div class="x-labels">
+            <span class="x-label">22 Fév</span>
+            <span class="x-label">23 Fév</span>
+            <span class="x-label">24 Fév</span>
+            <span class="x-label">25 Fév</span>
+            <span class="x-label">26 Fév</span>
+            <span class="x-label">27 Fév</span>
+            <span class="x-label">28 Fév</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BAR CHART - Benchmark -->
+    <div class="chart-card">
+      <div class="chart-title">
+        Benchmark Opérateurs — Comparaison QoS
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#3B82F6;"></div>Couverture</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#10B981;"></div>QoS</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#D4A843;"></div>QoE</div>
+        </div>
+      </div>
+      <div class="chart-body">
+        <div class="bar-chart">
+          <div class="bar-group">
+            <div class="bar-stack" style="height:100%;">
+              <div class="bar" style="height:82%;background:#3B82F6;width:22px;"></div>
+              <div class="bar" style="height:76%;background:#10B981;width:22px;"></div>
+              <div class="bar" style="height:80%;background:#D4A843;width:22px;"></div>
+            </div>
+            <div class="bar-label">Orange</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-stack" style="height:100%;">
+              <div class="bar" style="height:74%;background:#3B82F6;width:22px;"></div>
+              <div class="bar" style="height:69%;background:#10B981;width:22px;"></div>
+              <div class="bar" style="height:72%;background:#D4A843;width:22px;"></div>
+            </div>
+            <div class="bar-label">MTN</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-stack" style="height:100%;">
+              <div class="bar" style="height:52%;background:#3B82F6;width:22px;"></div>
+              <div class="bar" style="height:48%;background:#10B981;width:22px;"></div>
+              <div class="bar" style="height:55%;background:#D4A843;width:22px;"></div>
+            </div>
+            <div class="bar-label">Celcom</div>
+          </div>
+          <!-- Seuil ARPT line -->
+          <div style="position:absolute; top:22%; left:40px; right:20px; border-top:2px dashed #EF4444; z-index:1;">
+            <span style="position:absolute; right:0; top:-16px; font-size:9px; color:#EF4444;">Seuil ARPT: 60%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEATMAP - QoS by Region -->
+    <div class="chart-card">
+      <div class="chart-title">
+        Heatmap QoS par Région
+        <div class="chart-legend">
+          <div class="legend-item" style="gap:2px;">
+            <div style="width:30px;height:8px;border-radius:2px;background:linear-gradient(90deg,#EF4444,#F59E0B,#10B981);"></div>
+            <span>Faible → Excellent</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-body" style="padding-left:70px;padding-top:20px;">
+        <div class="heatmap" style="height:calc(100% - 10px);">
+          <!-- Row labels on the left side via absolute positioning -->
+          <!-- Y-axis: Operators, X-axis: Regions -->
+          <!-- Orange row -->
+          <div class="heat-cell" style="background:#065f46;color:#6ee7b7;">85</div>
+          <div class="heat-cell" style="background:#065f46;color:#6ee7b7;">82</div>
+          <div class="heat-cell" style="background:#164e63;color:#67e8f9;">71</div>
+          <div class="heat-cell" style="background:#164e63;color:#67e8f9;">68</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">62</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">58</div>
+          <div class="heat-cell" style="background:#3b1818;color:#fca5a5;">42</div>
+          <div class="heat-cell" style="background:#3b1818;color:#fca5a5;">38</div>
+          <!-- MTN row -->
+          <div class="heat-cell" style="background:#065f46;color:#6ee7b7;">80</div>
+          <div class="heat-cell" style="background:#164e63;color:#67e8f9;">74</div>
+          <div class="heat-cell" style="background:#164e63;color:#67e8f9;">69</div>
+          <div class="heat-cell" style="background:#164e63;color:#67e8f9;">72</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">55</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">60</div>
+          <div class="heat-cell" style="background:#3b1818;color:#fca5a5;">35</div>
+          <div class="heat-cell" style="background:#3b1818;color:#fca5a5;">40</div>
+          <!-- Celcom row -->
+          <div class="heat-cell" style="background:#164e63;color:#67e8f9;">70</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">62</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">58</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">52</div>
+          <div class="heat-cell" style="background:#3b1818;color:#fca5a5;">45</div>
+          <div class="heat-cell" style="background:#3b1818;color:#fca5a5;">38</div>
+          <div class="heat-cell" style="background:#3b1818;color:#fca5a5;">28</div>
+          <div class="heat-cell" style="background:#3b1818;color:#fca5a5;">25</div>
+          <!-- Repeat for more metrics -->
+          <!-- Latence row -->
+          <div class="heat-cell" style="background:#065f46;color:#6ee7b7;">92</div>
+          <div class="heat-cell" style="background:#065f46;color:#6ee7b7;">88</div>
+          <div class="heat-cell" style="background:#164e63;color:#67e8f9;">75</div>
+          <div class="heat-cell" style="background:#164e63;color:#67e8f9;">70</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">60</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">55</div>
+          <div class="heat-cell" style="background:#3b1818;color:#fca5a5;">40</div>
+          <div class="heat-cell" style="background:#3b1818;color:#fca5a5;">35</div>
+          <!-- Débit row -->
+          <div class="heat-cell" style="background:#065f46;color:#6ee7b7;">90</div>
+          <div class="heat-cell" style="background:#164e63;color:#67e8f9;">78</div>
+          <div class="heat-cell" style="background:#164e63;color:#67e8f9;">72</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">65</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">55</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">50</div>
+          <div class="heat-cell" style="background:#3b1818;color:#fca5a5;">32</div>
+          <div class="heat-cell" style="background:#3b1818;color:#fca5a5;">30</div>
+          <!-- Disponibilité row -->
+          <div class="heat-cell" style="background:#065f46;color:#6ee7b7;">98</div>
+          <div class="heat-cell" style="background:#065f46;color:#6ee7b7;">96</div>
+          <div class="heat-cell" style="background:#065f46;color:#6ee7b7;">94</div>
+          <div class="heat-cell" style="background:#065f46;color:#6ee7b7;">92</div>
+          <div class="heat-cell" style="background:#164e63;color:#67e8f9;">85</div>
+          <div class="heat-cell" style="background:#164e63;color:#67e8f9;">82</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">68</div>
+          <div class="heat-cell" style="background:#1e3a5f;color:#93c5fd;">62</div>
+        </div>
+        <!-- Row labels -->
+        <div style="position:absolute;left:0;top:30px;height:calc(100% - 50px);display:flex;flex-direction:column;justify-content:space-around;">
+          <span class="heat-label" style="font-weight:600;color:#94A3B8;">Couverture</span>
+          <span class="heat-label" style="font-weight:600;color:#94A3B8;">QoS Mobile</span>
+          <span class="heat-label" style="font-weight:600;color:#94A3B8;">QoS Internet</span>
+          <span class="heat-label" style="font-weight:600;color:#94A3B8;">Latence</span>
+          <span class="heat-label" style="font-weight:600;color:#94A3B8;">Débit</span>
+          <span class="heat-label" style="font-weight:600;color:#94A3B8;">Disponibilité</span>
+        </div>
+        <!-- Column labels -->
+        <div style="display:flex;justify-content:space-around;padding:4px 0;">
+          <span class="heat-label">Conakry</span>
+          <span class="heat-label">Kindia</span>
+          <span class="heat-label">Boké</span>
+          <span class="heat-label">Labé</span>
+          <span class="heat-label">Mamou</span>
+          <span class="heat-label">Faranah</span>
+          <span class="heat-label">Kankan</span>
+          <span class="heat-label">N'Zéré.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM RIGHT - Detailed stats -->
+    <div class="chart-card">
+      <div class="chart-title">
+        Détail par Opérateur — Dernières 24h
+      </div>
+      <div class="chart-body" style="overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;font-size:11px;">
+          <thead>
+            <tr style="border-bottom:1px solid #1E293B;">
+              <th style="text-align:left;padding:8px 6px;color:#94A3B8;font-weight:500;">Indicateur</th>
+              <th style="text-align:center;padding:8px 6px;color:#FF6600;font-weight:600;">Orange</th>
+              <th style="text-align:center;padding:8px 6px;color:#FFCC00;font-weight:600;">MTN</th>
+              <th style="text-align:center;padding:8px 6px;color:#00A651;font-weight:600;">Celcom</th>
+              <th style="text-align:center;padding:8px 6px;color:#94A3B8;font-weight:500;">Seuil</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(30,41,59,0.3);">
+              <td style="padding:10px 6px;color:#CBD5E1;">Latence (ms)</td>
+              <td style="text-align:center;padding:10px 6px;color:#10B981;font-weight:600;">62</td>
+              <td style="text-align:center;padding:10px 6px;color:#F59E0B;font-weight:600;">78</td>
+              <td style="text-align:center;padding:10px 6px;color:#EF4444;font-weight:600;">95</td>
+              <td style="text-align:center;padding:10px 6px;color:#64748B;">≤80</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(30,41,59,0.3);">
+              <td style="padding:10px 6px;color:#CBD5E1;">Débit (Mbps)</td>
+              <td style="text-align:center;padding:10px 6px;color:#10B981;font-weight:600;">15.2</td>
+              <td style="text-align:center;padding:10px 6px;color:#10B981;font-weight:600;">12.8</td>
+              <td style="text-align:center;padding:10px 6px;color:#F59E0B;font-weight:600;">8.4</td>
+              <td style="text-align:center;padding:10px 6px;color:#64748B;">≥10</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(30,41,59,0.3);">
+              <td style="padding:10px 6px;color:#CBD5E1;">Taux appel réussi (%)</td>
+              <td style="text-align:center;padding:10px 6px;color:#10B981;font-weight:600;">95.2</td>
+              <td style="text-align:center;padding:10px 6px;color:#10B981;font-weight:600;">91.8</td>
+              <td style="text-align:center;padding:10px 6px;color:#F59E0B;font-weight:600;">87.5</td>
+              <td style="text-align:center;padding:10px 6px;color:#64748B;">≥90</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(30,41,59,0.3);">
+              <td style="padding:10px 6px;color:#CBD5E1;">Jitter (ms)</td>
+              <td style="text-align:center;padding:10px 6px;color:#10B981;font-weight:600;">18</td>
+              <td style="text-align:center;padding:10px 6px;color:#F59E0B;font-weight:600;">24</td>
+              <td style="text-align:center;padding:10px 6px;color:#EF4444;font-weight:600;">35</td>
+              <td style="text-align:center;padding:10px 6px;color:#64748B;">≤25</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(30,41,59,0.3);">
+              <td style="padding:10px 6px;color:#CBD5E1;">Perte paquets (%)</td>
+              <td style="text-align:center;padding:10px 6px;color:#10B981;font-weight:600;">0.8</td>
+              <td style="text-align:center;padding:10px 6px;color:#10B981;font-weight:600;">1.2</td>
+              <td style="text-align:center;padding:10px 6px;color:#F59E0B;font-weight:600;">2.5</td>
+              <td style="text-align:center;padding:10px 6px;color:#64748B;">≤1.5</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(30,41,59,0.3);">
+              <td style="padding:10px 6px;color:#CBD5E1;">Handover succès (%)</td>
+              <td style="text-align:center;padding:10px 6px;color:#10B981;font-weight:600;">97.5</td>
+              <td style="text-align:center;padding:10px 6px;color:#10B981;font-weight:600;">95.8</td>
+              <td style="text-align:center;padding:10px 6px;color:#F59E0B;font-weight:600;">91.2</td>
+              <td style="text-align:center;padding:10px 6px;color:#64748B;">≥95</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 6px;color:#CBD5E1;">Disponibilité (%)</td>
+              <td style="text-align:center;padding:10px 6px;color:#10B981;font-weight:600;">99.1</td>
+              <td style="text-align:center;padding:10px 6px;color:#10B981;font-weight:600;">98.4</td>
+              <td style="text-align:center;padding:10px 6px;color:#F59E0B;font-weight:600;">96.8</td>
+              <td style="text-align:center;padding:10px 6px;color:#64748B;">≥98</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
