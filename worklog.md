@@ -232,3 +232,53 @@ Stage Summary:
 - 10 embedded images (arch_system, arch_sig, arch_bigdata, arch_ia, arch_cyber, dashboard_dg, dashboard_qos, dashboard_public, data_model, roadmap_onit_png)
 - 8 detailed data tables (benefits, tech stack, KPIs, scoring dimensions, data dictionary, milestones ×3)
 - Cover: HTML → Playwright PDF → pypdf merge with body
+
+---
+Task ID: 2
+Agent: fullstack-dev
+Task: Build complete ONIT-PNG web platform (Next.js 16 single-page application)
+
+Work Log:
+- Built ultra-premium dark mode web platform for ARPT Guinea telecom supervision
+- Design system: #0A0F1E background, glassmorphism cards, #D4A843 gold accents, all text in French
+- Single-page app at `/` with tab-based navigation (8 tabs, no routing)
+
+Files Created:
+- src/lib/mock-data.ts — Complete mock data (operators, regions, QoS metrics, campaigns, alerts, reports, security, FAQ)
+- src/components/metric-card.tsx — Reusable KPI card with value, label, trend arrow, icon, glassmorphism background
+- src/components/mini-chart.tsx — SVG chart components: Sparkline, HBarChart, CircularGauge, RadarChart, LineChart
+- src/components/guinea-map.tsx — Interactive SVG map of Guinea with 8 regions, color-coded by metric, hover tooltips, click handler
+- src/components/dashboard-dg.tsx — Executive dashboard: 4 KPI cards, 3 operator ranking cards with sparklines, coverage map, SLA gauge, alert feed, regional summary
+- src/components/dashboard-qos.tsx — QoS monitoring: filter bar, 4 KPI cards, line chart trends, benchmark comparison, regional heatmap, operator detail panels
+- src/components/dashboard-sig.tsx — GIS dashboard: interactive map, layer controls (coverage/QoS/zones/roads), operator filter, legend, region detail panel, zoom controls
+- src/components/dashboard-scoring.tsx — Operator scoring: 3 circular gauge score cards, radar comparison, historical sparklines, AI recommendations, detailed ranking table
+- src/components/dashboard-audit.tsx — Field audit: campaign overview (3 status cards), campaign table, drive test route map, test results with pass/fail, benchmark summary
+- src/components/dashboard-reports.tsx — Reports: 6 template type cards, recent reports table, quick generate panel, schedule configuration
+- src/components/dashboard-public.tsx — Public portal: hero section, public KPIs, coverage map, operator comparison, report cards, "Signaler un Problème" form, FAQ accordion, footer
+- src/components/dashboard-cyber.tsx — Security: security score gauge, RBAC overview, encryption status, compliance progress, active threats, audit log
+- src/components/onit-layout.tsx — Main layout: collapsible sidebar with branding + navigation, top header with search/notifications, responsive hamburger menu
+
+Files Updated:
+- src/app/globals.css — Dark theme CSS variables (#0A0F1E, #D4A843 gold), custom scrollbar (gold accent), pulse-glow animation, fade-in-up animation, glassmorphism utility, select dropdown dark styling
+- src/app/layout.tsx — Updated metadata (ONIT-PNG title, French lang, dark class on html)
+- src/app/page.tsx — Main page with useState for tab switching, renders OnitLayout
+
+Technical Details:
+- All components are 'use client' (React hooks)
+- Tailwind CSS only (custom CSS only for animations/scrollbar)
+- shadcn/ui components available but used minimally (custom glassmorphism design throughout)
+- Lucide icons used throughout
+- All SVG charts built inline (no chart libraries)
+- All text in French
+- Responsive design (mobile hamburger sidebar, grid breakpoints)
+- No external API calls (all data mocked in mock-data.ts)
+- ESLint: 0 errors in src/ directory
+
+Stage Summary:
+- 14 new/updated files in src/
+- 8 fully functional dashboard tabs
+- Ultra-premium dark aesthetic with gold accents matching Palantir/AWS/Deloitte Digital style
+- Professional glassmorphism card design with gold accent lines
+- Interactive Guinea SVG map with 8 regions
+- Complete mock data for Guinea telecom context
+- Compiles successfully, serving on port 3000
