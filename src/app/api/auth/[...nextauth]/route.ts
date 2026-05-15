@@ -13,49 +13,61 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          console.log("[AUTH] Missing credentials");
           return null;
         }
 
-        const user = await db.user.findUnique({
-          where: { email: credentials.email },
-          include: {
-            role: {
-              include: { permissions: true },
+        try {
+          const user = await db.user.findUnique({
+            where: { email: credentials.email },
+            include: {
+              role: {
+                include: { permissions: true },
+              },
             },
-          },
-        });
+          });
 
-        if (!user || !user.isActive) {
+          if (!user || !user.isActive) {
+            console.log("[AUTH] User not found or inactive:", credentials.email);
+            return null;
+          }
+
+          const isValid = await bcrypt.compare(credentials.password, user.passwordHash);
+          if (!isValid) {
+            console.log("[AUTH] Invalid password for:", credentials.email);
+            return null;
+          }
+
+          // Update last login
+          await db.user.update({
+            where: { id: user.id },
+            data: { lastLogin: new Date() },
+          }).catch(() => {});
+
+          // Create audit log
+          await db.auditLog.create({
+            data: {
+              userId: user.id,
+              action: "LOGIN",
+              resource: "system",
+              details: JSON.stringify({ method: "credentials" }),
+            },
+          }).catch(() => {});
+
+          console.log("[AUTH] Login successful:", credentials.email, "Role:", user.role.name);
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role.name as string,
+            organization: user.organization,
+            permissions: user.role.permissions.map((p) => `${p.resource}:${p.action}`),
+          };
+        } catch (error) {
+          console.error("[AUTH] Authorization error:", error);
           return null;
         }
-
-        const isValid = await bcrypt.compare(credentials.password, user.passwordHash);
-        if (!isValid) {
-          return null;
-        }
-
-        await db.user.update({
-          where: { id: user.id },
-          data: { lastLogin: new Date() },
-        });
-
-        await db.auditLog.create({
-          data: {
-            userId: user.id,
-            action: "LOGIN",
-            resource: "system",
-            details: JSON.stringify({ method: "credentials" }),
-          },
-        });
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role.name,
-          organization: user.organization,
-          permissions: user.role.permissions.map((p) => `${p.resource}:${p.action}`),
-        };
       },
     }),
   ],
@@ -66,7 +78,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.id = user.id as string;
         token.role = (user as Record<string, unknown>).role;
         token.organization = (user as Record<string, unknown>).organization;
         token.permissions = (user as Record<string, unknown>).permissions;
@@ -87,6 +99,7 @@ export const authOptions: NextAuthOptions = {
     signIn: "/",
   },
   secret: process.env.NEXTAUTH_SECRET || "onit-png-secret-key-2026-guinee",
+  debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);
