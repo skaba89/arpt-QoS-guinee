@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { OnitLayout } from '@/components/onit-layout';
 import { AuthProvider } from '@/components/auth-provider';
 import { LoginModal } from '@/components/login-modal';
@@ -11,15 +11,44 @@ type TabId = 'dashboard' | 'qos' | 'sig' | 'scoring' | 'audit' | 'reports' | 'pu
 function AppContent() {
   const [activeTab, setActiveTab] = useState<TabId>('dashboard');
   const { data: session, status } = useSession();
+  const [mounted, setMounted] = useState(false);
 
-  const showLogin = status === 'unauthenticated' && activeTab !== 'public';
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  // Public tab doesn't require auth
-  const effectiveTab = (activeTab === 'public' || session) ? activeTab : 'public';
+  const isAuthenticated = status === 'authenticated';
+  const isLoading = status === 'loading';
+
+  // Show login modal when:
+  // - App is mounted (hydration complete)
+  // - Not loading
+  // - Not authenticated
+  // - Not on public tab
+  const showLogin = mounted && !isLoading && !isAuthenticated && activeTab !== 'public';
+
+  // If not authenticated, only show public tab
+  const effectiveTab = isAuthenticated ? activeTab : 'public';
+
+  const handleTabChange = useCallback((tab: TabId) => {
+    if (!isAuthenticated && tab !== 'public') {
+      // User clicked a protected tab while not logged in - show login
+      setActiveTab(tab); // Remember where they want to go
+      return;
+    }
+    setActiveTab(tab);
+  }, [isAuthenticated]);
+
+  // After login, go to the tab they wanted
+  useEffect(() => {
+    if (isAuthenticated && activeTab === 'public') {
+      setActiveTab('dashboard');
+    }
+  }, [isAuthenticated, activeTab]);
 
   return (
     <>
-      <OnitLayout activeTab={effectiveTab} onTabChange={setActiveTab} />
+      <OnitLayout activeTab={effectiveTab} onTabChange={handleTabChange} />
       <LoginModal isOpen={showLogin} />
     </>
   );
