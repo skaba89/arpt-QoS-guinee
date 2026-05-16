@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type L from 'leaflet';
 import { guineaRegionsGeoJSON } from '@/lib/guinea-geojson';
 
 interface RegionMapData {
@@ -54,12 +55,43 @@ export function GuineaMapLeafletInner({
 }: GuineaMapLeafletInnerProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
+  const [isReady, setIsReady] = useState(false);
+
+  // Wait for the container to be mounted and have dimensions
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    // Use requestAnimationFrame to ensure the DOM has painted
+    const rafId = requestAnimationFrame(() => {
+      if (mapRef.current) {
+        setIsReady(true);
+      }
+    });
+
+    return () => cancelAnimationFrame(rafId);
+  }, []);
 
   useEffect(() => {
-    if (!mapRef.current || mapInstanceRef.current) return;
+    if (!isReady || !mapRef.current || mapInstanceRef.current) return;
+
+    // Double-check the container has dimensions
+    const container = mapRef.current;
+    if (container.offsetWidth === 0 || container.offsetHeight === 0) {
+      // Container not visible yet, retry after a short delay
+      const retryTimer = setTimeout(() => {
+        if (container.offsetWidth > 0 && container.offsetHeight > 0) {
+          setIsReady(false);
+          requestAnimationFrame(() => setIsReady(true));
+        }
+      }, 200);
+      return () => clearTimeout(retryTimer);
+    }
 
     const initMap = async () => {
       const L = (await import('leaflet')).default;
+
+      // Verify container still exists after async import
+      if (!mapRef.current) return;
 
       // Fix default marker icon
       const iconDefault = L.icon({
@@ -73,7 +105,7 @@ export function GuineaMapLeafletInner({
       });
       L.Marker.prototype.options.icon = iconDefault;
 
-      const map = L.map(mapRef.current!, {
+      const map = L.map(mapRef.current, {
         center: [10.0, -10.5],
         zoom: 7,
         zoomControl: false,
@@ -203,7 +235,7 @@ export function GuineaMapLeafletInner({
         mapInstanceRef.current = null;
       }
     };
-  }, []);
+  }, [isReady]);
 
   // Update region styles when selection changes
   useEffect(() => {
@@ -215,7 +247,7 @@ export function GuineaMapLeafletInner({
     <div
       ref={mapRef}
       className="w-full h-[400px] rounded-lg overflow-hidden"
-      style={{ background: '#0A0F1E' }}
+      style={{ background: '#0A0F1E', minHeight: '400px' }}
     />
   );
 }

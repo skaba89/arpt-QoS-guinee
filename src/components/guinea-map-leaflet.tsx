@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 
 interface RegionMapData {
   code: string;
@@ -53,15 +53,17 @@ export function GuineaMapLeaflet({
   showWhiteZones = true,
   showDriveTests = false,
 }: GuineaMapLeafletProps) {
-  const [MapComponent, setMapComponent] = useState<React.ComponentType<GuineaMapLeafletProps> | null>(null);
+  const [MapComponent, setMapComponent] = useState<React.ComponentType<GuineaMapLeafletInnerProps> | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     import('./guinea-map-leaflet-inner').then((mod) => {
       setMapComponent(() => mod.GuineaMapLeafletInner);
     });
   }, []);
 
-  if (!MapComponent) {
+  if (!mounted || !MapComponent) {
     return (
       <div className="w-full h-[400px] rounded-lg bg-[#0A0F1E] border border-white/5 flex items-center justify-center">
         <div className="text-xs text-slate-500 animate-pulse">Chargement de la carte...</div>
@@ -71,6 +73,7 @@ export function GuineaMapLeaflet({
 
   return (
     <MapComponent
+      key={`${metric}-${selectedOperator}-${showWhiteZones ? 'wz' : 'nowz'}`}
       metric={metric}
       onRegionClick={onRegionClick}
       selectedRegion={selectedRegion}
@@ -83,3 +86,15 @@ export function GuineaMapLeaflet({
     />
   );
 }
+
+type GuineaMapLeafletInnerProps = {
+  metric?: 'coverage' | 'qos';
+  onRegionClick?: (region: string) => void;
+  selectedRegion?: string | null;
+  regionData?: RegionMapData[];
+  measurementPoints?: MapPointData[];
+  operators?: OperatorData[];
+  selectedOperator?: string;
+  showWhiteZones?: boolean;
+  showDriveTests?: boolean;
+};
