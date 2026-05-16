@@ -282,3 +282,33 @@ Stage Summary:
 - Interactive Guinea SVG map with 8 regions
 - Complete mock data for Guinea telecom context
 - Compiles successfully, serving on port 3000
+
+---
+Task ID: 1-7
+Agent: Super Z (Main Agent)
+Task: Fix Leaflet map error, make all features functional, add admin dashboard
+
+Work Log:
+- Fixed Leaflet "Map container not found" error in guinea-map-leaflet-inner.tsx by adding polling mechanism with container readiness check
+- Created full Admin Dashboard (dashboard-admin.tsx) with user management, role management, audit logs
+- Updated onit-layout.tsx to use DashboardAdmin for admin tab
+- Added notification bell dropdown that fetches alerts from /api/alerts
+- Made report download buttons generate CSV files using Blob API
+- Made report generation buttons call POST /api/reports with toast notifications
+- Made problem report form in public portal POST to /api/alerts as SIGNALEMENT_PUBLIC
+- Added Sonner toast notifications throughout (login, logout, user creation, report generation, problem submission)
+- Updated /api/alerts to allow public submissions for SIGNALEMENT_PUBLIC type
+- Added /api/roles endpoint for admin dashboard
+- Enhanced /api/users with PATCH endpoint for toggling user active/inactive status
+- All 10 API endpoints verified working: dashboard, map, scoring, alerts, reports, qos, users, roles, audit-logs, campaigns
+- Login authentication verified working: admin@arpt.gn / Admin@2026! → SUPER_ADMIN role
+
+Stage Summary:
+- Leaflet map error fixed with container readiness polling mechanism
+- All dashboard tabs functional with data from API endpoints
+- Admin dashboard with full user CRUD operations
+- Notification bell with alert dropdown
+- Report download/generation functional
+- Public problem report submission functional
+- Toast notifications integrated throughout
+- Server running and stable on port 3000

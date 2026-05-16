@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   LayoutDashboard,
   Activity,
@@ -18,6 +18,10 @@ import {
   Settings,
   Users,
   Key,
+  CheckCheck,
+  AlertTriangle,
+  Info,
+  XCircle,
 } from 'lucide-react';
 import { DashboardDG } from './dashboard-dg';
 import { DashboardQoS } from './dashboard-qos';
@@ -27,6 +31,7 @@ import { DashboardAudit } from './dashboard-audit';
 import { DashboardReports } from './dashboard-reports';
 import { DashboardPublic } from './dashboard-public';
 import { DashboardCyber } from './dashboard-cyber';
+import { DashboardAdmin } from './dashboard-admin';
 import { UserMenu } from './user-menu';
 import { useSession } from 'next-auth/react';
 
@@ -57,13 +62,24 @@ const dashboardComponents: Record<string, React.ComponentType> = {
   reports: DashboardReports,
   public: DashboardPublic,
   cyber: DashboardCyber,
-  admin: DashboardCyber, // Reuse cyber for admin (shows audit logs)
+  admin: DashboardAdmin,
 };
 
 const rolePriority: Record<string, number> = {
   SUPER_ADMIN: 100, DG: 90, DGA: 80, DIRECTEUR_TECHNIQUE: 70,
   INGENIEUR_RF: 60, ANALYSTE_QOS: 50, AUDITEUR: 40, OPERATEUR_READONLY: 20, PUBLIC: 10,
 };
+
+interface AlertItem {
+  id: string;
+  type: string;
+  severity: string;
+  operator?: string;
+  region?: string;
+  message: string;
+  isResolved: boolean;
+  createdAt: string;
+}
 
 interface OnitLayoutProps {
   activeTab: TabId;
@@ -73,6 +89,10 @@ interface OnitLayoutProps {
 export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [alerts, setAlerts] = useState<AlertItem[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const notifRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
 
   const userRole = (session?.user as Record<string, unknown>)?.role as string;
@@ -85,6 +105,86 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
   });
 
   const ActiveDashboard = dashboardComponents[activeTab] || DashboardDG;
+
+  // Fetch alerts for notifications
+  useEffect(() => {
+    if (!session) return;
+    async function fetchAlerts() {
+      try {
+        const res = await fetch('/api/alerts');
+        if (res.ok) {
+          const data = await res.json();
+          const alertList = (data.alerts || []) as AlertItem[];
+          setAlerts(alertList);
+          setUnreadCount(alertList.filter((a) => !a.isResolved).length);
+        }
+      } catch (err) {
+        console.error('Alerts fetch error:', err);
+      }
+    }
+    fetchAlerts();
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchAlerts, 30000);
+    return () => clearInterval(interval);
+  }, [session]);
+
+  // Close notification dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setNotifOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleMarkAllRead = async () => {
+    try {
+      // Resolve all unread alerts one by one
+      const unresolved = alerts.filter((a) => !a.isResolved);
+      await Promise.all(
+        unresolved.map((alert) =>
+          fetch('/api/alerts', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: alert.id }),
+          })
+        )
+      );
+      setAlerts((prev) => prev.map((a) => ({ ...a, isResolved: true })));
+      setUnreadCount(0);
+    } catch (err) {
+      console.error('Mark all read error:', err);
+    }
+  };
+
+  const getAlertIcon = (severity: string) => {
+    if (severity === 'CRITIQUE') return <XCircle className="h-4 w-4 text-red-400" />;
+    if (severity === 'HAUTE') return <AlertTriangle className="h-4 w-4 text-amber-400" />;
+    return <Info className="h-4 w-4 text-blue-400" />;
+  };
+
+  const getAlertBg = (severity: string) => {
+    if (severity === 'CRITIQUE') return 'bg-red-500/5 border-red-500/20';
+    if (severity === 'HAUTE') return 'bg-amber-500/5 border-amber-500/20';
+    return 'bg-blue-500/5 border-blue-500/20';
+  };
+
+  const formatAlertTime = (dateStr: string) => {
+    try {
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diff = now.getTime() - date.getTime();
+      const minutes = Math.floor(diff / 60000);
+      if (minutes < 60) return `Il y a ${minutes} min`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `Il y a ${hours}h`;
+      return `Il y a ${Math.floor(hours / 24)}j`;
+    } catch {
+      return '';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0A0F1E] flex">
@@ -159,10 +259,70 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
               <Search className="h-3.5 w-3.5 text-slate-500" />
               <input type="text" placeholder="Rechercher..." className="bg-transparent text-xs text-slate-300 placeholder-slate-600 focus:outline-none w-40" onFocus={() => setSearchFocused(true)} onBlur={() => setSearchFocused(false)} />
             </div>
-            <button className="relative p-2 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-300 transition-colors">
-              <Bell className="h-4 w-4" />
-              <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-400 animate-pulse" />
-            </button>
+
+            {/* Notification Bell */}
+            <div className="relative" ref={notifRef}>
+              <button
+                onClick={() => setNotifOpen(!notifOpen)}
+                className="relative p-2 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-300 transition-colors"
+              >
+                <Bell className="h-4 w-4" />
+                {unreadCount > 0 && (
+                  <span className="absolute top-1 right-1 h-4 min-w-4 rounded-full bg-red-500 text-[9px] font-bold text-white flex items-center justify-center px-0.5">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {notifOpen && (
+                <div className="absolute right-0 top-full mt-2 w-80 rounded-xl bg-[#1E293B]/95 backdrop-blur-xl border border-white/10 shadow-xl z-50 overflow-hidden animate-fade-in-up">
+                  <div className="p-3 border-b border-white/10 flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                      <Bell className="h-4 w-4 text-[#D4A843]" />
+                      Alertes
+                    </h3>
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={handleMarkAllRead}
+                        className="flex items-center gap-1 text-[10px] text-[#D4A843] hover:text-[#D4A843]/80 transition-colors"
+                      >
+                        <CheckCheck className="h-3 w-3" />
+                        Tout marquer lu
+                      </button>
+                    )}
+                  </div>
+                  <div className="max-h-80 overflow-y-auto custom-scrollbar">
+                    {alerts.length === 0 ? (
+                      <div className="p-6 text-center">
+                        <Bell className="h-6 w-6 text-slate-600 mx-auto mb-2" />
+                        <p className="text-xs text-slate-500">Aucune alerte</p>
+                      </div>
+                    ) : (
+                      alerts.slice(0, 10).map((alert) => (
+                        <div
+                          key={alert.id}
+                          className={`p-3 border-b border-white/5 transition-colors hover:bg-white/5 ${!alert.isResolved ? 'bg-white/[0.02]' : ''}`}
+                        >
+                          <div className="flex items-start gap-2">
+                            {getAlertIcon(alert.severity)}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-medium text-slate-200 truncate">{alert.message}</p>
+                              <div className="flex items-center gap-2 mt-0.5">
+                                {alert.operator && <span className="text-[10px] text-slate-500">{alert.operator}</span>}
+                                {alert.region && <span className="text-[10px] text-slate-500">• {alert.region}</span>}
+                              </div>
+                              <p className="text-[10px] text-slate-600 mt-0.5">{formatAlertTime(alert.createdAt)}</p>
+                            </div>
+                            {!alert.isResolved && <div className="h-2 w-2 rounded-full bg-red-400 flex-shrink-0 mt-1" />}
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
               <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-[10px] text-emerald-400 font-medium">Live</span>

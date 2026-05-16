@@ -50,21 +50,50 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    const body = await request.json();
+
+    // Allow public submissions (no auth required) for SIGNALEMENT type
+    const isPublicReport = body.type === "SIGNALEMENT_PUBLIC" && !session?.user;
+
+    if (!isPublicReport && !session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
-    const body = await request.json();
-    const alert = await db.alerte.create({
-      data: {
-        type: body.type,
-        severity: body.severity,
-        operateurId: body.operateurId,
-        regionId: body.regionId,
-        message: body.message,
-        details: body.details,
-      },
-    });
+    // Build the alert data
+    const alertData: {
+      type: string;
+      severity: string;
+      message: string;
+      details?: string;
+      operateurId?: string;
+      regionId?: string;
+    } = {
+      type: body.type || "SIGNALEMENT_PUBLIC",
+      severity: body.severity || "MOYENNE",
+      message: body.message,
+    };
+
+    if (body.details) {
+      alertData.details = body.details;
+    }
+
+    // Resolve operator ID from code if provided
+    if (body.operatorCode) {
+      const op = await db.operateur.findFirst({ where: { code: body.operatorCode.toUpperCase() } });
+      if (op) alertData.operateurId = op.id;
+    } else if (body.operateurId) {
+      alertData.operateurId = body.operateurId;
+    }
+
+    // Resolve region ID from code if provided
+    if (body.regionCode) {
+      const reg = await db.region.findFirst({ where: { code: body.regionCode.toUpperCase() } });
+      if (reg) alertData.regionId = reg.id;
+    } else if (body.regionId) {
+      alertData.regionId = body.regionId;
+    }
+
+    const alert = await db.alerte.create({ data: alertData });
 
     return NextResponse.json({ alert });
   } catch (error) {

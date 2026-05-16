@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Globe, Signal, Activity, Users, Wifi, FileText, AlertCircle, ChevronDown, ChevronUp, Send } from 'lucide-react';
+import { Globe, Signal, Activity, Users, Wifi, FileText, AlertCircle, ChevronDown, ChevronUp, Send, Loader2 } from 'lucide-react';
 import { GuineaMapLeaflet } from './guinea-map-leaflet';
+import { toast } from 'sonner';
 
 interface MapRegionData { code: string; nom: string; centreLat: number; centreLng: number; population: number; coverage: number; qos: number; color: string; whiteZones: number }
 interface MapPointData { lat: number; lng: number; operator: string; operatorColor: string; rssi: number | null; scoreQoE: number | null }
@@ -21,6 +22,7 @@ const faqData = [
 export function DashboardPublic() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [problemForm, setProblemForm] = useState({ name: '', phone: '', operator: '', region: '', description: '' });
+  const [submitting, setSubmitting] = useState(false);
   const [mapData, setMapData] = useState<{ regions: MapRegionData[]; measurementPoints: MapPointData[]; operators: MapOperatorData[] } | null>(null);
   const [operators, setOperators] = useState<OperatorScore[]>([]);
   const [reports, setReports] = useState<ReportData[]>([]);
@@ -62,6 +64,44 @@ export function DashboardPublic() {
     }
     fetchData();
   }, []);
+
+  const handleSubmitProblem = async () => {
+    if (!problemForm.name || !problemForm.description) {
+      toast.error('Veuillez remplir votre nom et la description du problème');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const res = await fetch('/api/alerts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'SIGNALEMENT_PUBLIC',
+          severity: 'MOYENNE',
+          message: `Signalement de ${problemForm.name}: ${problemForm.description}`,
+          details: JSON.stringify({
+            name: problemForm.name,
+            phone: problemForm.phone,
+            operatorCode: problemForm.operator,
+            regionCode: problemForm.region,
+          }),
+          operatorCode: problemForm.operator || undefined,
+          regionCode: problemForm.region || undefined,
+        }),
+      });
+      if (res.ok) {
+        toast.success('Votre signalement a été envoyé avec succès. Merci pour votre contribution!');
+        setProblemForm({ name: '', phone: '', operator: '', region: '', description: '' });
+      } else {
+        const data = await res.json();
+        toast.error(data.error || 'Erreur lors de l\'envoi du signalement');
+      }
+    } catch {
+      toast.error('Erreur de connexion au serveur. Réessayez.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -146,15 +186,31 @@ export function DashboardPublic() {
           <h2 className="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2"><AlertCircle className="h-4 w-4 text-emerald-400" />Signaler un Problème</h2>
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
-              <div><label className="text-[10px] text-slate-500 mb-1 block">Nom complet</label><input type="text" value={problemForm.name} onChange={(e) => setProblemForm({ ...problemForm, name: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/40" placeholder="Votre nom" /></div>
+              <div><label className="text-[10px] text-slate-500 mb-1 block">Nom complet *</label><input type="text" value={problemForm.name} onChange={(e) => setProblemForm({ ...problemForm, name: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/40" placeholder="Votre nom" /></div>
               <div><label className="text-[10px] text-slate-500 mb-1 block">Téléphone</label><input type="text" value={problemForm.phone} onChange={(e) => setProblemForm({ ...problemForm, phone: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/40" placeholder="+224 xxx xxxx" /></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div><label className="text-[10px] text-slate-500 mb-1 block">Opérateur</label><select value={problemForm.operator} onChange={(e) => setProblemForm({ ...problemForm, operator: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/40"><option value="">Sélectionner</option>{operators.map((op) => (<option key={op.id} value={op.id}>{op.name}</option>))}</select></div>
+              <div><label className="text-[10px] text-slate-500 mb-1 block">Opérateur</label><select value={problemForm.operator} onChange={(e) => setProblemForm({ ...problemForm, operator: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/40"><option value="">Sélectionner</option>{operators.map((op) => (<option key={op.id} value={op.code}>{op.name}</option>))}</select></div>
               <div><label className="text-[10px] text-slate-500 mb-1 block">Région</label><select value={problemForm.region} onChange={(e) => setProblemForm({ ...problemForm, region: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/40"><option value="">Sélectionner</option>{(mapData?.regions || []).map((r) => (<option key={r.code} value={r.code}>{r.nom}</option>))}</select></div>
             </div>
-            <div><label className="text-[10px] text-slate-500 mb-1 block">Description du problème</label><textarea value={problemForm.description} onChange={(e) => setProblemForm({ ...problemForm, description: e.target.value })} rows={3} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/40 resize-none" placeholder="Décrivez le problème rencontré..." /></div>
-            <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-[#D4A843] to-[#10B981] text-sm font-semibold text-[#0A0F1E] hover:opacity-90 transition-opacity"><Send className="h-4 w-4" />Envoyer le Signalement</button>
+            <div><label className="text-[10px] text-slate-500 mb-1 block">Description du problème *</label><textarea value={problemForm.description} onChange={(e) => setProblemForm({ ...problemForm, description: e.target.value })} rows={3} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/40 resize-none" placeholder="Décrivez le problème rencontré..." /></div>
+            <button
+              onClick={handleSubmitProblem}
+              disabled={submitting}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-[#D4A843] to-[#10B981] text-sm font-semibold text-[#0A0F1E] hover:opacity-90 transition-opacity disabled:opacity-50"
+            >
+              {submitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Envoi en cours...
+                </>
+              ) : (
+                <>
+                  <Send className="h-4 w-4" />
+                  Envoyer le Signalement
+                </>
+              )}
+            </button>
           </div>
         </div>
 

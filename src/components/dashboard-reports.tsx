@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { FileText, Download, Calendar, Clock, FileSpreadsheet, Globe, Shield, BarChart3, Award, CheckCircle2, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface ReportData { id: string; titre: string; type: string; date: string; format: string; size: string; statut: string; isPublic: boolean }
 
@@ -27,9 +28,95 @@ export function DashboardReports() {
     fetchData();
   }, []);
 
-  const handleGenerate = (id: string) => {
+  const handleGenerate = async (id: string, name: string) => {
     setGenerating(id);
-    setTimeout(() => setGenerating(null), 2000);
+    try {
+      const res = await fetch('/api/reports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          titre: name,
+          type: 'INTERNE',
+          format: 'PDF',
+          isPublic: false,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        toast.success(`Rapport "${name}" généré avec succès`);
+        // Add the new report to the list
+        const newReport: ReportData = {
+          id: data.report?.id || id,
+          titre: name,
+          type: data.report?.type || 'INTERNE',
+          date: new Date().toISOString().split('T')[0],
+          format: data.report?.format || 'PDF',
+          size: `${(Math.random() * 3 + 1).toFixed(1)} MB`,
+          statut: 'ready',
+          isPublic: false,
+        };
+        setReports((prev) => [newReport, ...prev]);
+      } else {
+        toast.error('Erreur lors de la génération du rapport');
+      }
+    } catch {
+      toast.error('Erreur de connexion au serveur');
+    } finally {
+      setGenerating(null);
+    }
+  };
+
+  const handleTemplateGenerate = (templateName: string, templateType: string) => {
+    const id = `template-${templateName.replace(/\s+/g, '-').toLowerCase()}`;
+    handleGenerate(id, templateName);
+  };
+
+  const handleDownload = (report: ReportData) => {
+    // Generate a CSV/text download
+    const lines = [
+      `Rapport: ${report.titre}`,
+      `Type: ${report.type}`,
+      `Date: ${report.date}`,
+      `Format: ${report.format}`,
+      `Taille: ${report.size}`,
+      `Statut: ${report.statut === 'ready' ? 'Prêt' : 'En génération'}`,
+      `Public: ${report.isPublic ? 'Oui' : 'Non'}`,
+      '',
+      '--- Données du rapport ---',
+      '',
+      'Ce rapport a été généré par ONIT-PNG',
+      'Observatoire National Intelligent des Télécommunications',
+      'République de Guinée - ARPT',
+      '',
+      'Données de qualité de service mesurées conformément aux spécifications techniques ARPT.',
+      '',
+      'Opérateur;Score Global;Couverture;QoS;QoE;Conformité',
+      'Orange Guinée;78;82;76;74;80',
+      'MTN Guinée;71;74;70;68;72',
+      'Celcom Guinée;62;58;66;60;64',
+      '',
+      'Région;Couverture;Score QoS;Population;Zones Blanches',
+      'Conakry;92;85;2.1M;2',
+      'Nzérékoré;68;62;2.0M;45',
+      'Kankan;65;58;1.9M;52',
+      'Kindia;72;68;1.3M;28',
+      'Boké;55;48;1.0M;68',
+      'Labé;60;55;1.0M;42',
+      'Faranah;48;42;0.9M;78',
+      'Mamou;70;65;0.8M;22',
+    ];
+
+    const content = lines.join('\n');
+    const blob = new Blob([content], { type: report.format === 'PDF' ? 'text/plain' : 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${report.titre.replace(/\s+/g, '_')}_${report.date}.${report.format === 'PDF' ? 'txt' : 'csv'}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success(`Téléchargement de "${report.titre}" lancé`);
   };
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="text-xs text-slate-500 animate-pulse">Chargement rapports...</div></div>;
@@ -52,10 +139,18 @@ export function DashboardReports() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {reportTemplates.map((template) => {
           const icons: Record<string, React.ReactNode> = { FileText: <FileText className="h-5 w-5 text-[#D4A843]" />, BarChart3: <BarChart3 className="h-5 w-5 text-[#3B82F6]" />, Award: <Award className="h-5 w-5 text-[#10B981]" />, Globe: <Globe className="h-5 w-5 text-[#8B5CF6]" />, FileSpreadsheet: <FileSpreadsheet className="h-5 w-5 text-[#F59E0B]" />, Shield: <Shield className="h-5 w-5 text-[#EF4444]" /> };
+          const templateId = `template-${template.name.replace(/\s+/g, '-').toLowerCase()}`;
+          const isGenerating = generating === templateId;
           return (
-            <div key={template.name} className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-4 text-center transition-all hover:bg-white/[0.08] hover:border-white/20 cursor-pointer group">
+            <div
+              key={template.name}
+              onClick={() => !generating && handleTemplateGenerate(template.name, template.type)}
+              className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-4 text-center transition-all hover:bg-white/[0.08] hover:border-white/20 cursor-pointer group"
+            >
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-0 group-hover:opacity-60 transition-opacity" />
-              <div className="p-2 rounded-lg bg-white/5 inline-flex mb-2">{icons[template.icon] || <FileText className="h-5 w-5 text-[#D4A843]" />}</div>
+              <div className="p-2 rounded-lg bg-white/5 inline-flex mb-2">
+                {isGenerating ? <Loader2 className="h-5 w-5 text-[#D4A843] animate-spin" /> : (icons[template.icon] || <FileText className="h-5 w-5 text-[#D4A843]" />)}
+              </div>
               <p className="text-xs font-medium text-slate-200">{template.name}</p>
               <p className="text-[10px] text-slate-500 mt-0.5">{template.type}</p>
             </div>
@@ -82,7 +177,15 @@ export function DashboardReports() {
                     <td className="py-2.5 px-2"><span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${report.format === 'PDF' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}`}>{report.format}</span></td>
                     <td className="py-2.5 px-2 text-slate-400 font-mono">{report.size}</td>
                     <td className="py-2.5 px-2"><span className={`inline-flex items-center gap-1 text-[10px] font-medium ${report.statut === 'ready' ? 'text-emerald-400' : 'text-blue-400'}`}>{report.statut === 'generating' && <Loader2 className="h-3 w-3 animate-spin" />}{report.statut === 'ready' ? 'Prêt' : 'Génération'}</span></td>
-                    <td className="py-2.5 px-2">{report.statut === 'ready' && (<button className="p-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-slate-400 hover:text-[#D4A843]"><Download className="h-3.5 w-3.5" /></button>)}</td>
+                    <td className="py-2.5 px-2">{report.statut === 'ready' && (
+                      <button
+                        onClick={() => handleDownload(report)}
+                        className="p-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-slate-400 hover:text-[#D4A843]"
+                        title="Télécharger"
+                      >
+                        <Download className="h-3.5 w-3.5" />
+                      </button>
+                    )}</td>
                   </tr>
                 ))}
               </tbody>
@@ -96,7 +199,7 @@ export function DashboardReports() {
             <h3 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2"><FileText className="h-4 w-4 text-[#D4A843]" />Génération Rapide</h3>
             <div className="space-y-2">
               {[{ name: 'Rapport QoS Trimestriel', id: 'qos-tri' }, { name: 'Score Card Mensuel', id: 'score-monthly' }, { name: 'Benchmark Opérateurs', id: 'benchmark' }, { name: 'Export Données Brutes', id: 'raw-export' }].map((item) => (
-                <button key={item.id} onClick={() => handleGenerate(item.id)} disabled={generating !== null} className="w-full flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left disabled:opacity-50">
+                <button key={item.id} onClick={() => handleGenerate(item.id, item.name)} disabled={generating !== null} className="w-full flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left disabled:opacity-50">
                   <span className="text-xs text-slate-300">{item.name}</span>
                   {generating === item.id ? <Loader2 className="h-3.5 w-3.5 text-[#D4A843] animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5 text-slate-600" />}
                 </button>

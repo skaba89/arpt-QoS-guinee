@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { Lock, Mail, Eye, EyeOff, Shield, Loader2, AlertCircle } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -32,12 +33,15 @@ export function LoginModal({ isOpen }: LoginModalProps) {
 
       if (result?.error) {
         setError('Identifiants incorrects. Vérifiez votre email et mot de passe.');
+        toast.error('Échec de connexion', { description: 'Identifiants incorrects' });
       } else if (result?.ok) {
+        toast.success('Connexion réussie', { description: 'Bienvenue sur ONIT-PNG' });
         // Force a page reload to ensure session is picked up
-        window.location.reload();
+        setTimeout(() => window.location.reload(), 500);
       }
     } catch (err) {
       setError('Erreur de connexion au serveur. Réessayez.');
+      toast.error('Erreur serveur', { description: 'Impossible de se connecter au serveur' });
     } finally {
       setLoading(false);
     }

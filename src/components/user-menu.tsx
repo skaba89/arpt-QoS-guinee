@@ -3,6 +3,7 @@
 import { signOut, useSession } from 'next-auth/react';
 import { User, LogOut, Shield, Clock, Building2, ChevronDown } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
+import { toast } from 'sonner';
 
 const roleLabels: Record<string, string> = {
   SUPER_ADMIN: 'Super Admin',
@@ -109,7 +110,10 @@ export function UserMenu() {
           {/* Logout */}
           <div className="p-2 border-t border-white/10">
             <button
-              onClick={() => signOut({ redirect: false })}
+              onClick={() => {
+                toast.success('Déconnexion', { description: 'Vous avez été déconnecté' });
+                signOut({ redirect: false });
+              }}
               className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs text-red-400 hover:bg-red-500/10 transition-colors text-left"
             >
               <LogOut className="h-3.5 w-3.5" />
