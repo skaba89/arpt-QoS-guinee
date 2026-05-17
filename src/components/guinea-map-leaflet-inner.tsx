@@ -185,12 +185,12 @@ export function GuineaMapLeafletInner({
               });
 
               layer.on('mouseover', () => {
-                layer.setStyle({ fillOpacity: 0.7, weight: 2, color: '#F1F5F9' });
+                (layer as L.GeoJSON).setStyle({ fillOpacity: 0.7, weight: 2, color: '#F1F5F9' });
               });
 
               layer.on('mouseout', () => {
                 const isStillSelected = selectedRegion === feature.properties.nom;
-                layer.setStyle({
+                (layer as L.GeoJSON).setStyle({
                   fillOpacity: isStillSelected ? 0.65 : 0.4,
                   weight: isStillSelected ? 3 : 1.5,
                   color: isStillSelected ? '#D4A843' : 'rgba(255,255,255,0.3)',

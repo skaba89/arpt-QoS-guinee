@@ -3,6 +3,67 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { checkPermission, logAudit, getAccessibleOperators, getAccessibleRegions, getRLSScope } from "@/lib/rbac";
+import { z } from "zod";
+
+// ── Zod Schemas ──
+
+const stripHtml = (val: string) => val.replace(/<[^>]*>/g, "");
+
+/** Shared schema for a single QoS measurement row (used in both POST and PUT) */
+const mesureBaseSchema = z.object({
+  // Identifiers — either ID or code
+  operateurId: z.string().max(50).transform(stripHtml).optional(),
+  operatorCode: z.string().max(20).transform(stripHtml).optional(),
+  regionId: z.string().max(50).transform(stripHtml).optional(),
+  regionCode: z.string().max(20).transform(stripHtml).optional(),
+  campagneId: z.string().max(50).transform(stripHtml).optional(),
+  campagneNom: z.string().max(200).transform(stripHtml).optional(),
+  // Required fields
+  latitude: z.coerce.number().min(-90, "Latitude min -90").max(90, "Latitude max 90"),
+  longitude: z.coerce.number().min(-180, "Longitude min -180").max(180, "Longitude max 180"),
+  timestamp: z.string().min(1, "Timestamp requis").max(50).transform(stripHtml),
+  typeMesure: z.string().min(1, "typeMesure requis").max(50).transform(stripHtml),
+  // RF Metrics
+  rssi: z.coerce.number().min(-150).max(-30).optional(),
+  rsrp: z.coerce.number().min(-140).max(-44).optional(),
+  rsrq: z.coerce.number().min(-20).max(-3).optional(),
+  sinr: z.coerce.number().min(-20).max(30).optional(),
+  // Network Metrics
+  latence: z.coerce.number().min(0).max(5000).optional(),
+  debitDescendant: z.coerce.number().min(0).max(100000).optional(),
+  debitMontant: z.coerce.number().min(0).max(100000).optional(),
+  gigue: z.coerce.number().min(0).max(5000).optional(),
+  tauxAppelReussi: z.coerce.number().min(0).max(100).optional(),
+  tauxDropCall: z.coerce.number().min(0).max(100).optional(),
+  // Internet Metrics
+  debitDownload: z.coerce.number().min(0).max(100000).optional(),
+  debitUpload: z.coerce.number().min(0).max(100000).optional(),
+  ping: z.coerce.number().min(0).max(5000).optional(),
+  dnsLookupTime: z.coerce.number().min(0).max(5000).optional(),
+  tcpConnectTime: z.coerce.number().min(0).max(5000).optional(),
+  // QoE Metrics
+  scoreQoE: z.coerce.number().min(0).max(100).optional(),
+  pageLoadTime: z.coerce.number().min(0).max(60000).optional(),
+  videoBuffering: z.coerce.number().min(0).max(60000).optional(),
+});
+
+/** POST schema — requires operateurId|operatorCode, regionId|regionCode, campagneId|campagneNom */
+const createMesureSchema = mesureBaseSchema.refine(
+  (data) => data.operateurId || data.operatorCode,
+  { message: "operateurId ou operatorCode requis", path: ["operateurId"] }
+).refine(
+  (data) => data.regionId || data.regionCode,
+  { message: "regionId ou regionCode requis", path: ["regionId"] }
+).refine(
+  (data) => data.campagneId || data.campagneNom,
+  { message: "campagneId ou campagneNom requis", path: ["campagneId"] }
+);
+
+/** PUT schema — JSON bulk import body */
+const bulkImportSchema = z.object({
+  campagneId: z.string().min(1, "campagneId requis pour l'import en masse").max(50).transform(stripHtml),
+  mesures: z.array(mesureBaseSchema).min(1, "Au moins une mesure requise").max(10000, "Maximum 10 000 mesures par import"),
+});
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // GET /api/mesures — List QoS measurements (RLS-filtered)
@@ -143,18 +204,17 @@ export async function POST(request: Request) {
       );
     }
 
-    const body = await request.json();
+    const rawBody = await request.json();
+    const parsed = createMesureSchema.safeParse(rawBody);
 
-    // ── Validate required fields ──
-    const requiredFields = ["latitude", "longitude", "timestamp", "typeMesure"];
-    for (const field of requiredFields) {
-      if (body[field] === undefined || body[field] === null) {
-        return NextResponse.json(
-          { error: `Champ requis manquant: ${field}` },
-          { status: 400 }
-        );
-      }
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Données invalides", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
     }
+
+    const body = parsed.data;
 
     // ── Resolve operator ID ──
     let operateurId = body.operateurId;
@@ -213,62 +273,37 @@ export async function POST(request: Request) {
       );
     }
 
-    // ── Validate numeric ranges ──
-    const validateRange = (value: number | undefined, min: number, max: number, name: string): number | undefined => {
-      if (value === undefined || value === null) return undefined;
-      if (value < min || value > max) {
-        throw new Error(`${name} hors limites [${min}, ${max}]: ${value}`);
-      }
-      return value;
-    };
-
-    try {
-      validateRange(body.rssi, -150, -30, "rssi");
-      validateRange(body.rsrp, -140, -44, "rsrp");
-      validateRange(body.rsrq, -20, -3, "rsrq");
-      validateRange(body.sinr, -20, 30, "sinr");
-      validateRange(body.latence, 0, 5000, "latence");
-      validateRange(body.tauxAppelReussi, 0, 100, "tauxAppelReussi");
-      validateRange(body.tauxDropCall, 0, 100, "tauxDropCall");
-      validateRange(body.scoreQoE, 0, 100, "scoreQoE");
-    } catch (validationError) {
-      return NextResponse.json(
-        { error: (validationError as Error).message },
-        { status: 400 }
-      );
-    }
-
-    // ── Build measurement data ──
+    // ── Build measurement data (values already validated by Zod) ──
     const mesureData = {
       operateurId,
       regionId,
       campagneId,
-      latitude: parseFloat(body.latitude),
-      longitude: parseFloat(body.longitude),
+      latitude: body.latitude,
+      longitude: body.longitude,
       timestamp: new Date(body.timestamp),
       typeMesure: body.typeMesure,
       // RF Metrics
-      rssi: body.rssi !== undefined ? parseFloat(body.rssi) : undefined,
-      rsrp: body.rsrp !== undefined ? parseFloat(body.rsrp) : undefined,
-      rsrq: body.rsrq !== undefined ? parseFloat(body.rsrq) : undefined,
-      sinr: body.sinr !== undefined ? parseFloat(body.sinr) : undefined,
+      rssi: body.rssi,
+      rsrp: body.rsrp,
+      rsrq: body.rsrq,
+      sinr: body.sinr,
       // Network Metrics
-      latence: body.latence !== undefined ? parseFloat(body.latence) : undefined,
-      debitDescendant: body.debitDescendant !== undefined ? parseFloat(body.debitDescendant) : undefined,
-      debitMontant: body.debitMontant !== undefined ? parseFloat(body.debitMontant) : undefined,
-      gigue: body.gigue !== undefined ? parseFloat(body.gigue) : undefined,
-      tauxAppelReussi: body.tauxAppelReussi !== undefined ? parseFloat(body.tauxAppelReussi) : undefined,
-      tauxDropCall: body.tauxDropCall !== undefined ? parseFloat(body.tauxDropCall) : undefined,
+      latence: body.latence,
+      debitDescendant: body.debitDescendant,
+      debitMontant: body.debitMontant,
+      gigue: body.gigue,
+      tauxAppelReussi: body.tauxAppelReussi,
+      tauxDropCall: body.tauxDropCall,
       // Internet Metrics
-      debitDownload: body.debitDownload !== undefined ? parseFloat(body.debitDownload) : undefined,
-      debitUpload: body.debitUpload !== undefined ? parseFloat(body.debitUpload) : undefined,
-      ping: body.ping !== undefined ? parseFloat(body.ping) : undefined,
-      dnsLookupTime: body.dnsLookupTime !== undefined ? parseFloat(body.dnsLookupTime) : undefined,
-      tcpConnectTime: body.tcpConnectTime !== undefined ? parseFloat(body.tcpConnectTime) : undefined,
+      debitDownload: body.debitDownload,
+      debitUpload: body.debitUpload,
+      ping: body.ping,
+      dnsLookupTime: body.dnsLookupTime,
+      tcpConnectTime: body.tcpConnectTime,
       // QoE Metrics
-      scoreQoE: body.scoreQoE !== undefined ? parseFloat(body.scoreQoE) : undefined,
-      pageLoadTime: body.pageLoadTime !== undefined ? parseFloat(body.pageLoadTime) : undefined,
-      videoBuffering: body.videoBuffering !== undefined ? parseFloat(body.videoBuffering) : undefined,
+      scoreQoE: body.scoreQoE,
+      pageLoadTime: body.pageLoadTime,
+      videoBuffering: body.videoBuffering,
     };
 
     const mesure = await db.mesureQoS.create({ data: mesureData });
@@ -335,12 +370,6 @@ const pf = (val: string | undefined): number | undefined => {
   return isNaN(n) ? undefined : n;
 };
 
-const pfUnknown = (v: unknown): number | undefined => {
-  if (v === undefined || v === null || v === "") return undefined;
-  const n = parseFloat(String(v));
-  return isNaN(n) ? undefined : n;
-};
-
 export async function PUT(request: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -360,50 +389,53 @@ export async function PUT(request: Request) {
     }
 
     const contentType = request.headers.get("content-type") || "";
-    let mesuresData: Record<string, unknown>[] = [];
+    let mesuresData: any[] = [];
     let campagneId = "";
     let format = "";
 
     // ── Format 1: JSON ──
     if (contentType.includes("application/json")) {
       format = "JSON";
-      const body = await request.json();
+      const rawBody = await request.json();
+
+      // Zod validation for the bulk import body
+      const parsed = bulkImportSchema.safeParse(rawBody);
+      if (!parsed.success) {
+        return NextResponse.json(
+          { error: "Données invalides", details: parsed.error.flatten().fieldErrors },
+          { status: 400 }
+        );
+      }
+
+      const body = parsed.data;
       campagneId = body.campagneId;
 
-      if (!campagneId) {
-        return NextResponse.json({ error: "campagneId requis pour l'import en masse" }, { status: 400 });
-      }
-      if (!body.mesures || !Array.isArray(body.mesures)) {
-        return NextResponse.json({ error: "Format invalide — attendu: { campagneId, mesures: [...] }" }, { status: 400 });
-      }
-
       for (const m of body.mesures) {
-        if (m.latitude === undefined || m.longitude === undefined || !m.timestamp || !m.typeMesure) continue;
-
+        // Additional Zod validation on each row (already parsed, but check IDs)
         let operateurId = m.operateurId;
         if (!operateurId && m.operatorCode) {
-          const op = await db.operateur.findFirst({ where: { code: (m.operatorCode as string).toUpperCase() } });
+          const op = await db.operateur.findFirst({ where: { code: m.operatorCode.toUpperCase() } });
           if (op) operateurId = op.id;
         }
         if (!operateurId) continue;
 
         let regionId = m.regionId;
         if (!regionId && m.regionCode) {
-          const reg = await db.region.findFirst({ where: { code: (m.regionCode as string).toUpperCase() } });
+          const reg = await db.region.findFirst({ where: { code: m.regionCode.toUpperCase() } });
           if (reg) regionId = reg.id;
         }
         if (!regionId) continue;
 
         mesuresData.push({
           operateurId, regionId, campagneId,
-          latitude: parseFloat(m.latitude), longitude: parseFloat(m.longitude),
+          latitude: m.latitude, longitude: m.longitude,
           timestamp: new Date(m.timestamp), typeMesure: m.typeMesure,
-          rssi: pfUnknown(m.rssi), rsrp: pfUnknown(m.rsrp), rsrq: pfUnknown(m.rsrq), sinr: pfUnknown(m.sinr),
-          latence: pfUnknown(m.latence), debitDescendant: pfUnknown(m.debitDescendant), debitMontant: pfUnknown(m.debitMontant),
-          gigue: pfUnknown(m.gigue), tauxAppelReussi: pfUnknown(m.tauxAppelReussi), tauxDropCall: pfUnknown(m.tauxDropCall),
-          debitDownload: pfUnknown(m.debitDownload), debitUpload: pfUnknown(m.debitUpload), ping: pfUnknown(m.ping),
-          dnsLookupTime: pfUnknown(m.dnsLookupTime), tcpConnectTime: pfUnknown(m.tcpConnectTime),
-          scoreQoE: pfUnknown(m.scoreQoE), pageLoadTime: pfUnknown(m.pageLoadTime), videoBuffering: pfUnknown(m.videoBuffering),
+          rssi: m.rssi, rsrp: m.rsrp, rsrq: m.rsrq, sinr: m.sinr,
+          latence: m.latence, debitDescendant: m.debitDescendant, debitMontant: m.debitMontant,
+          gigue: m.gigue, tauxAppelReussi: m.tauxAppelReussi, tauxDropCall: m.tauxDropCall,
+          debitDownload: m.debitDownload, debitUpload: m.debitUpload, ping: m.ping,
+          dnsLookupTime: m.dnsLookupTime, tcpConnectTime: m.tcpConnectTime,
+          scoreQoE: m.scoreQoE, pageLoadTime: m.pageLoadTime, videoBuffering: m.videoBuffering,
         });
       }
     }
@@ -433,24 +465,47 @@ export async function PUT(request: Request) {
         const reg = await db.region.findFirst({ where: { code: regionCode.toUpperCase() } });
         if (!reg) continue;
 
-        mesuresData.push({
-          operateurId: op.id, regionId: reg.id, campagneId,
-          latitude: parseFloat(row.latitude), longitude: parseFloat(row.longitude),
-          timestamp: new Date(row.timestamp),
+        // Zod validation on each CSV row converted to object
+        const csvRowParsed = mesureBaseSchema.safeParse({
+          latitude: row.latitude,
+          longitude: row.longitude,
+          timestamp: row.timestamp,
           typeMesure: row.typemesure || row.type_mesure || row.type || "MOBILE",
-          rssi: pf(row.rssi), rsrp: pf(row.rsrp), rsrq: pf(row.rsrq), sinr: pf(row.sinr),
+          rssi: pf(row.rssi),
+          rsrp: pf(row.rsrp),
+          rsrq: pf(row.rsrq),
+          sinr: pf(row.sinr),
           latence: pf(row.latence) || pf(row.latency),
           debitDescendant: pf(row.debitdescendant) || pf(row.download_throughput),
           debitMontant: pf(row.debitmontant) || pf(row.upload_throughput),
           gigue: pf(row.gigue) || pf(row.jitter),
           tauxAppelReussi: pf(row.tauxappelreussi) || pf(row.call_success_rate),
           tauxDropCall: pf(row.tauxdropcall) || pf(row.drop_call_rate),
-          debitDownload: pf(row.debitdownload), debitUpload: pf(row.debitupload),
-          ping: pf(row.ping), dnsLookupTime: pf(row.dnslookuptime) || pf(row.dns_lookup_time),
+          debitDownload: pf(row.debitdownload),
+          debitUpload: pf(row.debitupload),
+          ping: pf(row.ping),
+          dnsLookupTime: pf(row.dnslookuptime) || pf(row.dns_lookup_time),
           tcpConnectTime: pf(row.tcpconnecttime) || pf(row.tcp_connect_time),
           scoreQoE: pf(row.scoreqoe) || pf(row.qoe_score),
           pageLoadTime: pf(row.pageloadtime) || pf(row.page_load_time),
           videoBuffering: pf(row.videobuffering) || pf(row.video_buffering),
+        });
+
+        // Skip rows that fail Zod validation (don't fail the whole import)
+        if (!csvRowParsed.success) continue;
+
+        const validatedRow = csvRowParsed.data;
+        mesuresData.push({
+          operateurId: op.id, regionId: reg.id, campagneId,
+          latitude: validatedRow.latitude, longitude: validatedRow.longitude,
+          timestamp: new Date(validatedRow.timestamp),
+          typeMesure: validatedRow.typeMesure,
+          rssi: validatedRow.rssi, rsrp: validatedRow.rsrp, rsrq: validatedRow.rsrq, sinr: validatedRow.sinr,
+          latence: validatedRow.latence, debitDescendant: validatedRow.debitDescendant, debitMontant: validatedRow.debitMontant,
+          gigue: validatedRow.gigue, tauxAppelReussi: validatedRow.tauxAppelReussi, tauxDropCall: validatedRow.tauxDropCall,
+          debitDownload: validatedRow.debitDownload, debitUpload: validatedRow.debitUpload, ping: validatedRow.ping,
+          dnsLookupTime: validatedRow.dnsLookupTime, tcpConnectTime: validatedRow.tcpConnectTime,
+          scoreQoE: validatedRow.scoreQoE, pageLoadTime: validatedRow.pageLoadTime, videoBuffering: validatedRow.videoBuffering,
         });
       }
     } else {
@@ -469,7 +524,7 @@ export async function PUT(request: Request) {
     for (let i = 0; i < mesuresData.length; i += CHUNK_SIZE) {
       const chunk = mesuresData.slice(i, i + CHUNK_SIZE);
       try {
-        const result = await db.mesureQoS.createMany({ data: chunk, skipDuplicates: true });
+        const result = await db.mesureQoS.createMany({ data: chunk as any });
         inserted += result.count;
       } catch (chunkError) {
         console.error("Bulk insert chunk error:", chunkError);

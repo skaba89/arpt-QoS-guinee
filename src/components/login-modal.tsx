@@ -23,8 +23,8 @@ const demoAccounts = [
 ];
 
 export function LoginModal({ isOpen }: LoginModalProps) {
-  const [email, setEmail] = useState('admin@arpt.gn');
-  const [password, setPassword] = useState('Admin@2026!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -66,7 +66,7 @@ export function LoginModal({ isOpen }: LoginModalProps) {
 
   const handleQuickLogin = (accountEmail: string) => {
     setEmail(accountEmail);
-    setPassword('Admin@2026!');
+    setPassword(''); // User must type their own password
     setError('');
   };
 
@@ -196,7 +196,7 @@ export function LoginModal({ isOpen }: LoginModalProps) {
                   </button>
                 ))}
               </div>
-              <p className="text-[9px] text-slate-600 mt-2 text-center">Mot de passe par défaut : Admin@2026!</p>
+              <p className="text-[9px] text-slate-600 mt-2 text-center">Saisissez votre mot de passe pour vous connecter</p>
             </div>
           </div>
 

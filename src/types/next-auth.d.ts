@@ -4,7 +4,7 @@ declare module "next-auth" {
   interface User {
     id: string;
     role: string;
-    organization: string;
+    organization?: string;
     permissions: string[];
   }
 
@@ -14,7 +14,7 @@ declare module "next-auth" {
       email: string;
       name: string;
       role: string;
-      organization: string;
+      organization?: string;
       permissions: string[];
     };
   }
@@ -24,7 +24,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     role: string;
-    organization: string;
+    organization?: string;
     permissions: string[];
   }
 }

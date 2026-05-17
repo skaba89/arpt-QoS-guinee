@@ -18,6 +18,8 @@ export async function checkPermission(
 }
 
 // Get regions accessible by a user based on RLS
+// FIX: Returns region IDs (CUID) instead of region codes
+// This fixes the critical RLS bug where regionId filters compared CODES to CUIDs
 export async function getAccessibleRegions(
   roleType: RoleType | string,
   _userId?: string
@@ -25,20 +27,29 @@ export async function getAccessibleRegions(
   const policy = await db.dataAccessPolicy.findFirst({
     where: { roleType: roleType as RoleType, resource: "campaigns" },
   });
+
   if (!policy) {
-    // If no policy, return all regions for PUBLIC access
-    const regions = await db.region.findMany({ select: { code: true } });
-    return regions.map((r) => r.code);
+    // If no policy, return all region IDs
+    const regions = await db.region.findMany({ select: { id: true } });
+    return regions.map((r) => r.id);
   }
 
   if (policy.scope === "all" || policy.scope === "public_only") {
-    const regions = await db.region.findMany({ select: { code: true } });
-    return regions.map((r) => r.code);
+    // Return all region IDs for full access scopes
+    const regions = await db.region.findMany({ select: { id: true } });
+    return regions.map((r) => r.id);
   }
 
-  if (policy.regions) {
+  if (policy.scope === "own_region" && policy.regions) {
+    // Policy stores region CODES (e.g., ["CON", "KIN", "BOK"])
+    // We need to resolve them to region IDs for Prisma queries
     try {
-      return JSON.parse(policy.regions);
+      const regionCodes: string[] = JSON.parse(policy.regions);
+      const regions = await db.region.findMany({
+        where: { code: { in: regionCodes } },
+        select: { id: true },
+      });
+      return regions.map((r) => r.id);
     } catch {
       return [];
     }
@@ -55,8 +66,9 @@ export async function getAccessibleOperators(
   const policy = await db.dataAccessPolicy.findFirst({
     where: { roleType: roleType as RoleType, resource: "campaigns" },
   });
+
   if (!policy) {
-    // If no policy, return all operators for PUBLIC access
+    // If no policy, return all operator IDs
     const operators = await db.operateur.findMany({ select: { id: true } });
     return operators.map((o) => o.id);
   }
@@ -75,6 +87,7 @@ export async function getAccessibleOperators(
 
   if (policy.operators) {
     try {
+      // Operators are already stored as IDs in the policy
       return JSON.parse(policy.operators);
     } catch {
       return [];
@@ -92,7 +105,6 @@ export function filterDataByRLS<T extends { operateurId?: string; regionId?: str
   scope: string
 ): T[] {
   if (scope === "all") return data;
-  if (scope === "public_only") return data;
 
   return data.filter((item) => {
     const opOk = !item.operateurId || accessibleOperatorIds.includes(item.operateurId);

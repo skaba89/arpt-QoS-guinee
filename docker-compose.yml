@@ -19,7 +19,9 @@ services:
       - NODE_ENV=production
       - DATABASE_URL=file:/app/db/onit-png.db
       - NEXTAUTH_URL=http://localhost:3000
-      - NEXTAUTH_SECRET=onit-png-secret-key-2026-guinee-arpt-changez-moi
+      # SECURITY: NEXTAUTH_SECRET is loaded from .env.docker or environment
+      # Generate with: openssl rand -base64 32
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:?NEXTAUTH_SECRET must be set}
       - PORT=3000
     volumes:
       - onit-db:/app/db

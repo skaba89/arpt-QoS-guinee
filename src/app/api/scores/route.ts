@@ -3,6 +3,28 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { checkPermission, logAudit, getAccessibleOperators, getRLSScope } from "@/lib/rbac";
+import { z } from "zod";
+
+// ── Zod Schema ──
+
+const stripHtml = (val: string) => val.replace(/<[^>]*>/g, "");
+
+const scoreField = z.number().min(0, "Score minimum: 0").max(100, "Score maximum: 100").optional();
+
+const createScoreSchema = z.object({
+  operateurId: z.string().max(50).transform(stripHtml).optional(),
+  operatorCode: z.string().max(20).transform(stripHtml).optional(),
+  periode: z.string().min(1, "Période requise (ex: 2026-Q1)").max(20).transform(stripHtml),
+  scoreGlobal: scoreField,
+  scoreCouverture: scoreField,
+  scoreQoS: scoreField,
+  scoreQoE: scoreField,
+  scoreConformite: scoreField,
+  recommandation: z.string().max(2000).transform(stripHtml).optional(),
+}).refine(
+  (data) => data.operateurId || data.operatorCode,
+  { message: "operateurId ou operatorCode requis", path: ["operateurId"] }
+);
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // GET /api/scores — List operator scores (RLS-filtered)
@@ -86,15 +108,17 @@ export async function POST(request: Request) {
       );
     }
 
-    const body = await request.json();
+    const rawBody = await request.json();
+    const parsed = createScoreSchema.safeParse(rawBody);
 
-    // Validate required fields
-    if (!body.operateurId && !body.operatorCode) {
-      return NextResponse.json({ error: "operateurId ou operatorCode requis" }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Données invalides", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
     }
-    if (!body.periode) {
-      return NextResponse.json({ error: "periode requis (ex: 2026-Q1)" }, { status: 400 });
-    }
+
+    const body = parsed.data;
 
     // Resolve operator
     let operateurId = body.operateurId;
@@ -104,49 +128,36 @@ export async function POST(request: Request) {
       operateurId = op.id;
     }
 
-    // Validate score ranges (0-100)
-    const validateScore = (val: unknown, name: string): number | undefined => {
-      if (val === undefined || val === null) return undefined;
-      const n = parseFloat(String(val));
-      if (isNaN(n) || n < 0 || n > 100) {
-        throw new Error(`${name} doit être entre 0 et 100`);
-      }
-      return n;
-    };
+    if (!operateurId) {
+      return NextResponse.json({ error: "operateurId ou operatorCode requis" }, { status: 400 });
+    }
 
-    let scoreGlobal: number | undefined;
     try {
-      scoreGlobal = validateScore(body.scoreGlobal, "scoreGlobal");
-      const scoreCouverture = validateScore(body.scoreCouverture, "scoreCouverture");
-      const scoreQoS = validateScore(body.scoreQoS, "scoreQoS");
-      const scoreQoE = validateScore(body.scoreQoE, "scoreQoE");
-      const scoreConformite = validateScore(body.scoreConformite, "scoreConformite");
-
       // Upsert score (create or update for same operator + period)
       const score = await db.scoreOperateur.upsert({
         where: {
           operateurId_periode: {
-            operateurId: operateurId!,
+            operateurId: operateurId,
             periode: body.periode,
           },
         },
         create: {
-          operateurId: operateurId!,
+          operateurId: operateurId,
           periode: body.periode,
-          scoreGlobal: scoreGlobal || 0,
-          scoreCouverture: scoreCouverture || 0,
-          scoreQoS: scoreQoS || 0,
-          scoreQoE: scoreQoE || 0,
-          scoreConformite: scoreConformite || 0,
-          recommandation: body.recommandation || "",
+          scoreGlobal: body.scoreGlobal ?? 0,
+          scoreCouverture: body.scoreCouverture ?? 0,
+          scoreQoS: body.scoreQoS ?? 0,
+          scoreQoE: body.scoreQoE ?? 0,
+          scoreConformite: body.scoreConformite ?? 0,
+          recommandation: body.recommandation ?? "",
         },
         update: {
-          scoreGlobal: scoreGlobal || 0,
-          scoreCouverture: scoreCouverture || 0,
-          scoreQoS: scoreQoS || 0,
-          scoreQoE: scoreQoE || 0,
-          scoreConformite: scoreConformite || 0,
-          recommandation: body.recommandation || "",
+          scoreGlobal: body.scoreGlobal ?? 0,
+          scoreCouverture: body.scoreCouverture ?? 0,
+          scoreQoS: body.scoreQoS ?? 0,
+          scoreQoE: body.scoreQoE ?? 0,
+          scoreConformite: body.scoreConformite ?? 0,
+          recommandation: body.recommandation ?? "",
         },
       });
 
@@ -154,14 +165,14 @@ export async function POST(request: Request) {
         userId,
         "CREATE",
         "score",
-        JSON.stringify({ operateurId, periode: body.periode, scoreGlobal }),
+        JSON.stringify({ operateurId, periode: body.periode, scoreGlobal: body.scoreGlobal }),
         score.id
       );
 
       return NextResponse.json({ score, message: "Score mis à jour avec succès" }, { status: 201 });
-    } catch (validationError) {
+    } catch (upsertError) {
       return NextResponse.json(
-        { error: (validationError as Error).message },
+        { error: (upsertError as Error).message },
         { status: 400 }
       );
     }

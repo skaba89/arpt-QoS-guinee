@@ -3,6 +3,21 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getAccessibleOperators, getAccessibleRegions, getRLSScope, logAudit, checkPermission } from "@/lib/rbac";
+import { z } from "zod";
+
+// ── Zod Schema ──
+
+const stripHtml = (val: string) => val.replace(/<[^>]*>/g, "");
+
+const createCampaignSchema = z.object({
+  nom: z.string().min(1, "Nom de campagne requis").max(200).transform(stripHtml),
+  type: z.string().min(1, "Type requis").max(50).transform(stripHtml),
+  operateurId: z.string().min(1, "Opérateur requis").max(50).transform(stripHtml),
+  regionId: z.string().min(1, "Région requise").max(50).transform(stripHtml),
+  dateDebut: z.string().min(1, "Date de début requise").max(30).transform(stripHtml),
+  dateFin: z.string().max(30).optional().transform((v) => (v && v.trim() !== "" ? stripHtml(v) : undefined)),
+  responsable: z.string().min(1, "Responsable requis").max(100).transform(stripHtml),
+});
 
 export async function GET() {
   try {
@@ -64,7 +79,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Permissions insuffisantes" }, { status: 403 });
     }
 
-    const body = await request.json();
+    const rawBody = await request.json();
+    const parsed = createCampaignSchema.safeParse(rawBody);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Données invalides", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+
+    const body = parsed.data;
     const campaign = await db.campagne.create({
       data: {
         nom: body.nom,
