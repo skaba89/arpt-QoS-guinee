@@ -188,7 +188,7 @@ export function DashboardQoS() {
                 { label: 'Débit', value: `${op.debit}Mbps`, good: op.debit > 15 },
                 { label: 'Taux Appel', value: `${op.tauxAppel}%`, good: op.tauxAppel > 90 },
                 { label: 'Jitter', value: `${op.jitter}ms`, good: op.jitter < 10 },
-                { label: 'Disponibilité', value: `${op.disponite}%`, good: true },
+                { label: 'Disponibilité', value: `${op.disponibilite}%`, good: true },
               ].map((metric) => (
                 <div key={metric.label} className="flex items-center justify-between">
                   <span className="text-xs text-slate-400">{metric.label}</span>

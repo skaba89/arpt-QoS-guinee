@@ -244,7 +244,7 @@ async function main() {
   console.log('  ✅ Campaigns (8)');
 
   // ═══════════════════════════════════════════
-  // 7. Create QoS Measurements
+  // 7. Create QoS Measurements (realistic coverage)
   // ═══════════════════════════════════════════
   const opCodes = ['ORANGE', 'MTN', 'CELCOM'];
   const regionCodes = ['CON', 'KIN', 'BOK', 'LAB', 'MAM', 'FAR', 'KAN', 'NZE'];
@@ -252,7 +252,7 @@ async function main() {
   const regionIds = Object.values(regionMap);
   const operateurIds = Object.values(operateurMap);
 
-  // QoS baselines per operator (adjusted per region)
+  // QoS baselines per operator
   const qosBase: Record<string, { latence: number; debit: number; tauxAppel: number; jitter: number; debitDown: number; debitUp: number; ping: number; rssi: number; rsrp: number; rsrq: number; sinr: number; scoreQoE: number }> = {
     ORANGE: { latence: 38, debit: 22, tauxAppel: 96, jitter: 6, debitDown: 24, debitUp: 12, ping: 35, rssi: -70, rsrp: -85, rsrq: -8, sinr: 15, scoreQoE: 79 },
     MTN: { latence: 45, debit: 18, tauxAppel: 93, jitter: 9, debitDown: 20, debitUp: 10, ping: 42, rssi: -75, rsrp: -90, rsrq: -10, sinr: 12, scoreQoE: 74 },
@@ -262,6 +262,24 @@ async function main() {
   // Region degradation factor (1.0 = good, higher = more degraded)
   const regionFactor: Record<string, number> = {
     CON: 1.0, KIN: 1.1, BOK: 1.35, LAB: 1.25, MAM: 1.15, FAR: 1.45, KAN: 1.3, NZE: 1.4,
+  };
+
+  // Target coverage probability per region (fraction of measurements with RSSI > -100)
+  // This produces realistic varied coverage across regions
+  const regionCoverage: Record<string, number> = {
+    CON: 0.92,   // Conakry: ~92% coverage (urban, well covered)
+    KIN: 0.71,   // Kindia: ~71% coverage
+    BOK: 0.55,   // Boké: ~55% coverage (rural, many dead zones)
+    LAB: 0.63,   // Labé: ~63% coverage
+    MAM: 0.68,   // Mamou: ~68% coverage
+    FAR: 0.48,   // Faranah: ~48% coverage (worst coverage)
+    KAN: 0.61,   // Kankan: ~61% coverage
+    NZE: 0.52,   // N'Zérékoré: ~52% coverage (forest region, poor coverage)
+  };
+
+  // Number of measurements per operator-region combo
+  const regionMeasureCount: Record<string, number> = {
+    CON: 12, KIN: 9, BOK: 9, LAB: 9, MAM: 9, FAR: 9, KAN: 9, NZE: 9,
   };
 
   // Center coords with small random offsets for measurements
@@ -278,6 +296,28 @@ async function main() {
 
   const measurementTypes = ['MOBILE', 'INTERNET'];
 
+  // Pre-compute deterministic coverage patterns per region
+  // This ensures exact coverage percentages instead of relying on random chance with small N
+  const regionCoveragePattern: Record<string, boolean[]> = {};
+  for (const rCode of regionCodes) {
+    const totalForRegion = regionMeasureCount[rCode] * 3; // 3 operators
+    const coveredCount = Math.round(totalForRegion * regionCoverage[rCode]);
+    const deadZoneCount = totalForRegion - coveredCount;
+    // Create pattern: first 'coveredCount' are true, rest are false
+    const pattern: boolean[] = [];
+    for (let i = 0; i < coveredCount; i++) pattern.push(true);
+    for (let i = 0; i < deadZoneCount; i++) pattern.push(false);
+    // Shuffle deterministically (Fisher-Yates with simple seeded approach)
+    let seed = rCode.charCodeAt(0) * 1000 + rCode.charCodeAt(1) * 100 + (rCode.length > 2 ? rCode.charCodeAt(2) : 0);
+    for (let i = pattern.length - 1; i > 0; i--) {
+      seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+      const j = seed % (i + 1);
+      [pattern[i], pattern[j]] = [pattern[j], pattern[i]];
+    }
+    regionCoveragePattern[rCode] = pattern;
+  }
+
+  let totalMeasures = 0;
   for (let oi = 0; oi < opCodes.length; oi++) {
     const opCode = opCodes[oi];
     const opId = operateurIds[oi];
@@ -288,15 +328,95 @@ async function main() {
       const rId = regionIds[ri];
       const factor = regionFactor[rCode];
       const center = regionCenters[rCode];
-
-      // Create 3-5 measurements per operator-region combo
-      const numMeasures = rCode === 'CON' ? 5 : 3;
+      const numMeasures = regionMeasureCount[rCode];
       const campIdx = (oi * 8 + ri) % campaignIds.length;
       const typeMesure = measurementTypes[oi % 2];
+      const pattern = regionCoveragePattern[rCode];
 
       for (let m = 0; m < numMeasures; m++) {
         const latJitter = (Math.random() - 0.5) * 0.5;
         const lngJitter = (Math.random() - 0.5) * 0.5;
+
+        // Use deterministic pattern to decide if this measurement is covered
+        const globalIdx = oi * numMeasures + m;
+        const isCovered = pattern[globalIdx % pattern.length];
+
+        let rssi: number;
+        let rsrp: number;
+        let rsrq: number;
+        let sinr: number;
+        let latence: number;
+        let debitDescendant: number;
+        let debitMontant: number;
+        let gigue: number;
+        let tauxAppelReussi: number;
+        let tauxDropCall: number;
+        let debitDownload: number;
+        let debitUpload: number;
+        let ping: number;
+        let dnsLookupTime: number;
+        let tcpConnectTime: number;
+        let scoreQoE: number;
+        let pageLoadTime: number;
+        let videoBuffering: number;
+
+        if (isCovered) {
+          // Good signal area: RSSI between -55 and -95
+          // Operator quality affects the range
+          const rssiBase = base.rssi; // ORANGE: -70, MTN: -75, CELCOM: -80
+          rssi = Math.round((rssiBase + (Math.random() - 0.5) * 20) * 10) / 10;
+          // Clamp to ensure it's above -95 for covered points
+          rssi = Math.max(-95, Math.min(-50, rssi));
+
+          rsrp = Math.round((base.rsrp + (Math.random() - 0.5) * 10) * 10) / 10;
+          rsrq = Math.round((base.rsrq + (Math.random() - 0.5) * 4) * 10) / 10;
+          sinr = Math.round((base.sinr / factor + (Math.random() - 0.5) * 3) * 10) / 10;
+
+          latence = Math.round(base.latence * factor * (0.9 + Math.random() * 0.2) * 10) / 10;
+          debitDescendant = Math.round(base.debit / factor * (0.85 + Math.random() * 0.3) * 10) / 10;
+          debitMontant = Math.round(base.debit * 0.5 / factor * (0.85 + Math.random() * 0.3) * 10) / 10;
+          gigue = Math.round(base.jitter * factor * (0.8 + Math.random() * 0.4) * 10) / 10;
+          tauxAppelReussi = Math.min(100, Math.round(base.tauxAppel / (factor * 0.9 + Math.random() * 0.2) * 10) / 10);
+          tauxDropCall = Math.round((100 - base.tauxAppel) * factor * (0.8 + Math.random() * 0.4) * 10) / 10;
+          debitDownload = Math.round(base.debitDown / factor * (0.85 + Math.random() * 0.3) * 10) / 10;
+          debitUpload = Math.round(base.debitUp / factor * (0.85 + Math.random() * 0.3) * 10) / 10;
+          ping = Math.round(base.ping * factor * (0.9 + Math.random() * 0.2) * 10) / 10;
+          dnsLookupTime = Math.round(15 * factor * (0.8 + Math.random() * 0.4) * 10) / 10;
+          tcpConnectTime = Math.round(25 * factor * (0.8 + Math.random() * 0.4) * 10) / 10;
+          scoreQoE = Math.min(100, Math.round(base.scoreQoE / factor * (0.9 + Math.random() * 0.2) * 10) / 10);
+          pageLoadTime = Math.round(2.5 * factor * (0.8 + Math.random() * 0.4) * 100) / 100;
+          videoBuffering = Math.round(0.5 * factor * (0.8 + Math.random() * 0.4) * 100) / 100;
+        } else {
+          // Dead zone / very poor signal: RSSI < -100
+          // Mix of measurable weak signals and complete dead zones
+          const isCompleteDeadZone = Math.random() < 0.4; // 40% chance of very deep dead zone
+          if (isCompleteDeadZone) {
+            rssi = Math.round((-110 - Math.random() * 15) * 10) / 10; // -110 to -125
+          } else {
+            rssi = Math.round((-101 - Math.random() * 8) * 10) / 10; // -101 to -109
+          }
+
+          // Degraded signal metrics for dead zones
+          rsrp = Math.round((-105 - Math.random() * 20) * 10) / 10;
+          rsrq = Math.round((-18 - Math.random() * 8) * 10) / 10;
+          sinr = Math.round((-5 - Math.random() * 10) * 10) / 10;
+
+          // Severely degraded QoS metrics
+          latence = Math.round((base.latence * factor * 2.5 + Math.random() * 50) * 10) / 10;
+          debitDescendant = Math.round(Math.max(0.1, base.debit / factor * 0.1 + Math.random() * 2) * 10) / 10;
+          debitMontant = Math.round(Math.max(0.05, base.debit * 0.5 / factor * 0.1 + Math.random()) * 10) / 10;
+          gigue = Math.round(base.jitter * factor * 3 * (0.8 + Math.random() * 0.6) * 10) / 10;
+          tauxAppelReussi = Math.round(Math.max(0, 30 + Math.random() * 40) * 10) / 10;
+          tauxDropCall = Math.round(Math.min(100, (100 - base.tauxAppel) * factor * 3 + Math.random() * 20) * 10) / 10;
+          debitDownload = Math.round(Math.max(0.1, base.debitDown / factor * 0.08 + Math.random() * 1.5) * 10) / 10;
+          debitUpload = Math.round(Math.max(0.05, base.debitUp / factor * 0.08 + Math.random() * 0.5) * 10) / 10;
+          ping = Math.round((base.ping * factor * 3 + Math.random() * 100) * 10) / 10;
+          dnsLookupTime = Math.round((40 + Math.random() * 60) * 10) / 10;
+          tcpConnectTime = Math.round((60 + Math.random() * 80) * 10) / 10;
+          scoreQoE = Math.round(Math.max(5, base.scoreQoE / factor * 0.15 + Math.random() * 8) * 10) / 10;
+          pageLoadTime = Math.round((8 + Math.random() * 15) * 100) / 100;
+          videoBuffering = Math.round((3 + Math.random() * 8) * 100) / 100;
+        }
 
         await prisma.mesureQoS.create({
           data: {
@@ -306,31 +426,32 @@ async function main() {
             latitude: center.lat + latJitter,
             longitude: center.lng + lngJitter,
             timestamp: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
-            latence: Math.round(base.latence * factor * (0.9 + Math.random() * 0.2) * 10) / 10,
-            debitDescendant: Math.round(base.debit / factor * (0.85 + Math.random() * 0.3) * 10) / 10,
-            debitMontant: Math.round(base.debit * 0.5 / factor * (0.85 + Math.random() * 0.3) * 10) / 10,
-            gigue: Math.round(base.jitter * factor * (0.8 + Math.random() * 0.4) * 10) / 10,
-            tauxAppelReussi: Math.min(100, Math.round(base.tauxAppel / (factor * 0.9 + Math.random() * 0.2) * 10) / 10),
-            tauxDropCall: Math.round((100 - base.tauxAppel) * factor * (0.8 + Math.random() * 0.4) * 10) / 10,
-            rssi: Math.round((base.rssi - factor * 5 + (Math.random() - 0.5) * 5) * 10) / 10,
-            rsrp: Math.round((base.rsrp - factor * 5 + (Math.random() - 0.5) * 5) * 10) / 10,
-            rsrq: Math.round((base.rsrq - factor * 2 + (Math.random() - 0.5) * 3) * 10) / 10,
-            sinr: Math.round((base.sinr / factor + (Math.random() - 0.5) * 3) * 10) / 10,
-            debitDownload: Math.round(base.debitDown / factor * (0.85 + Math.random() * 0.3) * 10) / 10,
-            debitUpload: Math.round(base.debitUp / factor * (0.85 + Math.random() * 0.3) * 10) / 10,
-            ping: Math.round(base.ping * factor * (0.9 + Math.random() * 0.2) * 10) / 10,
-            dnsLookupTime: Math.round(15 * factor * (0.8 + Math.random() * 0.4) * 10) / 10,
-            tcpConnectTime: Math.round(25 * factor * (0.8 + Math.random() * 0.4) * 10) / 10,
-            scoreQoE: Math.min(100, Math.round(base.scoreQoE / factor * (0.9 + Math.random() * 0.2) * 10) / 10),
-            pageLoadTime: Math.round(2.5 * factor * (0.8 + Math.random() * 0.4) * 100) / 100,
-            videoBuffering: Math.round(0.5 * factor * (0.8 + Math.random() * 0.4) * 100) / 100,
+            latence,
+            debitDescendant,
+            debitMontant,
+            gigue,
+            tauxAppelReussi,
+            tauxDropCall,
+            rssi,
+            rsrp,
+            rsrq,
+            sinr,
+            debitDownload,
+            debitUpload,
+            ping,
+            dnsLookupTime,
+            tcpConnectTime,
+            scoreQoE,
+            pageLoadTime,
+            videoBuffering,
             typeMesure,
           },
         });
+        totalMeasures++;
       }
     }
   }
-  console.log('  ✅ QoS Measurements (~72)');
+  console.log(`  ✅ QoS Measurements (${totalMeasures})`);
 
   // ═══════════════════════════════════════════
   // 8. Create Operator Scores (4 quarters)
