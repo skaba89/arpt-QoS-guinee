@@ -1,0 +1,17 @@
+node_modules
+.next
+.git
+db/*.db
+prisma/*.db
+*.db
+dev.log
+server.log
+e2e
+e2e-report
+test-results
+playwright-report
+download
+workspace
+agent-ctx
+.env.local
+.env*.local

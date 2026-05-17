@@ -1,0 +1,46 @@
+[
+  {
+    "action": "scores",
+    "operateurCode": "MTN",
+    "periode": "2025-Q2",
+    "scoreGlobal": 68,
+    "scoreCouverture": 70,
+    "scoreQoS": 66,
+    "scoreQoE": 69,
+    "scoreConformite": 72,
+    "recommandation": null
+  },
+  {
+    "action": "scores",
+    "operateurCode": "MTN",
+    "periode": "2025-Q3",
+    "scoreGlobal": 71,
+    "scoreCouverture": 73,
+    "scoreQoS": 70,
+    "scoreQoE": 72,
+    "scoreConformite": 75,
+    "recommandation": null
+  },
+  {
+    "action": "scores",
+    "operateurCode": "MTN",
+    "periode": "2025-Q4",
+    "scoreGlobal": 73,
+    "scoreCouverture": 75,
+    "scoreQoS": 71,
+    "scoreQoE": 73,
+    "scoreConformite": 77,
+    "recommandation": null
+  },
+  {
+    "action": "scores",
+    "operateurCode": "MTN",
+    "periode": "2026-Q1",
+    "scoreGlobal": 74,
+    "scoreCouverture": 76,
+    "scoreQoS": 72,
+    "scoreQoE": 74,
+    "scoreConformite": 78,
+    "recommandation": "Améliorer la latence dans la région de Boké"
+  }
+]

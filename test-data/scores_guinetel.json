@@ -1,0 +1,46 @@
+[
+  {
+    "action": "scores",
+    "operateurCode": "GUINETEL",
+    "periode": "2025-Q2",
+    "scoreGlobal": 42,
+    "scoreCouverture": 35,
+    "scoreQoS": 40,
+    "scoreQoE": 41,
+    "scoreConformite": 50,
+    "recommandation": null
+  },
+  {
+    "action": "scores",
+    "operateurCode": "GUINETEL",
+    "periode": "2025-Q3",
+    "scoreGlobal": 46,
+    "scoreCouverture": 39,
+    "scoreQoS": 44,
+    "scoreQoE": 45,
+    "scoreConformite": 54,
+    "recommandation": null
+  },
+  {
+    "action": "scores",
+    "operateurCode": "GUINETEL",
+    "periode": "2025-Q4",
+    "scoreGlobal": 49,
+    "scoreCouverture": 42,
+    "scoreQoS": 47,
+    "scoreQoE": 48,
+    "scoreConformite": 56,
+    "recommandation": null
+  },
+  {
+    "action": "scores",
+    "operateurCode": "GUINETEL",
+    "periode": "2026-Q1",
+    "scoreGlobal": 52,
+    "scoreCouverture": 45,
+    "scoreQoS": 50,
+    "scoreQoE": 51,
+    "scoreConformite": 58,
+    "recommandation": "Plan de déploiement urgent — couverture nationale insuffisante"
+  }
+]

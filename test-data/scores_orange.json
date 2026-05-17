@@ -1,0 +1,46 @@
+[
+  {
+    "action": "scores",
+    "operateurCode": "ORANGE",
+    "periode": "2025-Q2",
+    "scoreGlobal": 70,
+    "scoreCouverture": 75,
+    "scoreQoS": 68,
+    "scoreQoE": 72,
+    "scoreConformite": 78,
+    "recommandation": null
+  },
+  {
+    "action": "scores",
+    "operateurCode": "ORANGE",
+    "periode": "2025-Q3",
+    "scoreGlobal": 73,
+    "scoreCouverture": 78,
+    "scoreQoS": 72,
+    "scoreQoE": 75,
+    "scoreConformite": 81,
+    "recommandation": null
+  },
+  {
+    "action": "scores",
+    "operateurCode": "ORANGE",
+    "periode": "2025-Q4",
+    "scoreGlobal": 75,
+    "scoreCouverture": 80,
+    "scoreQoS": 74,
+    "scoreQoE": 77,
+    "scoreConformite": 83,
+    "recommandation": null
+  },
+  {
+    "action": "scores",
+    "operateurCode": "ORANGE",
+    "periode": "2026-Q1",
+    "scoreGlobal": 78,
+    "scoreCouverture": 82,
+    "scoreQoS": 76,
+    "scoreQoE": 79,
+    "scoreConformite": 85,
+    "recommandation": "Maintenir la qualité en zone urbaine"
+  }
+]

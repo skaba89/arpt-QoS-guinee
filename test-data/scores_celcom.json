@@ -1,0 +1,46 @@
+[
+  {
+    "action": "scores",
+    "operateurCode": "CELCOM",
+    "periode": "2025-Q2",
+    "scoreGlobal": 55,
+    "scoreCouverture": 48,
+    "scoreQoS": 52,
+    "scoreQoE": 54,
+    "scoreConformite": 62,
+    "recommandation": null
+  },
+  {
+    "action": "scores",
+    "operateurCode": "CELCOM",
+    "periode": "2025-Q3",
+    "scoreGlobal": 59,
+    "scoreCouverture": 52,
+    "scoreQoS": 56,
+    "scoreQoE": 58,
+    "scoreConformite": 66,
+    "recommandation": null
+  },
+  {
+    "action": "scores",
+    "operateurCode": "CELCOM",
+    "periode": "2025-Q4",
+    "scoreGlobal": 62,
+    "scoreCouverture": 55,
+    "scoreQoS": 59,
+    "scoreQoE": 61,
+    "scoreConformite": 68,
+    "recommandation": null
+  },
+  {
+    "action": "scores",
+    "operateurCode": "CELCOM",
+    "periode": "2026-Q1",
+    "scoreGlobal": 65,
+    "scoreCouverture": 58,
+    "scoreQoS": 62,
+    "scoreQoE": 64,
+    "scoreConformite": 70,
+    "recommandation": "Améliorer la couverture en zone rurale - objectif +15%"
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "action": "alertes",
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateurCode": "CELCOM",
+    "regionCode": "FAR",
+    "message": "Dégradation critique QoS - Latence > 100ms dans la région de Faranah",
+    "details": "{\"latence\": 108, \"seuil\": 50}"
+  },
+  {
+    "action": "alertes",
+    "type": "SEUIL_DEPASSE",
+    "severity": "HAUTE",
+    "operateurCode": "MTN",
+    "regionCode": "BOK",
+    "message": "Chute débit mobile en zone rurale de Boké (-35%)",
+    "details": "{\"debit\": 8.2, \"seuil\": 15}"
+  },
+  {
+    "action": "alertes",
+    "type": "NON_CONFORMITE",
+    "severity": "CRITIQUE",
+    "operateurCode": "CELCOM",
+    "regionCode": "NZE",
+    "message": "Taux d'appel réussi < 85% - Seuil réglementaire N'Zérékoré",
+    "details": "{\"tauxAppel\": 82.3, \"seuil\": 90}"
+  },
+  {
+    "action": "alertes",
+    "type": "DEGRADATION",
+    "severity": "MOYENNE",
+    "operateurCode": "ORANGE",
+    "regionCode": "LAB",
+    "message": "Couverture 4G en baisse dans la région de Labé",
+    "details": "{\"couverture4G\": 45, \"precedent\": 58}"
+  },
+  {
+    "action": "alertes",
+    "type": "ZONE_BLANCHE",
+    "severity": "HAUTE",
+    "operateurCode": "GUINETEL",
+    "regionCode": "FAR",
+    "message": "23 nouvelles zones blanches identifiées dans la région de Faranah",
+    "details": "{\"count\": 23}"
+  },
+  {
+    "action": "alertes",
+    "type": "DEGRADATION",
+    "severity": "BASSE",
+    "operateurCode": "MTN",
+    "regionCode": "CON",
+    "message": "Maintenance planifiée MTN Conakry - 22h00-04h00",
+    "details": "{\"maintenance\": true}"
+  },
+  {
+    "action": "alertes",
+    "type": "SEUIL_DEPASSE",
+    "severity": "HAUTE",
+    "operateurCode": "GUINETEL",
+    "regionCode": "KAN",
+    "message": "Jitter > 20ms dans la région de Kankan — réseau instable",
+    "details": "{\"jitter\": 22, \"seuil\": 10}"
+  },
+  {
+    "action": "alertes",
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateurCode": "GUINETEL",
+    "regionCode": "NZE",
+    "message": "Couverture quasi inexistante N'Zérékoré sud — urgence déploiement",
+    "details": "{\"count\": 42, \"population_affectee\": 350000}"
+  }
+]
