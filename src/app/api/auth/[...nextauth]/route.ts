@@ -38,14 +38,14 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
 
-          // Update last login
-          await db.user.update({
+          // Update last login (non-blocking)
+          db.user.update({
             where: { id: user.id },
             data: { lastLogin: new Date() },
           }).catch(() => {});
 
-          // Create audit log
-          await db.auditLog.create({
+          // Create audit log (non-blocking)
+          db.auditLog.create({
             data: {
               userId: user.id,
               action: "LOGIN",
@@ -73,7 +73,7 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 8 * 60 * 60,
+    maxAge: 8 * 60 * 60, // 8 hours
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -99,7 +99,47 @@ export const authOptions: NextAuthOptions = {
     signIn: "/",
   },
   secret: process.env.NEXTAUTH_SECRET || "onit-png-secret-key-2026-guinee",
-  debug: process.env.NODE_ENV === "development",
+  debug: false,
+  // Use cookies WITHOUT __Secure- / __Host- prefixes since we run on HTTP in dev
+  // These prefixes require HTTPS which we don't have in development
+  useSecureCookies: false,
+  cookies: {
+    sessionToken: {
+      name: "next-auth.session-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: false,
+      },
+    },
+    callbackUrl: {
+      name: "next-auth.callback-url",
+      options: {
+        sameSite: "lax",
+        path: "/",
+        secure: false,
+      },
+    },
+    csrfToken: {
+      name: "next-auth.csrf-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: false,
+      },
+    },
+    pkceCodeVerifier: {
+      name: "next-auth.pkce.code_verifier",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: false,
+      },
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: false,
   serverExternalPackages: ["bcryptjs"],
+  // Enable standalone output for production - much less memory
+  output: "standalone",
 };
 
 export default nextConfig;
