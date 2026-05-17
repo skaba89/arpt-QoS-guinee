@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Globe, Signal, Activity, Users, Wifi, FileText, AlertCircle, ChevronDown, ChevronUp, Send, Loader2 } from 'lucide-react';
 import { GuineaMapLeaflet } from './guinea-map-leaflet';
+import { cntRegions as cntRegionDefs } from '@/lib/guinea-geojson-cnt';
 import { toast } from 'sonner';
 
 interface MapRegionData { code: string; nom: string; centreLat: number; centreLng: number; population: number; coverage: number; qos: number; color: string; whiteZones: number }
@@ -136,7 +137,7 @@ export function DashboardPublic() {
         <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-60" />
           <h2 className="text-sm font-semibold text-slate-300 mb-4">Couverture par Région</h2>
-          <GuineaMapLeaflet metric="coverage" regionData={mapData?.regions || []} measurementPoints={mapData?.measurementPoints || []} operators={mapData?.operators || []} />
+          <GuineaMapLeaflet metric="coverage" regionData={mapData?.regions || []} measurementPoints={mapData?.measurementPoints || []} operators={mapData?.operators || []} useCNTDecoupage={true} />
         </div>
 
         <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
@@ -191,7 +192,7 @@ export function DashboardPublic() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div><label className="text-[10px] text-slate-500 mb-1 block">Opérateur</label><select value={problemForm.operator} onChange={(e) => setProblemForm({ ...problemForm, operator: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/40"><option value="">Sélectionner</option>{operators.map((op) => (<option key={op.id} value={op.code}>{op.name}</option>))}</select></div>
-              <div><label className="text-[10px] text-slate-500 mb-1 block">Région</label><select value={problemForm.region} onChange={(e) => setProblemForm({ ...problemForm, region: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/40"><option value="">Sélectionner</option>{(mapData?.regions || []).map((r) => (<option key={r.code} value={r.code}>{r.nom}</option>))}</select></div>
+              <div><label className="text-[10px] text-slate-500 mb-1 block">Région (CNT)</label><select value={problemForm.region} onChange={(e) => setProblemForm({ ...problemForm, region: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/40"><option value="">Sélectionner</option>{cntRegionDefs.map((r) => (<option key={r.code} value={r.code}>{r.nom}</option>))}</select></div>
             </div>
             <div><label className="text-[10px] text-slate-500 mb-1 block">Description du problème *</label><textarea value={problemForm.description} onChange={(e) => setProblemForm({ ...problemForm, description: e.target.value })} rows={3} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/40 resize-none" placeholder="Décrivez le problème rencontré..." /></div>
             <button

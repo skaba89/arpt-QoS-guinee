@@ -51,3 +51,46 @@ Stage Summary:
 - RBAC system with 9 roles and Row-Level Security working
 - Public portal with map, operator comparison, report form, FAQ
 - Auth system with NextAuth Credentials provider working
+---
+Task ID: 1
+Agent: Main Agent
+Task: Implement interactive Guinea map with new CNT découpage (16 regions)
+
+Work Log:
+- Read existing project files: page.tsx, layout.tsx, utils.ts, map API route, dashboard-sig.tsx, guinea-map-leaflet-inner.tsx, guinea-map-leaflet.tsx
+- Researched Guinea's new CNT administrative divisions: current 8 regions → proposed 16 regions
+- Downloaded real GeoJSON boundary data from Natural Earth (34 prefectures of Guinea)
+- Created `/src/lib/guinea-geojson-cnt.ts` with:
+  - 34 prefecture-level GeoJSON polygons (real boundaries from Natural Earth)
+  - CNT region definitions (16 new regions) with prefecture groupings
+  - Old 8-region definitions for backward compatibility
+  - Region code mappings between old and new systems
+- Updated `/src/components/guinea-map-leaflet-inner.tsx` with:
+  - Dual map mode: CNT 16-region view vs old 8-region view
+  - Prefecture-level polygon rendering for CNT mode
+  - Color coding based on coverage/QoS metrics
+  - Interactive popups showing region name, prefecture, coverage, QoS, parent region
+  - Region labels for all 16 CNT regions
+  - White zones overlay for CNT mode
+  - Fixed TypeScript `setStyle` errors with proper type casting
+- Updated `/src/components/guinea-map-leaflet.tsx` with:
+  - New `useCNTDecoupage` prop
+  - Updated re-render key to include découpage mode
+- Updated `/src/components/dashboard-sig.tsx` with:
+  - Découpage toggle (Nouveau CNT 16 / Ancien 8)
+  - CNT info banner explaining the reform
+  - CNT badge on new region cards
+  - CNT region detail card with prefecture list
+  - Updated statistics to show CNT data
+- Updated `/src/lib/mock-data.ts` with:
+  - 16 CNT region mock data entries
+- Updated `/src/components/dashboard-public.tsx` with:
+  - CNT region dropdown in problem report form
+  - useCNTDecoupage={true} for public map
+
+Stage Summary:
+- Interactive Guinea map now supports new CNT découpage with 16 regions
+- 34 real prefecture boundaries from Natural Earth provide accurate geographic data
+- Toggle between old (8) and new (16) region models in SIG dashboard
+- CNT regions: Conakry, Kindia, Coyah, Boké, Koundara, Labé, Mali, Mamou, Dalaba, Faranah, Kissidougou, Kankan, Siguiri, N'Zérékoré, Guéckédou, Beyla
+- New regions created by splitting: Coyah (from Kindia), Koundara (from Boké), Mali (from Labé), Dalaba (from Mamou), Kissidougou (from Faranah), Siguiri (from Kankan), Guéckédou + Beyla (from N'Zérékoré)

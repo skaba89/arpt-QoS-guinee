@@ -127,7 +127,7 @@ export const operators: Operator[] = [
   },
 ];
 
-// Regions of Guinea
+// Regions of Guinea (Ancien découpage - 8 régions)
 export const regions: Region[] = [
   { name: 'Conakry', coverage: 92, qos: 85, population: 2042000, whiteZones: 3, color: '#10B981' },
   { name: 'Kindia', coverage: 71, qos: 68, population: 1836000, whiteZones: 28, color: '#3B82F6' },
@@ -137,6 +137,26 @@ export const regions: Region[] = [
   { name: 'Faranah', coverage: 48, qos: 45, population: 942000, whiteZones: 48, color: '#EF4444' },
   { name: 'Kankan', coverage: 61, qos: 58, population: 1976000, whiteZones: 32, color: '#F59E0B' },
   { name: "N'Zérékoré", coverage: 52, qos: 49, population: 1715000, whiteZones: 21, color: '#EF4444' },
+];
+
+// Nouveau découpage CNT - 16 régions
+export const cntRegions: Region[] = [
+  { name: 'Conakry', coverage: 92, qos: 85, population: 2042000, whiteZones: 3, color: '#10B981' },
+  { name: 'Kindia', coverage: 71, qos: 68, population: 825000, whiteZones: 18, color: '#3B82F6' },
+  { name: 'Coyah', coverage: 76, qos: 72, population: 411000, whiteZones: 10, color: '#3B82F6' },
+  { name: 'Boké', coverage: 55, qos: 52, population: 543000, whiteZones: 22, color: '#F59E0B' },
+  { name: 'Koundara', coverage: 42, qos: 38, population: 600000, whiteZones: 32, color: '#EF4444' },
+  { name: 'Labé', coverage: 63, qos: 60, population: 650000, whiteZones: 18, color: '#F59E0B' },
+  { name: 'Mali', coverage: 48, qos: 44, population: 592000, whiteZones: 28, color: '#EF4444' },
+  { name: 'Mamou', coverage: 68, qos: 65, population: 532000, whiteZones: 12, color: '#3B82F6' },
+  { name: 'Dalaba', coverage: 58, qos: 55, population: 400000, whiteZones: 15, color: '#F59E0B' },
+  { name: 'Faranah', coverage: 48, qos: 45, population: 510000, whiteZones: 25, color: '#EF4444' },
+  { name: 'Kissidougou', coverage: 44, qos: 41, population: 432000, whiteZones: 30, color: '#EF4444' },
+  { name: 'Kankan', coverage: 61, qos: 58, population: 1050000, whiteZones: 16, color: '#F59E0B' },
+  { name: 'Siguiri', coverage: 53, qos: 50, population: 926000, whiteZones: 22, color: '#F59E0B' },
+  { name: "N'Zérékoré", coverage: 52, qos: 49, population: 756000, whiteZones: 8, color: '#EF4444' },
+  { name: 'Guéckédou', coverage: 46, qos: 43, population: 545000, whiteZones: 14, color: '#EF4444' },
+  { name: 'Beyla', coverage: 50, qos: 47, population: 414000, whiteZones: 11, color: '#F59E0B' },
 ];
 
 // KPI Data

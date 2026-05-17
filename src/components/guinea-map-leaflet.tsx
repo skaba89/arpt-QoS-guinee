@@ -40,6 +40,7 @@ interface GuineaMapLeafletProps {
   selectedOperator?: string;
   showWhiteZones?: boolean;
   showDriveTests?: boolean;
+  useCNTDecoupage?: boolean;
 }
 
 export function GuineaMapLeaflet({
@@ -52,6 +53,7 @@ export function GuineaMapLeaflet({
   selectedOperator = 'all',
   showWhiteZones = true,
   showDriveTests = false,
+  useCNTDecoupage = true,
 }: GuineaMapLeafletProps) {
   const [MapComponent, setMapComponent] = useState<React.ComponentType<GuineaMapLeafletInnerProps> | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -65,7 +67,7 @@ export function GuineaMapLeaflet({
 
   if (!mounted || !MapComponent) {
     return (
-      <div className="w-full h-[400px] rounded-lg bg-[#0A0F1E] border border-white/5 flex items-center justify-center">
+      <div className="w-full h-[500px] rounded-lg bg-[#0A0F1E] border border-white/5 flex items-center justify-center">
         <div className="text-xs text-slate-500 animate-pulse">Chargement de la carte...</div>
       </div>
     );
@@ -73,7 +75,7 @@ export function GuineaMapLeaflet({
 
   return (
     <MapComponent
-      key={`${metric}-${selectedOperator}-${showWhiteZones ? 'wz' : 'nowz'}`}
+      key={`${metric}-${selectedOperator}-${showWhiteZones ? 'wz' : 'nowz'}-${useCNTDecoupage ? 'cnt16' : 'old8'}`}
       metric={metric}
       onRegionClick={onRegionClick}
       selectedRegion={selectedRegion}
@@ -83,6 +85,7 @@ export function GuineaMapLeaflet({
       selectedOperator={selectedOperator}
       showWhiteZones={showWhiteZones}
       showDriveTests={showDriveTests}
+      useCNTDecoupage={useCNTDecoupage}
     />
   );
 }
@@ -97,4 +100,5 @@ type GuineaMapLeafletInnerProps = {
   selectedOperator?: string;
   showWhiteZones?: boolean;
   showDriveTests?: boolean;
+  useCNTDecoupage?: boolean;
 };
