@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
   output: "standalone",
   // Remove X-Powered-By header to avoid framework fingerprinting
   poweredByHeader: false,
+  // Allow cross-origin requests in dev mode (for preview iframe and external IP access)
+  allowedDevOrigins: [
+    "http://21.0.12.210:3000",
+    "http://localhost:3000",
+  ],
 };
 
 export default nextConfig;

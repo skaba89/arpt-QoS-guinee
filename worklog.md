@@ -357,3 +357,25 @@ Stage Summary:
 - 6 High security issues (in-memory rate limiting, SQLite in production, no migrations, hardcoded credentials, no pagination, no CSRF)
 - 9 Architecture issues (SPA without routing, no tests, code duplication, unsafe type casts, no health check, no transactions, missing indexes, no structured logging, dependency incompatibility)
 - 11 Code quality issues (duplication, error handling, no documentation, Docker config problems, etc.)
+
+---
+Task ID: display-fix-1
+Agent: Main Agent
+Task: Fix display problem in ONIT-PNG web application
+
+Work Log:
+- Analyzed user's screenshot showing unstyled/broken CSS display
+- Identified that CSS files were returning 404 from the dev server
+- Discovered X-Frame-Options: DENY header was blocking page display in iframe/preview
+- Found cross-origin request blocking for external IP access
+- Fixed middleware.ts: Changed X-Frame-Options from DENY to SAMEORIGIN
+- Fixed next.config.ts: Added allowedDevOrigins for cross-origin dev access
+- Verified CSS files load correctly (142KB main CSS + 3.6KB font CSS)
+- Verified production build serves all assets with HTTP 200
+- Verified dev server serves CSS with HTTP 200 and correct X-Frame-Options header
+
+Stage Summary:
+- Root cause: X-Frame-Options: DENY prevented page display in preview iframe
+- Fix 1: src/middleware.ts - Changed "X-Frame-Options": "DENY" → "SAMEORIGIN"
+- Fix 2: next.config.ts - Added allowedDevOrigins for dev server cross-origin access
+- Both production and dev servers now correctly serve CSS and API responses
