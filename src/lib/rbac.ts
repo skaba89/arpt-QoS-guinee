@@ -1,7 +1,22 @@
 import { db } from "@/lib/db";
 import type { RoleType } from "@prisma/client";
 
-// Check if a role has permission for a resource+action
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Operator color mapping (presentation concern)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const OPERATOR_COLORS: Record<string, string> = {
+  ORANGE: "#FF7900",
+  MTN: "#FFCC00",
+  CELCOM: "#00B4D8",
+};
+
+export function getOperatorColor(code: string): string {
+  return OPERATOR_COLORS[code] || "#6B7280";
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Permission check
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function checkPermission(
   roleType: RoleType | string,
   resource: string,
@@ -17,7 +32,10 @@ export async function checkPermission(
   );
 }
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Get regions accessible by a user based on RLS
+// Returns DATABASE IDs (not codes)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function getAccessibleRegions(
   roleType: RoleType | string,
   _userId?: string
@@ -25,20 +43,26 @@ export async function getAccessibleRegions(
   const policy = await db.dataAccessPolicy.findFirst({
     where: { roleType: roleType as RoleType, resource: "campaigns" },
   });
-  if (!policy) {
-    // If no policy, return all regions for PUBLIC access
-    const regions = await db.region.findMany({ select: { code: true } });
-    return regions.map((r) => r.code);
-  }
 
-  if (policy.scope === "all" || policy.scope === "public_only") {
-    const regions = await db.region.findMany({ select: { code: true } });
-    return regions.map((r) => r.code);
+  if (!policy || policy.scope === "all" || policy.scope === "public_only") {
+    const regions = await db.region.findMany({ select: { id: true } });
+    return regions.map((r) => r.id);
   }
 
   if (policy.regions) {
     try {
-      return JSON.parse(policy.regions);
+      const rawValues: string[] = JSON.parse(policy.regions);
+      // Determine if values are codes or IDs (cuids start with a letter and are ~25 chars)
+      const looksLikeIds = rawValues.length > 0 && rawValues[0].length > 10;
+      if (looksLikeIds) {
+        return rawValues;
+      }
+      // Resolve codes to IDs
+      const regions = await db.region.findMany({
+        where: { code: { in: rawValues.map((v) => v.toUpperCase()) } },
+        select: { id: true },
+      });
+      return regions.map((r) => r.id);
     } catch {
       return [];
     }
@@ -47,7 +71,10 @@ export async function getAccessibleRegions(
   return [];
 }
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Get operators accessible by a user based on RLS
+// Returns DATABASE IDs (not codes)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function getAccessibleOperators(
   roleType: RoleType | string,
   organization?: string
@@ -55,13 +82,8 @@ export async function getAccessibleOperators(
   const policy = await db.dataAccessPolicy.findFirst({
     where: { roleType: roleType as RoleType, resource: "campaigns" },
   });
-  if (!policy) {
-    // If no policy, return all operators for PUBLIC access
-    const operators = await db.operateur.findMany({ select: { id: true } });
-    return operators.map((o) => o.id);
-  }
 
-  if (policy.scope === "all" || policy.scope === "public_only") {
+  if (!policy || policy.scope === "all" || policy.scope === "public_only") {
     const operators = await db.operateur.findMany({ select: { id: true } });
     return operators.map((o) => o.id);
   }
@@ -75,7 +97,18 @@ export async function getAccessibleOperators(
 
   if (policy.operators) {
     try {
-      return JSON.parse(policy.operators);
+      const rawValues: string[] = JSON.parse(policy.operators);
+      // Determine if values are codes or IDs
+      const looksLikeIds = rawValues.length > 0 && rawValues[0].length > 10;
+      if (looksLikeIds) {
+        return rawValues;
+      }
+      // Resolve codes to IDs
+      const operators = await db.operateur.findMany({
+        where: { code: { in: rawValues.map((v) => v.toUpperCase()) } },
+        select: { id: true },
+      });
+      return operators.map((o) => o.id);
     } catch {
       return [];
     }
@@ -84,7 +117,9 @@ export async function getAccessibleOperators(
   return [];
 }
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Filter data by RLS - generic function
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export function filterDataByRLS<T extends { operateurId?: string; regionId?: string }>(
   data: T[],
   accessibleOperatorIds: string[],
@@ -101,7 +136,9 @@ export function filterDataByRLS<T extends { operateurId?: string; regionId?: str
   });
 }
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Create audit log entry
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function logAudit(
   userId: string,
   action: string,
@@ -111,20 +148,27 @@ export async function logAudit(
   ipAddress?: string,
   userAgent?: string
 ) {
-  return db.auditLog.create({
-    data: {
-      userId,
-      action,
-      resource,
-      resourceId,
-      details,
-      ipAddress,
-      userAgent,
-    },
-  });
+  try {
+    return await db.auditLog.create({
+      data: {
+        userId,
+        action,
+        resource,
+        resourceId,
+        details,
+        ipAddress,
+        userAgent,
+      },
+    });
+  } catch (error) {
+    console.error("Failed to create audit log:", error);
+    return null;
+  }
 }
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Get RLS scope for a role
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function getRLSScope(
   roleType: RoleType | string,
   resource: string = "campaigns"

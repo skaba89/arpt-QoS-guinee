@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getAccessibleOperators, getAccessibleRegions, getRLSScope } from "@/lib/rbac";
+import { getAccessibleOperators, getAccessibleRegions, getRLSScope, getOperatorColor } from "@/lib/rbac";
 import type { RoleType } from "@prisma/client";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     const userRole = session?.user ? ((session.user as Record<string, unknown>).role as string) : "PUBLIC";
@@ -14,26 +14,47 @@ export async function GET() {
     const accessibleOpIds = await getAccessibleOperators(userRole as RoleType, userOrg);
     const accessibleRegIds = await getAccessibleRegions(userRole as RoleType);
 
+    const rlsFilter = {
+      ...(scope !== "all" && scope !== "public_only" && accessibleOpIds.length > 0 ? { operateurId: { in: accessibleOpIds } } : {}),
+      ...(scope !== "all" && scope !== "public_only" && accessibleRegIds.length > 0 ? { regionId: { in: accessibleRegIds } } : {}),
+    };
+
+    // Parse query params
+    const { searchParams } = new URL(request.url);
+    const operateurCode = searchParams.get("operateur");
+    const regionCode = searchParams.get("region");
+    const limit = Math.min(parseInt(searchParams.get("limit") || "500"), 5000);
+
+    // Override RLS filters with specific params
+    if (operateurCode && operateurCode !== "all") {
+      const op = await db.operateur.findFirst({ where: { code: operateurCode.toUpperCase() } });
+      if (op) (rlsFilter as Record<string, unknown>).operateurId = op.id;
+    }
+    if (regionCode && regionCode !== "all") {
+      const reg = await db.region.findFirst({ where: { code: regionCode.toUpperCase() } });
+      if (reg) (rlsFilter as Record<string, unknown>).regionId = reg.id;
+    }
+
     const regions = await db.region.findMany({
       where: (scope !== "all" && scope !== "public_only" && accessibleRegIds.length > 0) ? { id: { in: accessibleRegIds } } : {},
     });
 
     const measures = await db.mesureQoS.findMany({
-      where: {
-        ...(scope !== "all" && scope !== "public_only" && accessibleOpIds.length > 0 ? { operateurId: { in: accessibleOpIds } } : {}),
-        ...(scope !== "all" && scope !== "public_only" && accessibleRegIds.length > 0 ? { regionId: { in: accessibleRegIds } } : {}),
-      },
+      where: rlsFilter,
       include: { operateur: true, region: true },
+      orderBy: { timestamp: "desc" },
+      take: limit,
     });
 
     // Build region overlay data
     const regionOverlay = regions.map((r) => {
       const regMeasures = measures.filter((m) => m.regionId === r.id);
       const goodSignal = regMeasures.filter((m) => (m.rssi ?? -100) > -100);
-      const coverage = regMeasures.length > 0 ? Math.round((goodSignal.length / regMeasures.length) * 100) : 50;
-      const qos = regMeasures.length > 0
-        ? Math.round(regMeasures.filter((m) => m.scoreQoE).reduce((s, m) => s + (m.scoreQoE || 0), 0) / Math.max(regMeasures.filter((m) => m.scoreQoE).length, 1))
-        : 50;
+      const coverage = regMeasures.length > 0 ? Math.round((goodSignal.length / regMeasures.length) * 100) : 0;
+      const qosMeasures = regMeasures.filter((m) => m.scoreQoE !== null);
+      const qos = qosMeasures.length > 0
+        ? Math.round(qosMeasures.reduce((s, m) => s + (m.scoreQoE || 0), 0) / qosMeasures.length)
+        : 0;
 
       return {
         code: r.code,
@@ -44,32 +65,34 @@ export async function GET() {
         coverage,
         qos,
         color: coverage >= 80 ? "#10B981" : coverage >= 65 ? "#3B82F6" : coverage >= 50 ? "#F59E0B" : "#EF4444",
-        whiteZones: Math.round((100 - coverage) / 3),
+        whiteZones: coverage > 0 ? Math.round((100 - coverage) / 3) : 0,
         measurementCount: regMeasures.length,
       };
     });
 
     // Measurement points for map markers
-    const measurementPoints = measures.slice(0, 100).map((m) => ({
+    const measurementPoints = measures.slice(0, 200).map((m) => ({
       lat: m.latitude,
       lng: m.longitude,
       operator: m.operateur.code,
-      operatorColor: m.operateur.code === "ORANGE" ? "#FF7900" : m.operateur.code === "MTN" ? "#FFCC00" : "#00B4D8",
+      operatorColor: getOperatorColor(m.operateur.code),
       rssi: m.rssi,
+      rsrp: m.rsrp,
       scoreQoE: m.scoreQoE,
       type: m.typeMesure,
+      timestamp: m.timestamp,
     }));
 
     // Operator data for map
     const operators = await db.operateur.findMany({
-      where: scope !== "all" ? { id: { in: accessibleOpIds } } : {},
+      where: scope !== "all" && scope !== "public_only" ? { id: { in: accessibleOpIds } } : {},
     });
 
     const operatorData = operators.map((op) => ({
       id: op.code.toLowerCase(),
       name: op.nom,
       code: op.code,
-      color: op.code === "ORANGE" ? "#FF7900" : op.code === "MTN" ? "#FFCC00" : "#00B4D8",
+      color: getOperatorColor(op.code),
     }));
 
     return NextResponse.json({

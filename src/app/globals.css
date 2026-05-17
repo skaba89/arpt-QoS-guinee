@@ -225,7 +225,56 @@ select option {
   color: #F1F5F9;
 }
 
+/* Fix select element dark mode appearance */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+}
+
 /* Smooth transitions for tab switching */
 main {
   transition: opacity 0.2s ease;
+}
+
+/* Leaflet map container fix */
+.leaflet-container {
+  font-family: inherit;
+}
+
+/* Dark popup styling - no class needed */
+.leaflet-popup-content-wrapper {
+  background: #1E293B;
+  color: #F1F5F9;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+.leaflet-popup-tip {
+  background: #1E293B;
+}
+.leaflet-popup-close-button {
+  color: #94A3B8 !important;
+}
+.leaflet-control-zoom a {
+  background: #1E293B !important;
+  color: #F1F5F9 !important;
+  border-color: rgba(255,255,255,0.1) !important;
+}
+.leaflet-control-zoom a:hover {
+  background: #334155 !important;
+}
+
+/* Fix for dark mode checkbox/radio */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: #D4A843;
+}
+
+/* Table hover row transition */
+tr {
+  transition: background-color 0.15s ease;
 }

@@ -6,7 +6,7 @@ import { checkPermission, logAudit, getAccessibleOperators, getAccessibleRegions
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // GET /api/mesures — List QoS measurements (RLS-filtered)
-// Query params: operateur, region, periode, type, campagneId, limit, offset
+// Query params: operateur, region, type, campagneId, limit, offset
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function GET(request: Request) {
   try {
@@ -119,10 +119,6 @@ export async function GET(request: Request) {
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // POST /api/mesures — Create a single QoS measurement
-// Accepts JSON body with measurement data
-// Formats accepted:
-//   1. Full JSON with operateurId/regionId/campagneId (IDs)
-//   2. JSON with operatorCode/regionCode (resolved from codes)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function POST(request: Request) {
   try {
@@ -134,7 +130,6 @@ export async function POST(request: Request) {
     const userRole = (session.user as Record<string, unknown>).role as string;
     const userId = (session.user as Record<string, unknown>).id as string;
 
-    // Check permission: campaign:write or mesure:write
     const canWrite = await checkPermission(userRole, "campaign", "write");
     if (!canWrite) {
       return NextResponse.json(
@@ -145,7 +140,7 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    // ── Validate required fields ──
+    // Validate required fields
     const requiredFields = ["latitude", "longitude", "timestamp", "typeMesure"];
     for (const field of requiredFields) {
       if (body[field] === undefined || body[field] === null) {
@@ -156,7 +151,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // ── Resolve operator ID ──
+    // Resolve operator ID
     let operateurId = body.operateurId;
     if (!operateurId && body.operatorCode) {
       const op = await db.operateur.findFirst({
@@ -177,7 +172,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // ── Resolve region ID ──
+    // Resolve region ID
     let regionId = body.regionId;
     if (!regionId && body.regionCode) {
       const reg = await db.region.findFirst({
@@ -198,7 +193,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // ── Resolve campaign ID ──
+    // Resolve campaign ID
     let campagneId = body.campagneId;
     if (!campagneId && body.campagneNom) {
       const camp = await db.campagne.findFirst({
@@ -213,7 +208,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // ── Validate numeric ranges ──
+    // Validate numeric ranges
     const validateRange = (value: number | undefined, min: number, max: number, name: string): number | undefined => {
       if (value === undefined || value === null) return undefined;
       if (value < min || value > max) {
@@ -238,7 +233,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // ── Build measurement data ──
+    // Build measurement data
     const mesureData = {
       operateurId,
       regionId,
@@ -247,25 +242,21 @@ export async function POST(request: Request) {
       longitude: parseFloat(body.longitude),
       timestamp: new Date(body.timestamp),
       typeMesure: body.typeMesure,
-      // RF Metrics
       rssi: body.rssi !== undefined ? parseFloat(body.rssi) : undefined,
       rsrp: body.rsrp !== undefined ? parseFloat(body.rsrp) : undefined,
       rsrq: body.rsrq !== undefined ? parseFloat(body.rsrq) : undefined,
       sinr: body.sinr !== undefined ? parseFloat(body.sinr) : undefined,
-      // Network Metrics
       latence: body.latence !== undefined ? parseFloat(body.latence) : undefined,
       debitDescendant: body.debitDescendant !== undefined ? parseFloat(body.debitDescendant) : undefined,
       debitMontant: body.debitMontant !== undefined ? parseFloat(body.debitMontant) : undefined,
       gigue: body.gigue !== undefined ? parseFloat(body.gigue) : undefined,
       tauxAppelReussi: body.tauxAppelReussi !== undefined ? parseFloat(body.tauxAppelReussi) : undefined,
       tauxDropCall: body.tauxDropCall !== undefined ? parseFloat(body.tauxDropCall) : undefined,
-      // Internet Metrics
       debitDownload: body.debitDownload !== undefined ? parseFloat(body.debitDownload) : undefined,
       debitUpload: body.debitUpload !== undefined ? parseFloat(body.debitUpload) : undefined,
       ping: body.ping !== undefined ? parseFloat(body.ping) : undefined,
       dnsLookupTime: body.dnsLookupTime !== undefined ? parseFloat(body.dnsLookupTime) : undefined,
       tcpConnectTime: body.tcpConnectTime !== undefined ? parseFloat(body.tcpConnectTime) : undefined,
-      // QoE Metrics
       scoreQoE: body.scoreQoE !== undefined ? parseFloat(body.scoreQoE) : undefined,
       pageLoadTime: body.pageLoadTime !== undefined ? parseFloat(body.pageLoadTime) : undefined,
       videoBuffering: body.videoBuffering !== undefined ? parseFloat(body.videoBuffering) : undefined,
@@ -273,7 +264,6 @@ export async function POST(request: Request) {
 
     const mesure = await db.mesureQoS.create({ data: mesureData });
 
-    // Audit log
     await logAudit(
       userId,
       "CREATE",
@@ -291,25 +281,7 @@ export async function POST(request: Request) {
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // PUT /api/mesures — Bulk import QoS measurements
-//
-// Supports TWO formats via query param ?format=json|csv:
-//   1. JSON (default): Content-Type: application/json
-//      Body: { "campagneId": "...", "mesures": [...] }
-//      Each mesure requires: latitude, longitude, timestamp, typeMesure,
-//                            operatorCode OR operateurId, regionCode OR regionId
-//
-//   2. CSV: Content-Type: text/csv
-//      Body: raw CSV with header row
-//      Required columns: latitude,longitude,timestamp,typeMesure,operatorCode,regionCode
-//      Optional columns: rssi,rsrp,rsrq,sinr,latence,debitDescendant,debitMontant,
-//                        gigue,tauxAppelReussi,tauxDropCall,debitDownload,debitUpload,
-//                        ping,dnsLookupTime,tcpConnectTime,scoreQoE,pageLoadTime,videoBuffering
-//      campagneId passed as query param: ?campagneId=xxx
-//
-// CSV Example:
-//   latitude,longitude,timestamp,typeMesure,operatorCode,regionCode,rssi,rsrp,rsrq,sinr,latence,debitDescendant
-//   9.5092,-13.7122,2026-05-15T10:30:00Z,MOBILE,ORANGE,CON,-75,-95,-12,8,38,22.5
-//   10.0660,-12.8585,2026-05-15T11:00:00Z,INTERNET,MTN,KIN,-82,-102,-14,5,45,18.3
+// Supports JSON and CSV formats
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 interface CsvRow { [key: string]: string }
@@ -364,7 +336,7 @@ export async function PUT(request: Request) {
     let campagneId = "";
     let format = "";
 
-    // ── Format 1: JSON ──
+    // Format 1: JSON
     if (contentType.includes("application/json")) {
       format = "JSON";
       const body = await request.json();
@@ -407,7 +379,7 @@ export async function PUT(request: Request) {
         });
       }
     }
-    // ── Format 2: CSV ──
+    // Format 2: CSV
     else if (contentType.includes("text/csv") || contentType.includes("application/octet-stream")) {
       format = "CSV";
       const csvText = await request.text();
@@ -425,12 +397,12 @@ export async function PUT(request: Request) {
 
       for (const row of rows) {
         const operatorCode = row.operatorcode || row.operateurcode || row.operator_code;
-        const regionCode = row.regioncode || row.region_code;
-        if (!operatorCode || !regionCode) continue;
+        const regionCodeVal = row.regioncode || row.region_code;
+        if (!operatorCode || !regionCodeVal) continue;
 
         const op = await db.operateur.findFirst({ where: { code: operatorCode.toUpperCase() } });
         if (!op) continue;
-        const reg = await db.region.findFirst({ where: { code: regionCode.toUpperCase() } });
+        const reg = await db.region.findFirst({ where: { code: regionCodeVal.toUpperCase() } });
         if (!reg) continue;
 
         mesuresData.push({
@@ -469,7 +441,7 @@ export async function PUT(request: Request) {
     for (let i = 0; i < mesuresData.length; i += CHUNK_SIZE) {
       const chunk = mesuresData.slice(i, i + CHUNK_SIZE);
       try {
-        const result = await db.mesureQoS.createMany({ data: chunk, skipDuplicates: true });
+        const result = await db.mesureQoS.createMany({ data: chunk as any });
         inserted += result.count;
       } catch (chunkError) {
         console.error("Bulk insert chunk error:", chunkError);

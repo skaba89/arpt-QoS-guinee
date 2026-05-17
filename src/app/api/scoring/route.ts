@@ -2,9 +2,13 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getAccessibleOperators, getRLSScope } from "@/lib/rbac";
+import { getAccessibleOperators, getRLSScope, getOperatorColor } from "@/lib/rbac";
 import type { RoleType } from "@prisma/client";
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// GET /api/scoring — Scoring engine data for all operators
+// Public access allowed (returns public_only data for unauthenticated)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
@@ -14,7 +18,7 @@ export async function GET() {
     const accessibleOpIds = await getAccessibleOperators(userRole as RoleType, userOrg);
 
     const operators = await db.operateur.findMany({
-      where: scope !== "all" ? { id: { in: accessibleOpIds } } : {},
+      where: scope !== "all" && scope !== "public_only" ? { id: { in: accessibleOpIds } } : {},
       include: {
         scores: { orderBy: { periode: "desc" } },
       },
@@ -27,7 +31,7 @@ export async function GET() {
         id: op.code.toLowerCase(),
         name: op.nom,
         code: op.code,
-        color: op.code === "ORANGE" ? "#FF7900" : op.code === "MTN" ? "#FFCC00" : "#00B4D8",
+        color: getOperatorColor(op.code),
         score: latestScore?.scoreGlobal || 0,
         trend: latestScore && prevScore ? Math.round((latestScore.scoreGlobal - prevScore.scoreGlobal) * 10) / 10 : 0,
         subscores: {
@@ -35,8 +39,8 @@ export async function GET() {
           qos: latestScore?.scoreQoS || 0,
           qoe: latestScore?.scoreQoE || 0,
           conformite: latestScore?.scoreConformite || 0,
-          innovation: Math.round((latestScore?.scoreQoS || 60) * 0.9),
-          investissement: Math.round((latestScore?.scoreCouverture || 55) * 0.88),
+          innovation: latestScore ? Math.round(latestScore.scoreQoS * 0.9) : 0,
+          investissement: latestScore ? Math.round(latestScore.scoreCouverture * 0.88) : 0,
         },
         historicalScores: op.scores.map((s) => s.scoreGlobal).reverse(),
         recommendations: op.scores.filter((s) => s.recommandation).map((s) => ({
@@ -46,7 +50,7 @@ export async function GET() {
       };
     });
 
-    // Radar data
+    // Radar data — build from actual operator subscores
     const radarData = [
       { label: "Couverture", values: result.map((op) => op.subscores.couverture) },
       { label: "QoS", values: result.map((op) => op.subscores.qos) },

@@ -2,9 +2,13 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getAccessibleOperators, getAccessibleRegions, getRLSScope } from "@/lib/rbac";
+import { getAccessibleOperators, getAccessibleRegions, getRLSScope, checkPermission, logAudit } from "@/lib/rbac";
 
-export async function GET() {
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// GET /api/alerts — List alerts (RLS-filtered)
+// Query params: severity, type, isResolved, operateurCode, regionCode, limit
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -17,13 +21,39 @@ export async function GET() {
     const accessibleOpIds = await getAccessibleOperators(userRole, userOrg);
     const accessibleRegIds = await getAccessibleRegions(userRole);
 
+    const { searchParams } = new URL(request.url);
+    const severity = searchParams.get("severity");
+    const type = searchParams.get("type");
+    const isResolved = searchParams.get("isResolved");
+    const operateurCode = searchParams.get("operateurCode");
+    const regionCode = searchParams.get("regionCode");
+    const limit = Math.min(parseInt(searchParams.get("limit") || "100"), 500);
+
+    // Build where clause
+    const where: Record<string, unknown> = {
+      ...(scope !== "all" ? { operateurId: { in: accessibleOpIds } } : {}),
+      ...(scope !== "all" ? { regionId: { in: accessibleRegIds } } : {}),
+    };
+
+    if (severity) where.severity = severity;
+    if (type) where.type = type;
+    if (isResolved !== null && isResolved !== undefined) {
+      where.isResolved = isResolved === "true";
+    }
+    if (operateurCode) {
+      const op = await db.operateur.findFirst({ where: { code: operateurCode.toUpperCase() } });
+      if (op) where.operateurId = op.id;
+    }
+    if (regionCode) {
+      const reg = await db.region.findFirst({ where: { code: regionCode.toUpperCase() } });
+      if (reg) where.regionId = reg.id;
+    }
+
     const alerts = await db.alerte.findMany({
-      where: {
-        ...(scope !== "all" ? { operateurId: { in: accessibleOpIds } } : {}),
-        ...(scope !== "all" ? { regionId: { in: accessibleRegIds } } : {}),
-      },
+      where,
       include: { operateur: true, region: true },
       orderBy: { createdAt: "desc" },
+      take: limit,
     });
 
     const result = alerts.map((a) => ({
@@ -37,6 +67,7 @@ export async function GET() {
       message: a.message,
       details: a.details,
       isResolved: a.isResolved,
+      resolvedAt: a.resolvedAt,
       createdAt: a.createdAt,
     }));
 
@@ -47,6 +78,10 @@ export async function GET() {
   }
 }
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// POST /api/alerts — Create alert
+// Public submissions allowed for SIGNALEMENT_PUBLIC type
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -57,6 +92,10 @@ export async function POST(request: Request) {
 
     if (!isPublicReport && !session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+    }
+
+    if (!body.message) {
+      return NextResponse.json({ error: "Le message est requis" }, { status: 400 });
     }
 
     // Build the alert data
@@ -93,15 +132,39 @@ export async function POST(request: Request) {
       alertData.regionId = body.regionId;
     }
 
-    const alert = await db.alerte.create({ data: alertData });
+    const alert = await db.alerte.create({
+      data: alertData,
+      include: { operateur: true, region: true },
+    });
 
-    return NextResponse.json({ alert });
+    // Audit log for authenticated users
+    if (session?.user) {
+      const userId = (session.user as Record<string, unknown>).id as string;
+      await logAudit(userId, "CREATE", "alert", JSON.stringify({ type: alertData.type, severity: alertData.severity }), alert.id);
+    }
+
+    return NextResponse.json({
+      alert: {
+        id: alert.id,
+        type: alert.type,
+        severity: alert.severity,
+        operator: alert.operateur?.nom || "Système",
+        region: alert.region?.nom || "National",
+        message: alert.message,
+        isResolved: alert.isResolved,
+        createdAt: alert.createdAt,
+      },
+    }, { status: 201 });
   } catch (error) {
     console.error("Create alert API error:", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// PATCH /api/alerts — Resolve/unresolve an alert
+// Body: { id, isResolved? (default true) }
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function PATCH(request: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -109,15 +172,59 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const userRole = (session.user as Record<string, unknown>).role as string;
+    const userId = (session.user as Record<string, unknown>).id as string;
+
+    // Check if user has permission to resolve alerts
+    const canResolve = await checkPermission(userRole, "alert", "write") ||
+                       await checkPermission(userRole, "alert", "admin") ||
+                       await checkPermission(userRole, "dashboard", "admin");
+    if (!canResolve) {
+      return NextResponse.json({ error: "Permissions insuffisantes pour résoudre une alerte" }, { status: 403 });
+    }
+
     const body = await request.json();
+    if (!body.id) {
+      return NextResponse.json({ error: "ID alerte requis" }, { status: 400 });
+    }
+
+    const isResolved = body.isResolved !== false;
     const alert = await db.alerte.update({
       where: { id: body.id },
-      data: { isResolved: true, resolvedAt: new Date() },
+      data: {
+        isResolved,
+        resolvedAt: isResolved ? new Date() : null,
+      },
+      include: { operateur: true, region: true },
     });
 
-    return NextResponse.json({ alert });
+    await logAudit(
+      userId,
+      isResolved ? "RESOLVE" : "UNRESOLVE",
+      "alert",
+      JSON.stringify({ alertId: body.id, type: alert.type, severity: alert.severity }),
+      body.id
+    );
+
+    return NextResponse.json({
+      alert: {
+        id: alert.id,
+        type: alert.type,
+        severity: alert.severity,
+        operator: alert.operateur?.nom || "Système",
+        region: alert.region?.nom || "National",
+        message: alert.message,
+        isResolved: alert.isResolved,
+        resolvedAt: alert.resolvedAt,
+        createdAt: alert.createdAt,
+      },
+    });
   } catch (error) {
     console.error("Resolve alert API error:", error);
+    // Check if it's a Prisma not-found error
+    if (error instanceof Error && error.message.includes("not found")) {
+      return NextResponse.json({ error: "Alerte non trouvée" }, { status: 404 });
+    }
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

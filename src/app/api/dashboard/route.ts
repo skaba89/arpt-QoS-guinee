@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getAccessibleOperators, getAccessibleRegions, getRLSScope } from "@/lib/rbac";
+import { getAccessibleOperators, getAccessibleRegions, getRLSScope, getOperatorColor } from "@/lib/rbac";
 import type { RoleType } from "@prisma/client";
 
 export async function GET() {
@@ -15,28 +15,31 @@ export async function GET() {
     const accessibleRegIds = await getAccessibleRegions(userRole as RoleType);
     const scope = await getRLSScope(userRole as RoleType);
 
+    const rlsFilter = {
+      ...(scope !== "all" && scope !== "public_only" && accessibleOpIds.length > 0 ? { operateurId: { in: accessibleOpIds } } : {}),
+      ...(scope !== "all" && scope !== "public_only" && accessibleRegIds.length > 0 ? { regionId: { in: accessibleRegIds } } : {}),
+    };
+
     // Get total measurements for calculations
     const allMeasures = await db.mesureQoS.findMany({
-      where: {
-        ...(scope !== "all" && scope !== "public_only" && accessibleOpIds.length > 0 ? { operateurId: { in: accessibleOpIds } } : {}),
-        ...(scope !== "all" && scope !== "public_only" && accessibleRegIds.length > 0 ? { regionId: { in: accessibleRegIds } } : {}),
-      },
+      where: rlsFilter,
       include: { operateur: true, region: true },
+      take: 5000,
     });
 
     // Calculate coverage: average of measurements with rssi > -100
     const goodSignalMeasures = allMeasures.filter((m) => (m.rssi ?? -100) > -100);
     const couvertureNationale = allMeasures.length > 0
       ? Math.round((goodSignalMeasures.length / allMeasures.length) * 100)
-      : 67;
+      : 0;
 
     // Calculate average QoS score
-    const qosScores = allMeasures.map((m) => m.scoreQoE).filter(Boolean) as number[];
+    const qosScores = allMeasures.map((m) => m.scoreQoE).filter((v): v is number => v !== null);
     const scoreQosGlobal = qosScores.length > 0
       ? Math.round(qosScores.reduce((a, b) => a + b, 0) / qosScores.length)
-      : 72;
+      : 0;
 
-    // Count zones blanches (alerts)
+    // Count zones blanches (unresolved alerts of type ZONE_BLANCHE)
     const zonesBlanches = await db.alerte.count({
       where: {
         type: "ZONE_BLANCHE",
@@ -50,7 +53,35 @@ export async function GET() {
       where: (scope !== "all" && scope !== "public_only") ? { id: { in: accessibleRegIds } } : {},
     });
     const totalPop = coveredRegions.reduce((sum, r) => sum + (r.population || 0), 0);
-    const populationCouverte = Math.round(totalPop * (couvertureNationale / 100) / 1000000 * 10) / 10;
+    const populationCouverte = totalPop > 0
+      ? Math.round(totalPop * (couvertureNationale / 100) / 1000000 * 10) / 10
+      : 0;
+
+    // Calculate KPI trends from DB: compare recent vs older measurements
+    const half = Math.floor(allMeasures.length / 2);
+    const recentMeasures = allMeasures.slice(0, half);
+    const olderMeasures = allMeasures.slice(half);
+
+    const trendCalc = (field: "rssi" | "scoreQoE") => {
+      const recentVals = recentMeasures.map((m) => m[field]).filter((v): v is number => v !== null);
+      const olderVals = olderMeasures.map((m) => m[field]).filter((v): v is number => v !== null);
+      if (!recentVals.length || !olderVals.length) return 0;
+      const recentAvg = recentVals.reduce((a, b) => a + b, 0) / recentVals.length;
+      const olderAvg = olderVals.reduce((a, b) => a + b, 0) / olderVals.length;
+      return Math.round((recentAvg - olderAvg) * 10) / 10;
+    };
+
+    // Count previous period zones blanches for trend
+    const prevMonthDate = new Date();
+    prevMonthDate.setMonth(prevMonthDate.getMonth() - 1);
+    const prevZonesBlanches = await db.alerte.count({
+      where: {
+        type: "ZONE_BLANCHE",
+        isResolved: false,
+        createdAt: { lt: prevMonthDate },
+        ...(scope !== "all" && scope !== "public_only" && accessibleRegIds.length > 0 ? { regionId: { in: accessibleRegIds } } : {}),
+      },
+    }).catch(() => 0);
 
     // Operator rankings with latest scores
     const operators = await db.operateur.findMany({
@@ -67,7 +98,7 @@ export async function GET() {
         id: op.code.toLowerCase(),
         name: op.nom,
         code: op.code,
-        color: op.code === "ORANGE" ? "#FF7900" : op.code === "MTN" ? "#FFCC00" : "#00B4D8",
+        color: getOperatorColor(op.code),
         score: latestScore?.scoreGlobal || 0,
         trend: latestScore && prevScore ? Math.round((latestScore.scoreGlobal - prevScore.scoreGlobal) * 10) / 10 : 0,
         subscores: {
@@ -75,8 +106,8 @@ export async function GET() {
           qos: latestScore?.scoreQoS || 0,
           qoe: latestScore?.scoreQoE || 0,
           conformite: latestScore?.scoreConformite || 0,
-          innovation: Math.round(latestScore?.scoreQoS ? latestScore.scoreQoS * 0.9 : 60),
-          investissement: Math.round(latestScore?.scoreCouverture ? latestScore.scoreCouverture * 0.88 : 55),
+          innovation: latestScore ? Math.round(latestScore.scoreQoS * 0.9) : 0,
+          investissement: latestScore ? Math.round(latestScore.scoreCouverture * 0.88) : 0,
         },
         historicalScores: op.scores.map((s) => s.scoreGlobal).reverse(),
       };
@@ -84,10 +115,7 @@ export async function GET() {
 
     // Recent alerts
     const recentAlerts = await db.alerte.findMany({
-      where: {
-        ...(scope !== "all" && scope !== "public_only" && accessibleOpIds.length > 0 ? { operateurId: { in: accessibleOpIds } } : {}),
-        ...(scope !== "all" && scope !== "public_only" && accessibleRegIds.length > 0 ? { regionId: { in: accessibleRegIds } } : {}),
-      },
+      where: rlsFilter,
       include: { operateur: true, region: true },
       orderBy: { createdAt: "desc" },
       take: 10,
@@ -110,37 +138,69 @@ export async function GET() {
     const regionStats = await Promise.all(regionData.map(async (r) => {
       const regMeasures = allMeasures.filter((m) => m.regionId === r.id);
       const regGoodSignal = regMeasures.filter((m) => (m.rssi ?? -100) > -100);
-      const coverage = regMeasures.length > 0 ? Math.round((regGoodSignal.length / regMeasures.length) * 100) : 50;
-      const qos = regMeasures.length > 0
-        ? Math.round(regMeasures.filter((m) => m.scoreQoE).reduce((s, m) => s + (m.scoreQoE || 0), 0) / regMeasures.filter((m) => m.scoreQoE).length)
-        : 50;
+      const coverage = regMeasures.length > 0 ? Math.round((regGoodSignal.length / regMeasures.length) * 100) : 0;
+      const qosMeasures = regMeasures.filter((m) => m.scoreQoE !== null);
+      const qos = qosMeasures.length > 0
+        ? Math.round(qosMeasures.reduce((s, m) => s + (m.scoreQoE || 0), 0) / qosMeasures.length)
+        : 0;
+
+      // Count actual white zone alerts for this region
+      const regionWhiteZones = await db.alerte.count({
+        where: {
+          type: "ZONE_BLANCHE",
+          isResolved: false,
+          regionId: r.id,
+        },
+      }).catch(() => 0);
+
       return {
         name: r.nom,
         code: r.code,
         coverage,
         qos,
         population: r.population || 0,
-        whiteZones: recentAlerts.filter((a) => a.regionId === r.id && a.type === "ZONE_BLANCHE").length || Math.round((100 - coverage) / 3),
+        whiteZones: regionWhiteZones || (coverage > 0 ? Math.round((100 - coverage) / 3) : 0),
         color: coverage >= 80 ? "#10B981" : coverage >= 65 ? "#3B82F6" : coverage >= 50 ? "#F59E0B" : "#EF4444",
       };
     }));
 
+    // SLA compliance from DB scores
+    const allScores = await db.scoreOperateur.findMany({
+      where: scope !== "all" && scope !== "public_only" ? { operateurId: { in: accessibleOpIds } } : {},
+      orderBy: { periode: "desc" },
+    });
+
+    const latestScoresByOp = new Map<string, number>();
+    for (const s of allScores) {
+      if (!latestScoresByOp.has(s.operateurId)) {
+        latestScoresByOp.set(s.operateurId, s.scoreConformite);
+      }
+    }
+
+    const slaComplianceOps: Record<string, number> = {};
+    let totalSLA = 0;
+    let slaCount = 0;
+    for (const op of operators) {
+      const conformite = latestScoresByOp.get(op.id) || 0;
+      slaComplianceOps[op.code] = Math.round(conformite * 0.95);
+      totalSLA += conformite;
+      slaCount++;
+    }
+    const globalSLA = slaCount > 0 ? Math.round((totalSLA / slaCount) * 0.95) : 0;
+
     return NextResponse.json({
       kpis: {
-        couvertureNationale: { value: couvertureNationale, unit: "%", trend: 2.3, label: "Couverture Nationale" },
-        scoreQosGlobal: { value: scoreQosGlobal, unit: "/100", trend: -1.2, label: "Score QoS Global" },
-        zonesBlanches: { value: zonesBlanches + 200, unit: "", trend: -12, label: "Zones Blanches" },
-        populationCouverte: { value: populationCouverte, unit: "M", trend: 340, label: "Population Couverte" },
+        couvertureNationale: { value: couvertureNationale, unit: "%", trend: trendCalc("rssi"), label: "Couverture Nationale" },
+        scoreQosGlobal: { value: scoreQosGlobal, unit: "/100", trend: trendCalc("scoreQoE"), label: "Score QoS Global" },
+        zonesBlanches: { value: zonesBlanches, unit: "", trend: zonesBlanches > 0 ? Math.round((zonesBlanches - prevZonesBlanches) * 10) / 10 : 0, label: "Zones Blanches" },
+        populationCouverte: { value: populationCouverte, unit: "M", trend: 0, label: "Population Couverte" },
       },
       operators: operatorRankings,
       alerts: formattedAlerts,
       regions: regionStats,
       slaCompliance: {
-        global: 84,
-        operators: operatorRankings.reduce((acc, op) => {
-          acc[op.code] = Math.round(op.subscores.conformite * 0.95);
-          return acc;
-        }, {} as Record<string, number>),
+        global: globalSLA,
+        operators: slaComplianceOps,
       },
     });
   } catch (error) {

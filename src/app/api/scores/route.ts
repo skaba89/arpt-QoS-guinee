@@ -55,6 +55,7 @@ export async function GET(request: Request) {
       scoreQoE: s.scoreQoE,
       scoreConformite: s.scoreConformite,
       recommandation: s.recommandation,
+      createdAt: s.createdAt,
     }));
 
     return NextResponse.json({ scores: result });
@@ -65,8 +66,8 @@ export async function GET(request: Request) {
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// POST /api/scores — Create or update an operator score
-// Body: { operateurId, periode, scoreGlobal, scoreCouverture, scoreQoS, scoreQoE, scoreConformite, recommandation }
+// POST /api/scores — Create or update an operator score (upsert)
+// Body: { operateurId, periode, scoreGlobal, scoreCouverture, scoreQoS, scoreQoE, scoreConformite, recommandation? }
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function POST(request: Request) {
   try {
@@ -105,8 +106,8 @@ export async function POST(request: Request) {
     }
 
     // Validate score ranges (0-100)
-    const validateScore = (val: unknown, name: string): number | undefined => {
-      if (val === undefined || val === null) return undefined;
+    const validateScore = (val: unknown, name: string): number => {
+      if (val === undefined || val === null) return 0;
       const n = parseFloat(String(val));
       if (isNaN(n) || n < 0 || n > 100) {
         throw new Error(`${name} doit être entre 0 et 100`);
@@ -114,9 +115,8 @@ export async function POST(request: Request) {
       return n;
     };
 
-    let scoreGlobal: number | undefined;
     try {
-      scoreGlobal = validateScore(body.scoreGlobal, "scoreGlobal");
+      const scoreGlobal = validateScore(body.scoreGlobal, "scoreGlobal");
       const scoreCouverture = validateScore(body.scoreCouverture, "scoreCouverture");
       const scoreQoS = validateScore(body.scoreQoS, "scoreQoS");
       const scoreQoE = validateScore(body.scoreQoE, "scoreQoE");
@@ -133,19 +133,19 @@ export async function POST(request: Request) {
         create: {
           operateurId: operateurId!,
           periode: body.periode,
-          scoreGlobal: scoreGlobal || 0,
-          scoreCouverture: scoreCouverture || 0,
-          scoreQoS: scoreQoS || 0,
-          scoreQoE: scoreQoE || 0,
-          scoreConformite: scoreConformite || 0,
+          scoreGlobal,
+          scoreCouverture,
+          scoreQoS,
+          scoreQoE,
+          scoreConformite,
           recommandation: body.recommandation || "",
         },
         update: {
-          scoreGlobal: scoreGlobal || 0,
-          scoreCouverture: scoreCouverture || 0,
-          scoreQoS: scoreQoS || 0,
-          scoreQoE: scoreQoE || 0,
-          scoreConformite: scoreConformite || 0,
+          scoreGlobal,
+          scoreCouverture,
+          scoreQoS,
+          scoreQoE,
+          scoreConformite,
           recommandation: body.recommandation || "",
         },
       });
