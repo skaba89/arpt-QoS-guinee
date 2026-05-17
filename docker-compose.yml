@@ -1,0 +1,41 @@
+# ═══════════════════════════════════════════════════════════
+# ONIT-PNG — Docker Compose Configuration
+# Observatoire National Intelligent des Télécommunications
+# République de Guinée — ARPT
+# ═══════════════════════════════════════════════════════════
+
+version: "3.9"
+
+services:
+  onit-png:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: onit-png
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:/app/db/onit-png.db
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=onit-png-secret-key-2026-guinee-arpt-changez-moi
+      - PORT=3000
+    volumes:
+      - onit-db:/app/db
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/auth/session"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    networks:
+      - onit-network
+
+volumes:
+  onit-db:
+    driver: local
+
+networks:
+  onit-network:
+    driver: bridge

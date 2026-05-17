@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rapport_reglementaire>
+  <entete>
+    <titre>Rapport QoS Trimestriel</titre>
+    <periode>2026-Q1</periode>
+    <date_generation>2026-04-15</date_generation>
+    <autorite>ARPT - Autorité de Régulation des Postes et Télécommunications</autorite>
+    <pays>Guinée</pays>
+    <version>1.0</version>
+  </entete>
+  <operateur>
+    <nom>Orange Guinée</nom>
+    <code>ORANGE</code>
+    <licence>LIC-ORANGE-2016</licence>
+  </operateur>
+  <indicateurs_qos>
+    <couverture_nationale>
+      <population_couverte_pourcentage>82</population_couverte_pourcentage>
+      <surface_couverte_pourcentage>68</surface_couverte_pourcentage>
+      <zones_blanches_nombre>156</zones_blanches_nombre>
+    </couverture_nationale>
+    <qualite_service_mobile>
+      <debit_moyen_descendant_mbps>22.5</debit_moyen_descendant_mbps>
+      <debit_moyen_montant_mbps>11.2</debit_moyen_montant_mbps>
+      <latence_moyenne_ms>37</latence_moyenne_ms>
+      <taux_appel_reussi_pourcentage>96.8</taux_appel_reussi_pourcentage>
+      <taux_drop_call_pourcentage>1.2</taux_drop_call_pourcentage>
+    </qualite_service_mobile>
+    <qualite_service_internet>
+      <dns_lookup_ms>13</dns_lookup_ms>
+      <tcp_connect_ms>23</tcp_connect_ms>
+      <page_load_ms>2100</page_load_ms>
+      <video_buffering_ms>480</video_buffering_ms>
+    </qualite_service_internet>
+  </indicateurs_qos>
+  <scores>
+    <score_global>78</score_global>
+    <score_couverture>82</score_couverture>
+    <score_qos>76</score_qos>
+    <score_qoe>77</score_qoe>
+    <score_conformite>81</score_conformite>
+  </scores>
+  <incidents>
+    <incident>
+      <date>2026-02-10</date>
+      <region>Conakry</region>
+      <type>DEGRADATION</type>
+      <description>Panne serveur BSC - 4h d'indisponibilité</description>
+      <duree_heures>4</duree_heures>
+      <clients_affectes>45000</clients_affectes>
+    </incident>
+  </incidents>
+  <conformite>
+    <conforme_aux_specifications>true</conforme_aux_specifications>
+    <seuils_respectes>8/10</seuils_respectes>
+    <seuils_non_respectes>
+      <seuil>Latence zone rurale &gt; 50ms</seuil>
+      <seuil>Débit descendant zone rurale &lt; 10Mbps</seuil>
+    </seuils_non_respectes>
+  </conformite>
+  <recommandations>
+    <recommandation>Étendre la couverture 4G dans les zones rurales de Kindia et Boké</recommandation>
+    <recommandation>Améliorer le backhaul dans la région de Faranah</recommandation>
+    <recommandation>Réduire la latence sur les liaisons internationales</recommandation>
+  </recommandations>
+</rapport_reglementaire>
