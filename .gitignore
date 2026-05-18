@@ -32,10 +32,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
-
 
 # typescript
 *.tsbuildinfo
@@ -46,9 +46,17 @@ local-*
 *.log
 dev.log
 dev.out.log
-test
-prompt
-
 server.log
-# Skills directory
+
+# Skills directory (internal)
 /skills/
+
+# Database files (runtime, not source)
+db/*.db
+db/*.db-journal
+
+# Worklog (internal)
+worklog.md
+
+# Generated scripts (not needed in repo)
+generate_formation_pdf.py

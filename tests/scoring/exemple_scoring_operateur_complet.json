@@ -1,0 +1,56 @@
+[
+  {
+    "operateur": "ORANGE",
+    "region": "CON",
+    "score_couverture": 82,
+    "score_qualite": 76,
+    "score_relatif": 78,
+    "score_global": 79,
+    "periode": "2026-Q1"
+  },
+  {
+    "operateur": "ORANGE",
+    "region": "KIN",
+    "score_couverture": 75,
+    "score_qualite": 70,
+    "score_relatif": 72,
+    "score_global": 73,
+    "periode": "2026-Q1"
+  },
+  {
+    "operateur": "MTN",
+    "region": "CON",
+    "score_couverture": 76,
+    "score_qualite": 72,
+    "score_relatif": 73,
+    "score_global": 74,
+    "periode": "2026-Q1"
+  },
+  {
+    "operateur": "MTN",
+    "region": "BOK",
+    "score_couverture": 55,
+    "score_qualite": 50,
+    "score_relatif": 52,
+    "score_global": 53,
+    "periode": "2026-Q1"
+  },
+  {
+    "operateur": "CELCOM",
+    "region": "CON",
+    "score_couverture": 58,
+    "score_qualite": 62,
+    "score_relatif": 59,
+    "score_global": 60,
+    "periode": "2026-Q1"
+  },
+  {
+    "operateur": "CELCOM",
+    "region": "NZE",
+    "score_couverture": 42,
+    "score_qualite": 38,
+    "score_relatif": 40,
+    "score_global": 40,
+    "periode": "2026-Q1"
+  }
+]

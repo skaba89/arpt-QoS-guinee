@@ -3,6 +3,28 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { checkPermission, logAudit } from "@/lib/rbac";
+import { z } from "zod";
+
+// ── Zod Schemas ──
+
+const stripHtml = (val: string) => val.replace(/<[^>]*>/g, "");
+
+const createUserSchema = z.object({
+  email: z.string().email("Email invalide").max(254).transform(stripHtml),
+  name: z.string().min(1, "Nom requis").max(100).transform(stripHtml),
+  password: z.string().min(8, "Mot de passe trop court (min 8)").max(128),
+  roleId: z.string().min(1, "Rôle requis").max(50).transform(stripHtml),
+  organization: z.string().max(100).optional().default("").transform(stripHtml),
+});
+
+const updateUserSchema = z.object({
+  id: z.string().min(1, "ID utilisateur requis").max(50).transform(stripHtml),
+  name: z.string().max(100).transform(stripHtml).optional(),
+  roleId: z.string().max(50).transform(stripHtml).optional(),
+  organization: z.string().max(100).transform(stripHtml).optional(),
+  isActive: z.boolean().optional(),
+  password: z.string().min(8).max(128).optional(),
+});
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // GET /api/users — List users (admin only)
@@ -65,13 +87,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
     }
 
-    const body = await request.json();
+    const rawBody = await request.json();
+    const parsed = createUserSchema.safeParse(rawBody);
 
-    // Validate required fields
-    if (!body.email) return NextResponse.json({ error: "L'email est requis" }, { status: 400 });
-    if (!body.name) return NextResponse.json({ error: "Le nom est requis" }, { status: 400 });
-    if (!body.password) return NextResponse.json({ error: "Le mot de passe est requis" }, { status: 400 });
-    if (!body.roleId) return NextResponse.json({ error: "Le rôle est requis" }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Données invalides", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+
+    const body = parsed.data;
 
     // Check if email already exists
     const existing = await db.user.findUnique({ where: { email: body.email } });
@@ -138,12 +164,17 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
     }
 
-    const body = await request.json();
-    const { id, name, roleId, organization, isActive, password } = body;
+    const rawBody = await request.json();
+    const parsed = updateUserSchema.safeParse(rawBody);
 
-    if (!id) {
-      return NextResponse.json({ error: "ID utilisateur requis" }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Données invalides", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
     }
+
+    const { id, name, roleId, organization, isActive, password } = parsed.data;
 
     // Prevent deactivating yourself
     if (id === adminUserId && isActive === false) {

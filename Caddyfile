@@ -1,23 +1,19 @@
+# ═══════════════════════════════════════════════════════════
+# ONIT-PNG — Caddy Reverse Proxy Configuration
+# Observatoire National Intelligent des Télécommunications
+# République de Guinée — ARPT
+#
+# SECURITY: The XTransformPort SSRF vulnerability has been removed.
+# Only the Next.js application on port 3000 is proxied.
+# ═══════════════════════════════════════════════════════════
+
 :81 {
-	@transform_port_query {
-		query XTransformPort=*
-	}
-
-	handle @transform_port_query {
-		reverse_proxy localhost:{query.XTransformPort} {
-			header_up Host {host}
-			header_up X-Forwarded-For {remote_host}
-			header_up X-Forwarded-Proto {scheme}
-			header_up X-Real-IP {remote_host}
-		}
-	}
-
-	handle {
-		reverse_proxy localhost:3000 {
-			header_up Host {host}
-			header_up X-Forwarded-For {remote_host}
-			header_up X-Forwarded-Proto {scheme}
-			header_up X-Real-IP {remote_host}
-		}
-	}
+        handle {
+                reverse_proxy localhost:3000 {
+                        header_up Host {host}
+                        header_up X-Forwarded-For {remote_host}
+                        header_up X-Forwarded-Proto {scheme}
+                        header_up X-Real-IP {remote_host}
+                }
+        }
 }

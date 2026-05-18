@@ -1,32 +1,39 @@
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# ONIT-PNG — Docker Compose pour tests locaux
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ═══════════════════════════════════════════════════════════
+# ONIT-PNG — Docker Compose Configuration
+# Observatoire National Intelligent des Télécommunications
+# République de Guinée — ARPT
+# ═══════════════════════════════════════════════════════════
 
 version: "3.9"
 
 services:
-  onit-app:
+  onit-png:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: onit-png-app
+    container_name: onit-png
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=file:/app/data/onit-png.db
-      - NEXTAUTH_SECRET=onit-png-secret-key-2026-guinee-docker
-      - NEXTAUTH_URL=http://localhost:3000
       - NODE_ENV=production
+      - DATABASE_URL=file:/app/db/onit-png.db
+      - NEXTAUTH_URL=http://localhost:3000
+      # SECURITY: NEXTAUTH_SECRET is loaded from .env.docker or environment
+      # Generate with: openssl rand -base64 32
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-onit-png-secret-key-2026-guinee-docker}
+      - PORT=3000
     volumes:
-      - onit-data:/app/data
+      - onit-db:/app/db
       - ./test-data:/app/test-data:ro
-    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/auth/session"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 20s
+    networks:
+      - onit-network
 
   # Optional: Caddy reverse proxy (matches existing Caddyfile)
   onit-caddy:
@@ -37,11 +44,17 @@ services:
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
     depends_on:
-      onit-app:
+      onit-png:
         condition: service_healthy
     profiles:
       - with-caddy
+    networks:
+      - onit-network
 
 volumes:
-  onit-data:
+  onit-db:
     driver: local
+
+networks:
+  onit-network:
+    driver: bridge

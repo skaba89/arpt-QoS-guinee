@@ -3,6 +3,26 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getAccessibleOperators, getAccessibleRegions, getRLSScope, logAudit, checkPermission, getOperatorColor } from "@/lib/rbac";
+import { z } from "zod";
+
+// ── Zod Schema ──
+
+const stripHtml = (val: string) => val.replace(/<[^>]*>/g, "");
+
+const createCampaignSchema = z.object({
+  nom: z.string().min(1, "Nom de campagne requis").max(200).transform(stripHtml),
+  type: z.string().min(1, "Type requis").max(50).transform(stripHtml),
+  operateurId: z.string().min(1, "Opérateur requis").max(50).transform(stripHtml),
+  regionId: z.string().min(1, "Région requise").max(50).transform(stripHtml),
+  dateDebut: z.string().min(1, "Date de début requise").max(30).transform(stripHtml),
+  dateFin: z.string().max(30).optional().transform((v) => (v && v.trim() !== "" ? stripHtml(v) : undefined)),
+  responsable: z.string().min(1, "Responsable requis").max(100).transform(stripHtml),
+});
+
+const updateCampaignSchema = z.object({
+  id: z.string().min(1, "ID campagne requis").max(50).transform(stripHtml),
+  statut: z.enum(["PLANIFIEE", "EN_COURS", "TERMINEE", "ANNULEE"]),
+});
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // GET /api/campaigns — List campaigns (RLS-filtered)
@@ -92,15 +112,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Permissions insuffisantes" }, { status: 403 });
     }
 
-    const body = await request.json();
+    const rawBody = await request.json();
+    const parsed = createCampaignSchema.safeParse(rawBody);
 
-    // Validate required fields
-    if (!body.nom) return NextResponse.json({ error: "Le nom est requis" }, { status: 400 });
-    if (!body.type) return NextResponse.json({ error: "Le type est requis" }, { status: 400 });
-    if (!body.operateurId) return NextResponse.json({ error: "L'opérateur est requis" }, { status: 400 });
-    if (!body.regionId) return NextResponse.json({ error: "La région est requise" }, { status: 400 });
-    if (!body.dateDebut) return NextResponse.json({ error: "La date de début est requise" }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Données invalides", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
 
+    const body = parsed.data;
     const campaign = await db.campagne.create({
       data: {
         nom: body.nom,
@@ -156,26 +178,25 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "Permissions insuffisantes" }, { status: 403 });
     }
 
-    const body = await request.json();
-    if (!body.id) {
-      return NextResponse.json({ error: "ID campagne requis" }, { status: 400 });
-    }
-    if (!body.statut) {
-      return NextResponse.json({ error: "Statut requis" }, { status: 400 });
+    const rawBody = await request.json();
+    const parsed = updateCampaignSchema.safeParse(rawBody);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Données invalides", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
     }
 
-    const validStatuses = ["PLANIFIEE", "EN_COURS", "TERMINEE", "ANNULEE"];
-    if (!validStatuses.includes(body.statut)) {
-      return NextResponse.json({ error: `Statut invalide. Valeurs autorisées: ${validStatuses.join(", ")}` }, { status: 400 });
-    }
+    const { id, statut } = parsed.data;
 
     const campaign = await db.campagne.update({
-      where: { id: body.id },
-      data: { statut: body.statut },
+      where: { id },
+      data: { statut },
       include: { operateur: true, region: true },
     });
 
-    await logAudit(userId, "UPDATE", "campaign", JSON.stringify({ statut: body.statut }), campaign.id);
+    await logAudit(userId, "UPDATE", "campaign", JSON.stringify({ statut }), campaign.id);
 
     return NextResponse.json({
       campaign: {

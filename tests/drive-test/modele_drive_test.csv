@@ -1,0 +1,2 @@
+date,operateur,region,latitude,longitude,rssi,rsrp,rsrq,sinr,type_reseau,type_test
+2026-05-01T08:00:00,ORANGE,CON,9.5000,-13.7000,-70,-85,-8,15,4G,DRIVE_TEST

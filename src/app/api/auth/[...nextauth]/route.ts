@@ -3,6 +3,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 
+// Determine if we're in production (HTTPS) or development (HTTP)
+const isProduction = process.env.NODE_ENV === "production";
+const isSecureCookie = isProduction && process.env.NEXTAUTH_URL?.startsWith("https");
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -13,7 +17,6 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.log("[AUTH] Missing credentials");
           return null;
         }
 
@@ -28,24 +31,32 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (!user || !user.isActive) {
-            console.log("[AUTH] User not found or inactive:", credentials.email);
+            // SECURITY: Don't log email addresses - information leakage
             return null;
           }
 
           const isValid = await bcrypt.compare(credentials.password, user.passwordHash);
           if (!isValid) {
-            console.log("[AUTH] Invalid password for:", credentials.email);
+            // Log failed attempt for security monitoring (without password)
+            await db.auditLog.create({
+              data: {
+                userId: user.id,
+                action: "LOGIN_FAILED",
+                resource: "system",
+                details: JSON.stringify({ method: "credentials" }),
+              },
+            }).catch(() => {});
             return null;
           }
 
-          // Update last login
-          await db.user.update({
+          // Update last login (non-blocking)
+          db.user.update({
             where: { id: user.id },
             data: { lastLogin: new Date() },
           }).catch(() => {});
 
-          // Create audit log
-          await db.auditLog.create({
+          // Create audit log (non-blocking)
+          db.auditLog.create({
             data: {
               userId: user.id,
               action: "LOGIN",
@@ -54,18 +65,17 @@ export const authOptions: NextAuthOptions = {
             },
           }).catch(() => {});
 
-          console.log("[AUTH] Login successful:", credentials.email, "Role:", user.role.name);
-
           return {
             id: user.id,
             email: user.email,
             name: user.name,
             role: user.role.name as string,
-            organization: user.organization,
+            organization: user.organization ?? undefined,
             permissions: user.role.permissions.map((p) => `${p.resource}:${p.action}`),
           };
         } catch (error) {
-          console.error("[AUTH] Authorization error:", error);
+          // SECURITY: Log error type only, not full details with credentials
+          console.error("[AUTH] Authorization error");
           return null;
         }
       },
@@ -73,15 +83,15 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 8 * 60 * 60,
+    maxAge: 8 * 60 * 60, // 8 hours
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id as string;
-        token.role = (user as Record<string, unknown>).role;
-        token.organization = (user as Record<string, unknown>).organization;
-        token.permissions = (user as Record<string, unknown>).permissions;
+        token.role = (user as unknown as Record<string, unknown>).role as string;
+        token.organization = (user as unknown as Record<string, unknown>).organization as string | undefined;
+        token.permissions = (user as unknown as Record<string, unknown>).permissions as string[];
       }
       return token;
     },
@@ -98,8 +108,50 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/",
   },
-  secret: process.env.NEXTAUTH_SECRET || "onit-png-secret-key-2026-guinee",
-  debug: process.env.NODE_ENV === "development",
+  secret: process.env.NEXTAUTH_SECRET,
+  // CRITICAL: NEXTAUTH_SECRET MUST be set in environment variables.
+  // Do NOT add a fallback default value — that would allow JWT forgery.
+  debug: false,
+  // SECURITY: Use secure cookies only in production with HTTPS
+  // In development (HTTP), secure cookies won't work
+  useSecureCookies: isSecureCookie,
+  cookies: {
+    sessionToken: {
+      name: isSecureCookie ? "__Secure-next-auth.session-token" : "next-auth.session-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: !!isSecureCookie,
+      },
+    },
+    callbackUrl: {
+      name: isSecureCookie ? "__Secure-next-auth.callback-url" : "next-auth.callback-url",
+      options: {
+        sameSite: "lax",
+        path: "/",
+        secure: !!isSecureCookie,
+      },
+    },
+    csrfToken: {
+      name: isSecureCookie ? "__Host-next-auth.csrf-token" : "next-auth.csrf-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: !!isSecureCookie,
+      },
+    },
+    pkceCodeVerifier: {
+      name: isSecureCookie ? "__Secure-next-auth.pkce.code_verifier" : "next-auth.pkce.code_verifier",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: !!isSecureCookie,
+      },
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

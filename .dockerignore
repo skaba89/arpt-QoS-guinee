@@ -1,17 +1,66 @@
+# Dependencies
 node_modules
+.pnp
+.pnp.js
+
+# Build outputs
 .next
-.git
+out
+dist
+build
+
+# Database
 db/*.db
+db/*.db-journal
 prisma/*.db
 *.db
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 dev.log
 server.log
+
+# Environment
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Git
+.git
+.gitignore
+
+# Documentation (not needed in container)
+docs/
+tests/
+*.md
+!README.md
+
+# Test & E2E
 e2e
 e2e-report
 test-results
 playwright-report
-download
+
+# Misc
 workspace
 agent-ctx
-.env.local
-.env*.local
+download
+worklog.md

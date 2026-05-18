@@ -1,0 +1,2 @@
+date,operateur,region,debit_descendant,debit_montant,latence,gigue,dns,tcp,taux_appel,type_reseau
+2026-05-01T10:00:00,ORANGE,CON,20.0,10.0,40,8,15,25,95.0,4G

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useSyncExternalStore } from 'react';
+import { useState, useCallback, useSyncExternalStore, useEffect } from 'react';
 import { OnitLayout } from '@/components/onit-layout';
 import { AuthProvider } from '@/components/auth-provider';
 import { LoginModal } from '@/components/login-modal';
@@ -26,6 +26,13 @@ function AppContent() {
   const isAuthenticated = status === 'authenticated';
   const isLoading = status === 'loading';
 
+  // When user authenticates, switch from public to dashboard if they were on public
+  useEffect(() => {
+    if (isAuthenticated && activeTab === 'public') {
+      setActiveTab('dashboard');
+    }
+  }, [isAuthenticated, activeTab]);
+
   // Show login modal when:
   // - App is mounted (hydration complete)
   // - Not loading
@@ -40,8 +47,9 @@ function AppContent() {
 
   const handleTabChange = useCallback((tab: TabId) => {
     if (!isAuthenticated && tab !== 'public') {
-      // User clicked a protected tab while not logged in - show login
-      setActiveTab(tab); // Remember where they want to go
+      // User clicked a protected tab while not logged in - show login modal
+      // Set activeTab to the requested tab so after login they go there
+      setActiveTab(tab);
       return;
     }
     setActiveTab(tab);

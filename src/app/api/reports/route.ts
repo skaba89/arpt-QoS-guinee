@@ -4,6 +4,20 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getRLSScope, logAudit, checkPermission } from "@/lib/rbac";
 import type { RoleType } from "@prisma/client";
+import { z } from "zod";
+
+// ── Zod Schema ──
+
+const stripHtml = (val: string) => val.replace(/<[^>]*>/g, "");
+
+const createReportSchema = z.object({
+  titre: z.string().min(1, "Titre requis").max(200).transform(stripHtml),
+  type: z.enum(["INTERNE", "PUBLIC", "CONFIDENTIEL"]).optional().default("INTERNE"),
+  format: z.enum(["PDF", "EXCEL", "CSV"]).optional().default("PDF"),
+  isPublic: z.boolean().optional().default(false),
+  campagneId: z.string().max(50).transform(stripHtml).optional(),
+  contenu: z.string().max(100000).optional(),
+});
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // GET /api/reports — List reports (RLS-filtered)
@@ -77,23 +91,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Permissions insuffisantes" }, { status: 403 });
     }
 
-    const body = await request.json();
+    const rawBody = await request.json();
+    const parsed = createReportSchema.safeParse(rawBody);
 
-    // Validate required fields
-    if (!body.titre) {
-      return NextResponse.json({ error: "Le titre est requis" }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Données invalides", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
     }
 
+    const body = parsed.data;
     const report = await db.rapport.create({
       data: {
         titre: body.titre,
-        type: body.type || "INTERNE",
-        format: body.format || "PDF",
+        type: body.type,
+        format: body.format,
         campagneId: body.campagneId || null,
         contenu: body.contenu || null,
         generePar: userId,
         statut: body.contenu ? "GENERE" : "PLANIFIE",
-        isPublic: body.isPublic || false,
+        isPublic: body.isPublic,
       },
       include: { campagne: true },
     });

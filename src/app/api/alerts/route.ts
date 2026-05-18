@@ -3,6 +3,36 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getAccessibleOperators, getAccessibleRegions, getRLSScope, checkPermission, logAudit } from "@/lib/rbac";
+import { z } from "zod";
+
+// Validation schemas
+const createAlertSchema = z.object({
+  type: z.enum([
+    "DEGRADATION",
+    "SEUIL_DEPASSE",
+    "NON_CONFORMITE",
+    "ZONE_BLANCHE",
+    "SIGNALEMENT_PUBLIC",
+  ]).default("SIGNALEMENT_PUBLIC"),
+  severity: z.enum([
+    "CRITIQUE",
+    "HAUTE",
+    "MOYENNE",
+    "BASSE",
+  ]).default("MOYENNE"),
+  message: z.string()
+    .min(5, "Le message doit contenir au moins 5 caractères")
+    .max(500, "Le message ne peut pas dépasser 500 caractères")
+    .transform((val) => val.replace(/<[^>]*>/g, "")), // Strip HTML tags (XSS prevention)
+  details: z.string().max(1000).optional(),
+  operatorCode: z.string().max(10).optional(),
+  regionCode: z.string().max(10).optional(),
+});
+
+const resolveAlertSchema = z.object({
+  id: z.string().min(1),
+  isResolved: z.boolean().optional().default(true),
+});
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // GET /api/alerts — List alerts (RLS-filtered)
@@ -85,20 +115,26 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
+
     const body = await request.json();
+    const parsed = createAlertSchema.safeParse(body);
 
-    // Allow public submissions (no auth required) for SIGNALEMENT type
-    const isPublicReport = body.type === "SIGNALEMENT_PUBLIC" && !session?.user;
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Données invalides", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
 
-    if (!isPublicReport && !session?.user) {
+    const data = parsed.data;
+    const isPublicReport = data.type === "SIGNALEMENT_PUBLIC" && !session?.user;
+
+    // Non-SIGNALEMENT_PUBLIC types require auth
+    if (data.type !== "SIGNALEMENT_PUBLIC" && !session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
-    if (!body.message) {
-      return NextResponse.json({ error: "Le message est requis" }, { status: 400 });
-    }
-
-    // Build the alert data
+    // Build the alert data with sanitized values
     const alertData: {
       type: string;
       severity: string;
@@ -107,29 +143,25 @@ export async function POST(request: Request) {
       operateurId?: string;
       regionId?: string;
     } = {
-      type: body.type || "SIGNALEMENT_PUBLIC",
-      severity: body.severity || "MOYENNE",
-      message: body.message,
+      type: data.type,
+      severity: data.severity,
+      message: data.message, // Already sanitized by Zod transform
     };
 
-    if (body.details) {
-      alertData.details = body.details;
+    if (data.details) {
+      alertData.details = data.details.replace(/<[^>]*>/g, "");
     }
 
     // Resolve operator ID from code if provided
-    if (body.operatorCode) {
-      const op = await db.operateur.findFirst({ where: { code: body.operatorCode.toUpperCase() } });
+    if (data.operatorCode) {
+      const op = await db.operateur.findFirst({ where: { code: data.operatorCode.toUpperCase() } });
       if (op) alertData.operateurId = op.id;
-    } else if (body.operateurId) {
-      alertData.operateurId = body.operateurId;
     }
 
     // Resolve region ID from code if provided
-    if (body.regionCode) {
-      const reg = await db.region.findFirst({ where: { code: body.regionCode.toUpperCase() } });
+    if (data.regionCode) {
+      const reg = await db.region.findFirst({ where: { code: data.regionCode.toUpperCase() } });
       if (reg) alertData.regionId = reg.id;
-    } else if (body.regionId) {
-      alertData.regionId = body.regionId;
     }
 
     const alert = await db.alerte.create({
@@ -184,13 +216,25 @@ export async function PATCH(request: Request) {
     }
 
     const body = await request.json();
-    if (!body.id) {
-      return NextResponse.json({ error: "ID alerte requis" }, { status: 400 });
+    const parsed = resolveAlertSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Données invalides", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
     }
 
-    const isResolved = body.isResolved !== false;
+    const isResolved = parsed.data.isResolved !== false;
+
+    // Verify alert exists
+    const existingAlert = await db.alerte.findUnique({ where: { id: parsed.data.id } });
+    if (!existingAlert) {
+      return NextResponse.json({ error: "Alerte introuvable" }, { status: 404 });
+    }
+
     const alert = await db.alerte.update({
-      where: { id: body.id },
+      where: { id: parsed.data.id },
       data: {
         isResolved,
         resolvedAt: isResolved ? new Date() : null,
@@ -202,8 +246,8 @@ export async function PATCH(request: Request) {
       userId,
       isResolved ? "RESOLVE" : "UNRESOLVE",
       "alert",
-      JSON.stringify({ alertId: body.id, type: alert.type, severity: alert.severity }),
-      body.id
+      JSON.stringify({ alertId: parsed.data.id, type: alert.type, severity: alert.severity }),
+      parsed.data.id
     );
 
     return NextResponse.json({

@@ -1,0 +1,52 @@
+[
+  {
+    "operateur": "ORANGE",
+    "region": "CON",
+    "type_probleme": "DEGRADATION",
+    "description": "Internet très lent depuis 3 jours dans le quartier de Kaloum, débit inférieur à 1 Mbps",
+    "latitude": 9.5092,
+    "longitude": -13.7122,
+    "nom": "Mamadou Diallo",
+    "telephone": "+224 622 11 22 33"
+  },
+  {
+    "operateur": "MTN",
+    "region": "KIN",
+    "type_probleme": "PAS_DE_SIGNAL",
+    "description": "Aucun signal MTN dans le village de Madina-Oula depuis 2 semaines",
+    "latitude": 10.0569,
+    "longitude": -12.8605,
+    "nom": "Fatoumata Camara",
+    "telephone": "+224 628 44 55 66"
+  },
+  {
+    "operateur": "CELCOM",
+    "region": "FAR",
+    "type_probleme": "APPEL_COUPURE",
+    "description": "Les appels se coupent systématiquement après 30 secondes dans la zone de Dabola",
+    "latitude": 10.0333,
+    "longitude": -10.7333,
+    "nom": "Ibrahima Condé",
+    "telephone": "+224 621 77 88 99"
+  },
+  {
+    "operateur": "ORANGE",
+    "region": "KAN",
+    "type_probleme": "INTERNET_LENT",
+    "description": "La connexion 4G est extrêmement lente en soirée (18h-23h), impossible de regarder une vidéo",
+    "latitude": 10.3833,
+    "longitude": -9.3000,
+    "nom": "Aissatou Bah",
+    "telephone": "+224 625 33 22 11"
+  },
+  {
+    "operateur": "MTN",
+    "region": "BOK",
+    "type_probleme": "PAS_DE_4G",
+    "description": "La 4G n'est pas disponible à Boké ville alors qu'elle est annoncée depuis 6 mois",
+    "latitude": 11.1852,
+    "longitude": -14.2941,
+    "nom": "Moussa Sangaré",
+    "telephone": "+224 623 55 66 77"
+  }
+]
