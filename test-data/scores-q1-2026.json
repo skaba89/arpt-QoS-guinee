@@ -1,0 +1,44 @@
+{
+  "scores": [
+    {
+      "operatorCode": "ORANGE",
+      "periode": "2026-Q1",
+      "scoreGlobal": 78,
+      "scoreCouverture": 82,
+      "scoreQoS": 76,
+      "scoreQoE": 79,
+      "scoreConformite": 85,
+      "recommandation": "Maintenir la qualité en zone urbaine — Étendre la 4G en zone rurale"
+    },
+    {
+      "operatorCode": "MTN",
+      "periode": "2026-Q1",
+      "scoreGlobal": 74,
+      "scoreCouverture": 76,
+      "scoreQoS": 72,
+      "scoreQoE": 74,
+      "scoreConformite": 78,
+      "recommandation": "Améliorer la latence dans la région de Boké — Renforcer l'infrastructure backhaul"
+    },
+    {
+      "operatorCode": "CELCOM",
+      "periode": "2026-Q1",
+      "scoreGlobal": 65,
+      "scoreCouverture": 58,
+      "scoreQoS": 62,
+      "scoreQoE": 64,
+      "scoreConformite": 70,
+      "recommandation": "Améliorer la couverture en zone rurale — objectif +15% — Investir dans l'infrastructure 4G"
+    },
+    {
+      "operatorCode": "INTERCEL",
+      "periode": "2026-Q1",
+      "scoreGlobal": 42,
+      "scoreCouverture": 28,
+      "scoreQoS": 38,
+      "scoreQoE": 40,
+      "scoreConformite": 45,
+      "recommandation": "Couverture limitée à Conakry uniquement — Plan d'extension régionale urgent requis — Seuil de conformité non atteint"
+    }
+  ]
+}
