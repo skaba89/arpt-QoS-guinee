@@ -183,7 +183,7 @@ async function main() {
     { email: 'tech@orange.gn', name: 'Responsable Technique Orange', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Orange Guinée' },
     { email: 'tech@mtn.gn', name: 'Responsable Technique MTN', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'MTN Guinée' },
     { email: 'tech@celcom.gn', name: 'Responsable Technique Celcom', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Celcom Guinée' },
-    { email: 'tech@guinetel.gn', name: 'Responsable Technique Guinée Telecom', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Guinée Telecom' },
+    { email: 'tech@intercel.gn', name: 'Responsable Technique Intercel', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Intercel Guinée' },
   ];
 
   for (const u of users) {
@@ -219,7 +219,7 @@ async function main() {
     { nom: 'Orange Guinée', code: 'ORANGE', type: 'MOBILE', licence: 'LIC-ORANGE-2016' },
     { nom: 'MTN Guinée', code: 'MTN', type: 'MOBILE', licence: 'LIC-MTN-2016' },
     { nom: 'Celcom Guinée', code: 'CELCOM', type: 'MOBILE', licence: 'LIC-CELCOM-2018' },
-    { nom: 'Guinée Telecom', code: 'GUINETEL', type: 'MOBILE', licence: 'LIC-GUINETEL-2020' },
+    { nom: 'Intercel Guinée', code: 'INTERCEL', type: 'MOBILE', licence: 'LIC-INTERCEL-2017' },
   ];
 
   const operateurMap: Record<string, string> = {};
@@ -227,7 +227,7 @@ async function main() {
     const op = await prisma.operateur.create({ data: o });
     operateurMap[o.code] = op.id;
   }
-  console.log('  ✅ Opérateurs (4) — ORANGE, MTN, CELCOM, GUINETEL');
+  console.log('  ✅ Opérateurs (4) — ORANGE, MTN, CELCOM, INTERCEL');
 
   // ═══════════════════════════════════════════
   // 6. Create Prestataire API Keys
@@ -237,7 +237,7 @@ async function main() {
     { name: 'Orange API Key', key: 'prest-orange-2026-ak1a2b3c4d', operateurId: operateurMap['ORANGE']! },
     { name: 'MTN API Key', key: 'prest-mtn-2026-x9y8z7w6v5', operateurId: operateurMap['MTN']! },
     { name: 'Celcom API Key', key: 'prest-celcom-2026-p1q2r3s4t5', operateurId: operateurMap['CELCOM']! },
-    { name: 'Guinée Telecom API Key', key: 'prest-guinetel-2026-m6n7o8p9q0', operateurId: operateurMap['GUINETEL']! },
+    { name: 'Intercel API Key', key: 'prest-intercel-2026-m6n7o8p9q0', operateurId: operateurMap['INTERCEL']! },
   ];
 
   // Store API keys as environment-like config — logged for admin reference
@@ -258,7 +258,7 @@ async function main() {
   console.log('  Orange:   tech@orange.gn / Admin@2026!');
   console.log('  MTN:      tech@mtn.gn / Admin@2026!');
   console.log('  Celcom:   tech@celcom.gn / Admin@2026!');
-  console.log('  GuinTel:  tech@guinetel.gn / Admin@2026!');
+  console.log('  Intercel:  tech@intercel.gn / Admin@2026!');
   console.log('\n📊 AUCUNE donnée de test n\'a été injectée.');
   console.log('   Utilisez l\'API ou les fichiers dans test-data/ pour injecter des données.');
 }

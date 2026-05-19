@@ -12,6 +12,7 @@ interface OperatorScoreData {
 }
 
 const recommendations = [
+  { priority: 'high', text: 'Intercel : couverture critique < 40% — plan d\'urgence requis par l\'ARPT', operator: 'Intercel' },
   { priority: 'high', text: 'Celcom doit améliorer la couverture en zone rurale - objectif +15% en 6 mois', operator: 'Celcom' },
   { priority: 'high', text: 'MTN : réduire la latence dans la région de Boké sous le seuil de 50ms', operator: 'MTN' },
   { priority: 'medium', text: "Renforcer l'investissement en infrastructure 4G pour tous les opérateurs", operator: 'Multi' },
@@ -21,12 +22,25 @@ const recommendations = [
 export function DashboardScoring() {
   const [data, setData] = useState<{ operators: OperatorScoreData[]; radarData: { label: string; values: number[] }[] } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedPeriod, setSelectedPeriod] = useState<string>('latest');
+  const [periodScores, setPeriodScores] = useState<Record<string, { operateur: string; operateurCode: string; periode: string; scoreGlobal: number; scoreCouverture: number; scoreQoS: number; scoreQoE: number; scoreConformite: number }[]> | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
         const res = await fetch('/api/scoring');
         if (res.ok) setData(await res.json());
+        // Also fetch all scores for multi-period comparison
+        const scoresRes = await fetch('/api/scores');
+        if (scoresRes.ok) {
+          const scoresData = await scoresRes.json();
+          const grouped: Record<string, typeof scoresData.scores> = {};
+          for (const s of scoresData.scores || []) {
+            if (!grouped[s.periode]) grouped[s.periode] = [];
+            grouped[s.periode].push(s);
+          }
+          setPeriodScores(grouped);
+        }
       } catch (err) {
         console.error('Scoring fetch error:', err);
       } finally {
@@ -41,13 +55,35 @@ export function DashboardScoring() {
   const operators = data?.operators || [];
   const radarData = data?.radarData || [];
 
+  // Get available periods for comparison
+  const availablePeriods = periodScores ? Object.keys(periodScores).sort().reverse() : [];
+  const comparisonPeriods = selectedPeriod === 'latest'
+    ? availablePeriods.slice(0, 2)
+    : [selectedPeriod, availablePeriods.find(p => p < selectedPeriod) || availablePeriods[availablePeriods.indexOf(selectedPeriod) + 1]].filter(Boolean);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div><h1 className="text-2xl font-bold text-slate-50">Scoring Opérateurs</h1><p className="text-sm text-slate-400 mt-1">Évaluation multi-critères et classement des opérateurs de télécommunications</p></div>
+        {/* Multi-period selector */}
+        {availablePeriods.length > 0 && (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-500">Période :</span>
+            <select
+              value={selectedPeriod}
+              onChange={(e) => setSelectedPeriod(e.target.value)}
+              className="px-3 py-1.5 text-xs rounded-lg bg-white/5 border border-white/10 text-slate-300 focus:outline-none focus:border-[#D4A843]/40"
+            >
+              <option value="latest">Dernière période</option>
+              {availablePeriods.map((p) => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         {operators.map((op) => (
           <div key={op.id} className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20">
             <div className="absolute top-0 left-0 right-0 h-1" style={{ backgroundColor: op.color }} />
@@ -123,6 +159,67 @@ export function DashboardScoring() {
           </div>
         </div>
       </div>
+
+      {/* Multi-Period Comparison */}
+      {periodScores && comparisonPeriods.length >= 2 && (
+        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#8B5CF6] to-transparent opacity-60" />
+          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <BarChart3 className="h-4 w-4 text-[#8B5CF6]" />
+            Comparaison Multi-Périodes
+            <span className="text-[10px] text-slate-500 font-normal normal-case">
+              {comparisonPeriods[0]} vs {comparisonPeriods[1]}
+            </span>
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-2 px-3 text-slate-400 font-medium">Opérateur</th>
+                  <th className="text-center py-2 px-2 text-slate-400 font-medium">{comparisonPeriods[0]}</th>
+                  <th className="text-center py-2 px-2 text-slate-400 font-medium">{comparisonPeriods[1]}</th>
+                  <th className="text-center py-2 px-2 text-slate-400 font-medium">Variation</th>
+                  <th className="text-center py-2 px-2 text-slate-400 font-medium">Couv.</th>
+                  <th className="text-center py-2 px-2 text-slate-400 font-medium">QoS</th>
+                  <th className="text-center py-2 px-2 text-slate-400 font-medium">QoE</th>
+                  <th className="text-center py-2 px-2 text-slate-400 font-medium">Conf.</th>
+                </tr>
+              </thead>
+              <tbody>
+                {operators.map((op) => {
+                  const currentPeriodData = (periodScores[comparisonPeriods[0]] || []).find((s: { operateurCode: string }) => s.operateurCode === op.code.toUpperCase());
+                  const prevPeriodData = (periodScores[comparisonPeriods[1]] || []).find((s: { operateurCode: string }) => s.operateurCode === op.code.toUpperCase());
+                  const currentScore = currentPeriodData?.scoreGlobal || 0;
+                  const prevScore = prevPeriodData?.scoreGlobal || 0;
+                  const diff = currentScore - prevScore;
+                  return (
+                    <tr key={op.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                      <td className="py-2 px-3">
+                        <div className="flex items-center gap-2">
+                          <span className="h-3 w-3 rounded-full" style={{ backgroundColor: op.color }} />
+                          <span className="font-medium text-slate-200">{op.name}</span>
+                        </div>
+                      </td>
+                      <td className="text-center py-2 px-2 font-bold text-slate-200">{currentScore}</td>
+                      <td className="text-center py-2 px-2 text-slate-400">{prevScore}</td>
+                      <td className="text-center py-2 px-2">
+                        <span className={`inline-flex items-center gap-0.5 text-xs font-semibold ${diff > 0 ? 'text-emerald-400' : diff < 0 ? 'text-red-400' : 'text-slate-500'}`}>
+                          {diff > 0 ? '+' : ''}{diff}
+                          {diff > 0 ? <TrendingUp className="h-3 w-3" /> : diff < 0 ? <TrendingDown className="h-3 w-3" /> : null}
+                        </span>
+                      </td>
+                      <td className="text-center py-2 px-2 text-slate-300">{currentPeriodData?.scoreCouverture || '-'}</td>
+                      <td className="text-center py-2 px-2 text-slate-300">{currentPeriodData?.scoreQoS || '-'}</td>
+                      <td className="text-center py-2 px-2 text-slate-300">{currentPeriodData?.scoreQoE || '-'}</td>
+                      <td className="text-center py-2 px-2 text-slate-300">{currentPeriodData?.scoreConformite || '-'}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-60" />

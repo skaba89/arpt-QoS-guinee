@@ -8,7 +8,7 @@ const OPERATOR_COLORS: Record<string, string> = {
   ORANGE: "#FF7900",
   MTN: "#FFCC00",
   CELCOM: "#00B4D8",
-  GUINETEL: "#2DD4BF",
+  INTERCEL: "#8B5CF6",
 };
 
 export function getOperatorColor(code: string): string {

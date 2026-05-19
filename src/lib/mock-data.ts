@@ -1,6 +1,6 @@
 // ONIT-PNG Mock Data - All data for the national telecom supervision platform
 
-export type OperatorId = 'orange' | 'mtn' | 'celcom';
+export type OperatorId = 'orange' | 'mtn' | 'celcom' | 'intercel';
 
 export interface Operator {
   id: OperatorId;
@@ -79,7 +79,7 @@ export interface AuditLogEntry {
 export const operators: Operator[] = [
   {
     id: 'orange',
-    name: 'Orange Guinea',
+    name: 'Orange Guinée',
     color: '#FF7900',
     score: 78,
     trend: 2.1,
@@ -95,7 +95,7 @@ export const operators: Operator[] = [
   },
   {
     id: 'mtn',
-    name: 'MTN Guinea',
+    name: 'MTN Guinée',
     color: '#FFCC00',
     score: 74,
     trend: -0.8,
@@ -111,7 +111,7 @@ export const operators: Operator[] = [
   },
   {
     id: 'celcom',
-    name: 'Celcom Guinea',
+    name: 'Celcom Guinée',
     color: '#00B4D8',
     score: 65,
     trend: 1.5,
@@ -124,6 +124,22 @@ export const operators: Operator[] = [
       investissement: 65,
     },
     historicalScores: [55, 56, 58, 59, 60, 61, 59, 62, 63, 62, 64, 65],
+  },
+  {
+    id: 'intercel',
+    name: 'Intercel Guinée',
+    color: '#8B5CF6',
+    score: 48,
+    trend: -1.2,
+    subscores: {
+      couverture: 38,
+      qos: 44,
+      qoe: 46,
+      conformite: 55,
+      innovation: 35,
+      investissement: 42,
+    },
+    historicalScores: [52, 51, 50, 49, 50, 48, 49, 47, 48, 47, 48, 48],
   },
 ];
 
@@ -181,15 +197,16 @@ export const qosTrendData = {
   orange: [75, 76, 74, 77, 76, 78],
   mtn: [72, 73, 71, 74, 73, 74],
   celcom: [60, 62, 61, 63, 64, 65],
+  intercel: [50, 49, 48, 49, 47, 48],
 };
 
 // Benchmark data
 export const benchmarkData = [
-  { metric: 'Latence (ms)', orange: 38, mtn: 45, celcom: 55, threshold: 50 },
-  { metric: 'Débit (Mbps)', orange: 22, mtn: 18, celcom: 12, threshold: 15 },
-  { metric: 'Taux Appel (%)', orange: 96, mtn: 93, celcom: 89, threshold: 90 },
-  { metric: 'Jitter (ms)', orange: 6, mtn: 9, celcom: 14, threshold: 10 },
-  { metric: 'Disponibilité (%)', orange: 99.2, mtn: 98.5, celcom: 97.1, threshold: 98 },
+  { metric: 'Latence (ms)', orange: 38, mtn: 45, celcom: 55, intercel: 78, threshold: 50 },
+  { metric: 'Débit (Mbps)', orange: 22, mtn: 18, celcom: 12, intercel: 6, threshold: 15 },
+  { metric: 'Taux Appel (%)', orange: 96, mtn: 93, celcom: 89, intercel: 78, threshold: 90 },
+  { metric: 'Jitter (ms)', orange: 6, mtn: 9, celcom: 14, intercel: 22, threshold: 10 },
+  { metric: 'Disponibilité (%)', orange: 99.2, mtn: 98.5, celcom: 97.1, intercel: 93.5, threshold: 98 },
 ];
 
 // Alerts
@@ -199,6 +216,8 @@ export const alerts: Alert[] = [
   { id: '3', type: 'critical', operator: 'Celcom', region: "N'Zérékoré", message: 'Taux d\'appel réussi < 85% - Seuil réglementaire', time: 'Il y a 1h' },
   { id: '4', type: 'warning', operator: 'Orange', region: 'Labé', message: 'Couverture 4G en baisse - Incident signalé', time: 'Il y a 2h' },
   { id: '5', type: 'info', operator: 'MTN', region: 'Conakry', message: 'Maintenance planifiée - 22h00-04h00', time: 'Il y a 3h' },
+  { id: '6', type: 'critical', operator: 'Intercel', region: 'Faranah', message: 'Zone blanche étendue - Aucun signal détecté', time: 'Il y a 20 min' },
+  { id: '7', type: 'warning', operator: 'Intercel', region: 'Kankan', message: 'Couverture 2G en dessous du seuil réglementaire', time: 'Il y a 1h30' },
 ];
 
 // Campaigns
@@ -216,12 +235,15 @@ export const auditResults: AuditResult[] = [
   { id: '1', metric: 'Latence', operator: 'Orange', value: '38ms', threshold: '<50ms', status: 'pass' },
   { id: '2', metric: 'Latence', operator: 'MTN', value: '45ms', threshold: '<50ms', status: 'pass' },
   { id: '3', metric: 'Latence', operator: 'Celcom', value: '55ms', threshold: '<50ms', status: 'fail' },
-  { id: '4', metric: 'Débit', operator: 'Orange', value: '22Mbps', threshold: '>15Mbps', status: 'pass' },
-  { id: '5', metric: 'Débit', operator: 'MTN', value: '18Mbps', threshold: '>15Mbps', status: 'pass' },
-  { id: '6', metric: 'Débit', operator: 'Celcom', value: '12Mbps', threshold: '>15Mbps', status: 'fail' },
-  { id: '7', metric: 'Taux Appel', operator: 'Orange', value: '96%', threshold: '>90%', status: 'pass' },
-  { id: '8', metric: 'Taux Appel', operator: 'MTN', value: '93%', threshold: '>90%', status: 'pass' },
-  { id: '9', metric: 'Taux Appel', operator: 'Celcom', value: '89%', threshold: '>90%', status: 'fail' },
+  { id: '4', metric: 'Latence', operator: 'Intercel', value: '78ms', threshold: '<50ms', status: 'fail' },
+  { id: '5', metric: 'Débit', operator: 'Orange', value: '22Mbps', threshold: '>15Mbps', status: 'pass' },
+  { id: '6', metric: 'Débit', operator: 'MTN', value: '18Mbps', threshold: '>15Mbps', status: 'pass' },
+  { id: '7', metric: 'Débit', operator: 'Celcom', value: '12Mbps', threshold: '>15Mbps', status: 'fail' },
+  { id: '8', metric: 'Débit', operator: 'Intercel', value: '6Mbps', threshold: '>15Mbps', status: 'fail' },
+  { id: '9', metric: 'Taux Appel', operator: 'Orange', value: '96%', threshold: '>90%', status: 'pass' },
+  { id: '10', metric: 'Taux Appel', operator: 'MTN', value: '93%', threshold: '>90%', status: 'pass' },
+  { id: '11', metric: 'Taux Appel', operator: 'Celcom', value: '89%', threshold: '>90%', status: 'fail' },
+  { id: '12', metric: 'Taux Appel', operator: 'Intercel', value: '78%', threshold: '>90%', status: 'fail' },
 ];
 
 // Reports

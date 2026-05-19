@@ -41,7 +41,7 @@ const PRESTATAIRE_API_KEYS: Record<string, { operateurCode: string; name: string
   "prest-orange-2026-ak1a2b3c4d": { operateurCode: "ORANGE", name: "Orange Guinée" },
   "prest-mtn-2026-x9y8z7w6v5": { operateurCode: "MTN", name: "MTN Guinée" },
   "prest-celcom-2026-p1q2r3s4t5": { operateurCode: "CELCOM", name: "Celcom Guinée" },
-  "prest-guinetel-2026-m6n7o8p9q0": { operateurCode: "GUINETEL", name: "Guinée Telecom" },
+  "prest-intercel-2026-m6n7o8p9q0": { operateurCode: "INTERCEL", name: "Intercel Guinée" },
 };
 
 function validateApiKey(request: Request): { operateurCode: string; name: string } | null {

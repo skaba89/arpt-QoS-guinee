@@ -11,11 +11,12 @@ interface BenchmarkItem { metric: string; orange: number; mtn: number; celcom: n
 interface OperatorMetric { id: string; name: string; code: string; color: string; score: number; latence: number; debit: number; tauxAppel: number; jitter: number; disponibilite: number }
 interface RegionHeatmapItem { name: string; code: string; qos: number }
 
-const operatorColors: Record<string, string> = { ORANGE: '#FF7900', MTN: '#FFCC00', CELCOM: '#00B4D8' };
+const operatorColors: Record<string, string> = { ORANGE: '#FF7900', MTN: '#FFCC00', CELCOM: '#00B4D8', INTERCEL: '#8B5CF6' };
 const defaultOperators = [
   { id: 'orange', name: 'Orange Guinée', code: 'ORANGE', color: '#FF7900' },
   { id: 'mtn', name: 'MTN Guinée', code: 'MTN', color: '#FFCC00' },
   { id: 'celcom', name: 'Celcom Guinée', code: 'CELCOM', color: '#00B4D8' },
+  { id: 'intercel', name: 'Intercel Guinée', code: 'INTERCEL', color: '#8B5CF6' },
 ];
 
 export function DashboardQoS() {
@@ -68,10 +69,16 @@ export function DashboardQoS() {
   const regionalHeatmap = data?.regionalHeatmap || [];
   const perOperator = data?.perOperator || [];
 
-  const trendChartData = trendData.months.map((month, i) => ({
-    label: month,
-    values: [trendData.orange[i], trendData.mtn[i], trendData.celcom[i]],
-  }));
+  const trendChartData = trendData.months.map((month, i) => {
+    const allValues: number[] = [];
+    for (const op of defaultOperators) {
+      const opData = (trendData as Record<string, unknown>)[op.code.toLowerCase()];
+      if (Array.isArray(opData) && typeof opData[i] === 'number') {
+        allValues.push(opData[i] as number);
+      }
+    }
+    return { label: month, values: allValues };
+  });
 
   const ops = defaultOperators;
 
@@ -93,7 +100,7 @@ export function DashboardQoS() {
           <Filter className="h-4 w-4 text-[#D4A843] mr-1" />
           <div className="flex items-center gap-1">
             <span className="text-xs text-slate-500 mr-1">Opérateur:</span>
-            {['all', 'orange', 'mtn', 'celcom'].map((op) => (
+            {['all', 'orange', 'mtn', 'celcom', 'intercel'].map((op) => (
               <button key={op} onClick={() => setSelectedOperator(op)} className={`px-3 py-1 text-xs rounded-md border transition-all ${selectedOperator === op ? 'bg-[#D4A843]/20 border-[#D4A843]/40 text-[#D4A843]' : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'}`}>
                 {op === 'all' ? 'Tous' : op.charAt(0).toUpperCase() + op.slice(1)}
               </button>
@@ -151,8 +158,8 @@ export function DashboardQoS() {
                   <span className="text-[10px] text-slate-500">Seuil: {item.threshold}</span>
                 </div>
                 <div className="flex items-center gap-1 h-4">
-                  {[{ val: item.orange, color: '#FF7900' }, { val: item.mtn, color: '#FFCC00' }, { val: item.celcom, color: '#00B4D8' }].map((bar, bi) => {
-                    const maxVal = Math.max(item.orange, item.mtn, item.celcom, item.threshold);
+                  {[{ val: item.orange, color: '#FF7900' }, { val: item.mtn, color: '#FFCC00' }, { val: item.celcom, color: '#00B4D8' }, { val: ((item as unknown) as Record<string, number>).intercel || 0, color: '#8B5CF6' }].map((bar, bi) => {
+                    const maxVal = Math.max(item.orange, item.mtn, item.celcom, ((item as unknown) as Record<string, number>).intercel || 0, item.threshold);
                     return (<div key={bi} className="flex-1 flex items-center gap-1"><div className="flex-1 h-3 bg-white/5 rounded-full overflow-hidden relative"><div className="h-full rounded-full" style={{ width: `${(bar.val / maxVal) * 100}%`, backgroundColor: bar.color, opacity: 0.8 }} /></div><span className="text-[10px] text-slate-400 font-mono w-10 text-right">{bar.val}</span></div>);
                   })}
                 </div>

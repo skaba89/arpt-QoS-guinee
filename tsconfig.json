@@ -42,6 +42,8 @@
     "workspace",
     "download",
     "skills",
-    "agent-ctx"
+    "agent-ctx",
+    "e2e",
+    "playwright.config.ts"
   ]
 }

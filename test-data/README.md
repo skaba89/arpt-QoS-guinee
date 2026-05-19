@@ -1,121 +1,65 @@
-# ONIT-PNG Test Data
+# Test Data for ONIT-PNG Prestataire API
+# ==========================================
 
-This directory contains sample data files for testing the ONIT-PNG (Observatoire National de l'Infrastructure Télécom de Guinée) platform APIs.
+## 1. Submit QoS Measurements
 
-## Files
-
-### QoS Measurement CSV Files
-
-| File | Operator | Description |
-|------|----------|-------------|
-| `mesures-orange-q1-2026.csv` | Orange Guinée | ~20 rows — best coverage, especially in Conakry |
-| `mesures-mtn-q1-2026.csv` | MTN Guinée | ~20 rows — slightly worse than Orange |
-| `mesures-celcom-q1-2026.csv` | Celcom Guinée | ~20 rows — worse than MTN |
-| `mesures-intercel-q1-2026.csv` | Intercel | ~20 rows — worst coverage, mostly Conakry only |
-
-**CSV columns:** `operatorcode,regioncode,latitude,longitude,timestamp,typemesure,rssi,rsrp,rsrq,sinr,latence,debitdescendant,debitmontant,gigue,tauxappelreussi,tauxdropcall,debitdownload,debitupload,ping,scoreqoe`
-
-### Bulk Import JSON
-
-| File | Description |
-|------|-------------|
-| `import-bulk.json` | 10 mixed measurements from all 4 operators, formatted for `PUT /api/mesures` |
-
-### Scores JSON
-
-| File | Description |
-|------|-------------|
-| `scores-q1-2026.json` | Score data for all 4 operators for period 2026-Q1, formatted for `POST /api/scores` |
-
-## Region Codes
-
-| Code | Region | Center Lat | Center Lng |
-|------|--------|-----------|-----------|
-| CON | Conakry | 9.5092 | -13.7122 |
-| KIN | Kindia | 10.0569 | -12.8605 |
-| BOK | Boké | 11.1852 | -14.2941 |
-| LAB | Labé | 11.3170 | -12.2832 |
-| MAM | Mamou | 10.5167 | -12.0833 |
-| FAR | Faranah | 10.0333 | -10.7333 |
-| KAN | Kankan | 10.3833 | -9.3000 |
-| NZE | N'Zérékoré | 7.7500 | -8.8167 |
-
-## Operator Codes
-
-| Code | Operator | Quality Tier |
-|------|----------|-------------|
-| ORANGE | Orange Guinée | Best |
-| MTN | MTN Guinée | Good |
-| CELCOM | Celcom Guinée | Moderate |
-| INTERCEL | Intercel | Poor (Conakry-focused) |
-
-## Usage Examples
-
-### Import CSV measurements via bulk API
+### Using the new REST API (recommended):
 
 ```bash
-# Import Orange measurements
-curl -X PUT http://localhost:3000/api/mesures?campagneId=YOUR_CAMPAGNE_ID \
-  -H "Content-Type: text/csv" \
-  --data-binary @mesures-orange-q1-2026.csv
-
-# Import MTN measurements
-curl -X PUT http://localhost:3000/api/mesures?campagneId=YOUR_CAMPAGNE_ID \
-  -H "Content-Type: text/csv" \
-  --data-binary @mesures-mtn-q1-2026.csv
-```
-
-### Import JSON bulk measurements
-
-```bash
-curl -X PUT http://localhost:3000/api/mesures \
-  -H "Content-Type: application/json" \
-  -d @import-bulk.json
-```
-
-### Import scores via scores API
-
-```bash
-# Submit individual score
-curl -X POST http://localhost:3000/api/scores \
-  -H "Content-Type: application/json" \
-  -d '{
-    "operatorCode": "ORANGE",
-    "periode": "2026-Q1",
-    "scoreGlobal": 78,
-    "scoreCouverture": 82,
-    "scoreQoS": 76,
-    "scoreQoE": 79,
-    "scoreConformite": 85
-  }'
-```
-
-### Import via Prestataire API (API Key auth)
-
-```bash
-# Submit measurements as external provider
 curl -X POST http://localhost:3000/api/prestataires/mesures \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: onit-ORANGE-test-key-2026" \
-  -d '{
-    "mesures": [...]
-  }'
-
-# Submit scores as external provider
-curl -X POST http://localhost:3000/api/prestataires/scores \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: onit-MTN-prod-key" \
-  -d '{
-    "scores": [...]
-  }'
+  -H "X-API-Key: onit-ORANGE-abc123" \
+  -d @test-data/sample-mesures.json
 ```
 
-## Data Quality Notes
+### Using the legacy action-based API:
 
-- **Orange** has the best RF metrics (RSSI ~-68 to -83, RSRP ~-81 to -99) and highest QoE scores (60-86)
-- **MTN** is slightly worse (RSSI ~-71 to -86, RSRP ~-86 to -102), QoE scores 48-78
-- **Celcom** shows moderate degradation (RSSI ~-76 to -91, RSRP ~-92 to -107), QoE scores 35-68
-- **Intercel** has the worst metrics (RSSI ~-77 to -98, RSRP ~-92 to -114), QoE scores 18-64
-- Conakry (CON) always has the best metrics; Faranah (FAR) and N'Zérékoré (NZE) typically worst
-- All timestamps are in Q1 2026 (January–March)
-- Coordinates are near actual regional capitals with small offsets
+```bash
+curl -X POST http://localhost:3000/api/prestataire \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: prest-orange-2026-ak1a2b3c4d" \
+  -d '{"action":"mesures","mesures":[...]}'
+```
+
+## 2. Submit Operator Scores
+
+```bash
+curl -X POST http://localhost:3000/api/prestataires/scores \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: onit-ORANGE-abc123" \
+  -d @test-data/sample-scores.json
+```
+
+## 3. API Keys
+
+| Operator | Legacy Key | New Format Key |
+|----------|-----------|----------------|
+| Orange   | prest-orange-2026-ak1a2b3c4d | onit-ORANGE-abc123 |
+| MTN      | prest-mtn-2026-x9y8z7w6v5 | onit-MTN-prod-key |
+| Celcom   | prest-celcom-2026-p1q2r3s4t5 | onit-CELCOM-2026 |
+| Intercel | prest-intercel-2026-m6n7o8p9q0 | onit-INTERCEL-provider-01 |
+
+## 4. Login Credentials
+
+| Role | Email | Password |
+|------|-------|----------|
+| Super Admin | admin@arpt.gn | Admin@2026! |
+| DG | dg@arpt.gn | Admin@2026! |
+| DGA | dga@arpt.gn | Admin@2026! |
+| Dir. Technique | dir.tech@arpt.gn | Admin@2026! |
+| Ingénieur RF | ing.rf@arpt.gn | Admin@2026! |
+| Analyste QoS | analyse@arpt.gn | Admin@2026! |
+| Auditeur | auditeur@arpt.gn | Admin@2026! |
+| Orange | tech@orange.gn | Admin@2026! |
+| MTN | tech@mtn.gn | Admin@2026! |
+| Celcom | tech@celcom.gn | Admin@2026! |
+| Intercel | tech@intercel.gn | Admin@2026! |
+
+## 5. CSV Import
+
+```bash
+curl -X POST http://localhost:3000/api/prestataire \
+  -H "Content-Type: text/csv" \
+  -H "X-API-Key: prest-orange-2026-ak1a2b3c4d" \
+  --data-binary @test-data/sample-mesures.csv
+```

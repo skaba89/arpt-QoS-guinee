@@ -6,7 +6,7 @@
 
 set -e
 
-DB_PATH="/app/data/onit-png.db"
+DB_PATH="/app/db/onit-png.db"
 
 echo "🚀 ONIT-PNG Docker Entry Point"
 echo "   DATABASE_URL: $DATABASE_URL"
@@ -45,13 +45,13 @@ echo "   DG:       dg@arpt.gn / Admin@2026!"
 echo "   Orange:   tech@orange.gn / Admin@2026!"
 echo "   MTN:      tech@mtn.gn / Admin@2026!"
 echo "   Celcom:   tech@celcom.gn / Admin@2026!"
-echo "   GuinTel:  tech@guinetel.gn / Admin@2026!"
+echo "   Intercel: tech@intercel.gn / Admin@2026!"
 echo ""
 echo "🔑 API Prestataire:"
 echo "   Orange:   prest-orange-2026-ak1a2b3c4d"
 echo "   MTN:      prest-mtn-2026-x9y8z7w6v5"
 echo "   Celcom:   prest-celcom-2026-p1q2r3s4t5"
-echo "   GuinTel:  prest-guinetel-2026-m6n7o8p9q0"
+echo "   Intercel: onit-INTERCEL-provider-01"
 echo ""
 echo "📡 Endpoints API:"
 echo "   GET  /api/prestataire              — Statut (header: X-API-Key)"

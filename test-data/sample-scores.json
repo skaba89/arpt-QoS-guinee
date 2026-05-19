@@ -1,0 +1,13 @@
+{
+  "scores": [
+    {
+      "periode": "2026-Q2",
+      "scoreGlobal": 80,
+      "scoreCouverture": 84,
+      "scoreQoS": 78,
+      "scoreQoE": 81,
+      "scoreConformite": 87,
+      "recommandation": "Maintenir la dynamique positive — étendre la 4G vers les zones rurales"
+    }
+  ]
+}

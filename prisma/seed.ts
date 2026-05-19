@@ -178,12 +178,13 @@ async function main() {
     { email: 'tech@orange.gn', name: 'Responsable Technique Orange', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Orange Guinée' },
     { email: 'tech@mtn.gn', name: 'Responsable Technique MTN', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'MTN Guinée' },
     { email: 'tech@celcom.gn', name: 'Responsable Technique Celcom', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Celcom Guinée' },
+    { email: 'tech@intercel.gn', name: 'Responsable Technique Intercel', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Intercel Guinée' },
   ];
 
   for (const u of users) {
     await prisma.user.create({ data: u });
   }
-  console.log('  ✅ Users (10)');
+  console.log('  ✅ Users (11)');
 
   // ═══════════════════════════════════════════
   // 4. Create Regions
@@ -213,6 +214,7 @@ async function main() {
     { nom: 'Orange Guinée', code: 'ORANGE', type: 'MOBILE', licence: 'LIC-ORANGE-2016' },
     { nom: 'MTN Guinée', code: 'MTN', type: 'MOBILE', licence: 'LIC-MTN-2016' },
     { nom: 'Celcom Guinée', code: 'CELCOM', type: 'MOBILE', licence: 'LIC-CELCOM-2018' },
+    { nom: 'Intercel Guinée', code: 'INTERCEL', type: 'MOBILE', licence: 'LIC-INTERCEL-2017' },
   ];
 
   const operateurMap: Record<string, string> = {};
@@ -220,7 +222,7 @@ async function main() {
     const op = await prisma.operateur.create({ data: o });
     operateurMap[o.code] = op.id;
   }
-  console.log('  ✅ Operators (3)');
+  console.log('  ✅ Operators (4)');
 
   // ═══════════════════════════════════════════
   // 6. Create Campaigns
@@ -234,6 +236,9 @@ async function main() {
     { nom: 'Test 4G MTN Kankan', type: 'DRIVE_TEST', operateurId: operateurMap['MTN']!, regionId: regionMap['KAN']!, dateDebut: new Date('2026-05-01'), statut: 'PLANIFIEE', responsable: 'Ing. Bah' },
     { nom: 'Campagne QoS Q1 2026 - MTN Boké', type: 'DRIVE_TEST', operateurId: operateurMap['MTN']!, regionId: regionMap['BOK']!, dateDebut: new Date('2026-01-20'), dateFin: new Date('2026-01-30'), statut: 'TERMINEE', responsable: 'Ing. Sangaré' },
     { nom: 'Campagne QoS Q1 2026 - Celcom Labé', type: 'WALK_TEST', operateurId: operateurMap['CELCOM']!, regionId: regionMap['LAB']!, dateDebut: new Date('2026-01-25'), dateFin: new Date('2026-02-05'), statut: 'TERMINEE', responsable: 'Ing. Dioubaté' },
+    { nom: 'Recensement Zones Blanches Intercel Faranah', type: 'WALK_TEST', operateurId: operateurMap['INTERCEL']!, regionId: regionMap['FAR']!, dateDebut: new Date('2026-02-10'), dateFin: new Date('2026-02-28'), statut: 'TERMINEE', responsable: 'Ing. Soumah' },
+    { nom: 'Test Couverture 2G Intercel Nzérékoré', type: 'DRIVE_TEST', operateurId: operateurMap['INTERCEL']!, regionId: regionMap['NZE']!, dateDebut: new Date('2026-03-15'), dateFin: new Date('2026-03-25'), statut: 'TERMINEE', responsable: 'Ing. Loua' },
+    { nom: 'Audit QoS Intercel Kankan', type: 'WALK_TEST', operateurId: operateurMap['INTERCEL']!, regionId: regionMap['KAN']!, dateDebut: new Date('2026-04-05'), statut: 'EN_COURS', responsable: 'Ing. Camara' },
   ];
 
   const campaignMap: Record<string, string> = {};
@@ -241,12 +246,12 @@ async function main() {
     const camp = await prisma.campagne.create({ data: c });
     campaignMap[c.nom] = camp.id;
   }
-  console.log('  ✅ Campaigns (8)');
+  console.log('  ✅ Campaigns (11)');
 
   // ═══════════════════════════════════════════
   // 7. Create QoS Measurements (realistic coverage)
   // ═══════════════════════════════════════════
-  const opCodes = ['ORANGE', 'MTN', 'CELCOM'];
+  const opCodes = ['ORANGE', 'MTN', 'CELCOM', 'INTERCEL'];
   const regionCodes = ['CON', 'KIN', 'BOK', 'LAB', 'MAM', 'FAR', 'KAN', 'NZE'];
   const campaignIds = Object.values(campaignMap);
   const regionIds = Object.values(regionMap);
@@ -257,6 +262,7 @@ async function main() {
     ORANGE: { latence: 38, debit: 22, tauxAppel: 96, jitter: 6, debitDown: 24, debitUp: 12, ping: 35, rssi: -70, rsrp: -85, rsrq: -8, sinr: 15, scoreQoE: 79 },
     MTN: { latence: 45, debit: 18, tauxAppel: 93, jitter: 9, debitDown: 20, debitUp: 10, ping: 42, rssi: -75, rsrp: -90, rsrq: -10, sinr: 12, scoreQoE: 74 },
     CELCOM: { latence: 55, debit: 12, tauxAppel: 89, jitter: 14, debitDown: 14, debitUp: 7, ping: 52, rssi: -80, rsrp: -95, rsrq: -13, sinr: 8, scoreQoE: 64 },
+    INTERCEL: { latence: 78, debit: 6, tauxAppel: 78, jitter: 22, debitDown: 8, debitUp: 3, ping: 75, rssi: -90, rsrp: -102, rsrq: -16, sinr: 3, scoreQoE: 42 },
   };
 
   // Region degradation factor (1.0 = good, higher = more degraded)
@@ -266,15 +272,16 @@ async function main() {
 
   // Target coverage probability per region (fraction of measurements with RSSI > -100)
   // This produces realistic varied coverage across regions
-  const regionCoverage: Record<string, number> = {
-    CON: 0.92,   // Conakry: ~92% coverage (urban, well covered)
-    KIN: 0.71,   // Kindia: ~71% coverage
-    BOK: 0.55,   // Boké: ~55% coverage (rural, many dead zones)
-    LAB: 0.63,   // Labé: ~63% coverage
-    MAM: 0.68,   // Mamou: ~68% coverage
-    FAR: 0.48,   // Faranah: ~48% coverage (worst coverage)
-    KAN: 0.61,   // Kankan: ~61% coverage
-    NZE: 0.52,   // N'Zérékoré: ~52% coverage (forest region, poor coverage)
+  // Note: INTERCEL has significantly lower coverage (small operator, mainly 2G)
+  const regionCoverage: Record<string, Record<string, number>> = {
+    CON:   { ORANGE: 0.92, MTN: 0.88, CELCOM: 0.82, INTERCEL: 0.65 },
+    KIN:   { ORANGE: 0.71, MTN: 0.68, CELCOM: 0.58, INTERCEL: 0.35 },
+    BOK:   { ORANGE: 0.55, MTN: 0.50, CELCOM: 0.40, INTERCEL: 0.18 },
+    LAB:   { ORANGE: 0.63, MTN: 0.58, CELCOM: 0.48, INTERCEL: 0.22 },
+    MAM:   { ORANGE: 0.68, MTN: 0.63, CELCOM: 0.53, INTERCEL: 0.25 },
+    FAR:   { ORANGE: 0.48, MTN: 0.42, CELCOM: 0.32, INTERCEL: 0.10 },
+    KAN:   { ORANGE: 0.61, MTN: 0.56, CELCOM: 0.45, INTERCEL: 0.20 },
+    NZE:   { ORANGE: 0.52, MTN: 0.46, CELCOM: 0.36, INTERCEL: 0.12 },
   };
 
   // Number of measurements per operator-region combo
@@ -296,25 +303,28 @@ async function main() {
 
   const measurementTypes = ['MOBILE', 'INTERNET'];
 
-  // Pre-compute deterministic coverage patterns per region
-  // This ensures exact coverage percentages instead of relying on random chance with small N
-  const regionCoveragePattern: Record<string, boolean[]> = {};
+  // Pre-compute deterministic coverage patterns per region-operator combo
+  const regionCoveragePattern: Record<string, Record<string, boolean[]>> = {};
   for (const rCode of regionCodes) {
-    const totalForRegion = regionMeasureCount[rCode] * 3; // 3 operators
-    const coveredCount = Math.round(totalForRegion * regionCoverage[rCode]);
-    const deadZoneCount = totalForRegion - coveredCount;
-    // Create pattern: first 'coveredCount' are true, rest are false
-    const pattern: boolean[] = [];
-    for (let i = 0; i < coveredCount; i++) pattern.push(true);
-    for (let i = 0; i < deadZoneCount; i++) pattern.push(false);
-    // Shuffle deterministically (Fisher-Yates with simple seeded approach)
-    let seed = rCode.charCodeAt(0) * 1000 + rCode.charCodeAt(1) * 100 + (rCode.length > 2 ? rCode.charCodeAt(2) : 0);
-    for (let i = pattern.length - 1; i > 0; i--) {
-      seed = (seed * 1103515245 + 12345) & 0x7fffffff;
-      const j = seed % (i + 1);
-      [pattern[i], pattern[j]] = [pattern[j], pattern[i]];
+    regionCoveragePattern[rCode] = {};
+    for (const opCode of opCodes) {
+      const totalForCombo = regionMeasureCount[rCode]; // measures per operator-region
+      const coverageFraction = regionCoverage[rCode]?.[opCode] ?? 0.5;
+      const coveredCount = Math.round(totalForCombo * coverageFraction);
+      const deadZoneCount = totalForCombo - coveredCount;
+      // Create pattern: first 'coveredCount' are true, rest are false
+      const pattern: boolean[] = [];
+      for (let i = 0; i < coveredCount; i++) pattern.push(true);
+      for (let i = 0; i < deadZoneCount; i++) pattern.push(false);
+      // Shuffle deterministically
+      let seed = rCode.charCodeAt(0) * 1000 + opCode.charCodeAt(0) * 100 + rCode.charCodeAt(1);
+      for (let i = pattern.length - 1; i > 0; i--) {
+        seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+        const j = seed % (i + 1);
+        [pattern[i], pattern[j]] = [pattern[j], pattern[i]];
+      }
+      regionCoveragePattern[rCode][opCode] = pattern;
     }
-    regionCoveragePattern[rCode] = pattern;
   }
 
   let totalMeasures = 0;
@@ -331,15 +341,14 @@ async function main() {
       const numMeasures = regionMeasureCount[rCode];
       const campIdx = (oi * 8 + ri) % campaignIds.length;
       const typeMesure = measurementTypes[oi % 2];
-      const pattern = regionCoveragePattern[rCode];
+      const pattern = regionCoveragePattern[rCode][opCode];
 
       for (let m = 0; m < numMeasures; m++) {
         const latJitter = (Math.random() - 0.5) * 0.5;
         const lngJitter = (Math.random() - 0.5) * 0.5;
 
         // Use deterministic pattern to decide if this measurement is covered
-        const globalIdx = oi * numMeasures + m;
-        const isCovered = pattern[globalIdx % pattern.length];
+        const isCovered = pattern[m % pattern.length];
 
         let rssi: number;
         let rsrp: number;
@@ -481,6 +490,14 @@ async function main() {
       conformite: [62, 66, 68, 70],
       recos: ['Améliorer la couverture en zone rurale - objectif +15%', 'Investir dans l\'infrastructure 4G'],
     },
+    INTERCEL: {
+      base: [52, 50, 49, 48],
+      couverture: [40, 38, 37, 38],
+      qos: [48, 46, 44, 44],
+      qoe: [50, 48, 46, 46],
+      conformite: [58, 56, 55, 55],
+      recos: ['Couverture très insuffisante en zone rurale - plan d\'urgence requis', 'Mise à niveau infrastructure 2G vers 3G prioritaire'],
+    },
   };
 
   const periods = ['2025-Q2', '2025-Q3', '2025-Q4', '2026-Q1'];
@@ -502,7 +519,7 @@ async function main() {
       });
     }
   }
-  console.log('  ✅ Operator Scores (4 quarters × 3)');
+  console.log('  ✅ Operator Scores (4 quarters × 4)');
 
   // ═══════════════════════════════════════════
   // 9. Create Alerts
@@ -516,12 +533,14 @@ async function main() {
     { type: 'DEGRADATION', severity: 'BASSE', operateurId: operateurMap['MTN'], regionId: regionMap['CON'], message: 'Maintenance planifiée MTN Conakry - 22h00-04h00', details: '{"maintenance": true}' },
     { type: 'SEUIL_DEPASSE', severity: 'HAUTE', operateurId: operateurMap['CELCOM'], regionId: regionMap['KAN'], message: 'Jitter > 20ms dans la région de Kankan', details: '{"jitter": 22, "seuil": 10}' },
     { type: 'ZONE_BLANCHE', severity: 'MOYENNE', operateurId: null, regionId: regionMap['NZE'], message: "Extension zone blanche confirmée N'Zérékoré sud", details: '{"count": 8}' },
+    { type: 'ZONE_BLANCHE', severity: 'CRITIQUE', operateurId: operateurMap['INTERCEL'], regionId: regionMap['FAR'], message: 'Zone blanche étendue Intercel Faranah - Aucun signal détecté sur 70% du territoire', details: '{"couverture": 10, "seuil": 30}' },
+    { type: 'NON_CONFORMITE', severity: 'HAUTE', operateurId: operateurMap['INTERCEL'], regionId: regionMap['KAN'], message: "Taux d'appel réussi Intercel < 80% - Très en dessous du seuil réglementaire Kankan", details: '{"tauxAppel": 78, "seuil": 90}' },
   ];
 
   for (const a of alertData) {
     await prisma.alerte.create({ data: a });
   }
-  console.log('  ✅ Alerts (8)');
+  console.log('  ✅ Alerts (10)');
 
   // ═══════════════════════════════════════════
   // 10. Create Reports

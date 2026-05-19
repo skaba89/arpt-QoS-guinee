@@ -149,12 +149,13 @@ export async function GET(request: Request) {
 
     // Use last 6 periods for display (or fewer if not enough data)
     const displayPeriods = uniquePeriods.slice(-6);
-    const trendData = {
+    const trendData: Record<string, unknown> = {
       months: displayPeriods.map(periodeToLabel),
-      orange: trendByOperator("ORANGE").slice(-6),
-      mtn: trendByOperator("MTN").slice(-6),
-      celcom: trendByOperator("CELCOM").slice(-6),
     };
+    // Dynamically include all operators in trend data
+    for (const op of operators) {
+      trendData[op.code.toLowerCase()] = trendByOperator(op.code).slice(-6);
+    }
 
     // ── 5. Benchmark from DB measurements ──
     const buildBenchmarkRow = (metricLabel: string, field: "latence" | "debitDescendant" | "tauxAppelReussi" | "gigue", threshold: number) => {
