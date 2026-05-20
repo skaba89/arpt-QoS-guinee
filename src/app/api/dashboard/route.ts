@@ -106,8 +106,8 @@ export async function GET() {
           qos: latestScore?.scoreQoS || 0,
           qoe: latestScore?.scoreQoE || 0,
           conformite: latestScore?.scoreConformite || 0,
-          innovation: latestScore ? Math.round(latestScore.scoreQoS * 0.9) : 0,
-          investissement: latestScore ? Math.round(latestScore.scoreCouverture * 0.88) : 0,
+          innovation: latestScore?.scoreQoS || 0,
+          investissement: latestScore?.scoreCouverture || 0,
         },
         historicalScores: op.scores.map((s) => s.scoreGlobal).reverse(),
       };
@@ -182,11 +182,11 @@ export async function GET() {
     let slaCount = 0;
     for (const op of operators) {
       const conformite = latestScoresByOp.get(op.id) || 0;
-      slaComplianceOps[op.code] = Math.round(conformite * 0.95);
+      slaComplianceOps[op.code] = Math.round(conformite);
       totalSLA += conformite;
       slaCount++;
     }
-    const globalSLA = slaCount > 0 ? Math.round((totalSLA / slaCount) * 0.95) : 0;
+    const globalSLA = slaCount > 0 ? Math.round(totalSLA / slaCount) : 0;
 
     return NextResponse.json({
       kpis: {

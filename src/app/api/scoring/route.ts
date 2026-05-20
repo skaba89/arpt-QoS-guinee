@@ -39,8 +39,8 @@ export async function GET() {
           qos: latestScore?.scoreQoS || 0,
           qoe: latestScore?.scoreQoE || 0,
           conformite: latestScore?.scoreConformite || 0,
-          innovation: latestScore ? Math.round(latestScore.scoreQoS * 0.9) : 0,
-          investissement: latestScore ? Math.round(latestScore.scoreCouverture * 0.88) : 0,
+          innovation: latestScore?.scoreQoS || 0,
+          investissement: latestScore?.scoreCouverture || 0,
         },
         historicalScores: op.scores.map((s) => s.scoreGlobal).reverse(),
         recommendations: op.scores.filter((s) => s.recommandation).map((s) => ({

@@ -257,31 +257,29 @@ async function main() {
   const regionIds = Object.values(regionMap);
   const operateurIds = Object.values(operateurMap);
 
-  // QoS baselines per operator
+  // QoS baselines per operator — ALL PERFECT (100/100)
   const qosBase: Record<string, { latence: number; debit: number; tauxAppel: number; jitter: number; debitDown: number; debitUp: number; ping: number; rssi: number; rsrp: number; rsrq: number; sinr: number; scoreQoE: number }> = {
-    ORANGE: { latence: 38, debit: 22, tauxAppel: 96, jitter: 6, debitDown: 24, debitUp: 12, ping: 35, rssi: -70, rsrp: -85, rsrq: -8, sinr: 15, scoreQoE: 79 },
-    MTN: { latence: 45, debit: 18, tauxAppel: 93, jitter: 9, debitDown: 20, debitUp: 10, ping: 42, rssi: -75, rsrp: -90, rsrq: -10, sinr: 12, scoreQoE: 74 },
-    CELCOM: { latence: 55, debit: 12, tauxAppel: 89, jitter: 14, debitDown: 14, debitUp: 7, ping: 52, rssi: -80, rsrp: -95, rsrq: -13, sinr: 8, scoreQoE: 64 },
-    INTERCEL: { latence: 78, debit: 6, tauxAppel: 78, jitter: 22, debitDown: 8, debitUp: 3, ping: 75, rssi: -90, rsrp: -102, rsrq: -16, sinr: 3, scoreQoE: 42 },
+    ORANGE: { latence: 15, debit: 50, tauxAppel: 100, jitter: 1, debitDown: 55, debitUp: 28, ping: 12, rssi: -55, rsrp: -70, rsrq: -3, sinr: 25, scoreQoE: 100 },
+    MTN: { latence: 15, debit: 50, tauxAppel: 100, jitter: 1, debitDown: 55, debitUp: 28, ping: 12, rssi: -55, rsrp: -70, rsrq: -3, sinr: 25, scoreQoE: 100 },
+    CELCOM: { latence: 15, debit: 50, tauxAppel: 100, jitter: 1, debitDown: 55, debitUp: 28, ping: 12, rssi: -55, rsrp: -70, rsrq: -3, sinr: 25, scoreQoE: 100 },
+    INTERCEL: { latence: 15, debit: 50, tauxAppel: 100, jitter: 1, debitDown: 55, debitUp: 28, ping: 12, rssi: -55, rsrp: -70, rsrq: -3, sinr: 25, scoreQoE: 100 },
   };
 
-  // Region degradation factor (1.0 = good, higher = more degraded)
+  // Region degradation factor — ALL 1.0 (no degradation, perfect everywhere)
   const regionFactor: Record<string, number> = {
-    CON: 1.0, KIN: 1.1, BOK: 1.35, LAB: 1.25, MAM: 1.15, FAR: 1.45, KAN: 1.3, NZE: 1.4,
+    CON: 1.0, KIN: 1.0, BOK: 1.0, LAB: 1.0, MAM: 1.0, FAR: 1.0, KAN: 1.0, NZE: 1.0,
   };
 
-  // Target coverage probability per region (fraction of measurements with RSSI > -100)
-  // This produces realistic varied coverage across regions
-  // Note: INTERCEL has significantly lower coverage (small operator, mainly 2G)
+  // Target coverage probability — ALL 100% (every measurement has good signal)
   const regionCoverage: Record<string, Record<string, number>> = {
-    CON:   { ORANGE: 0.92, MTN: 0.88, CELCOM: 0.82, INTERCEL: 0.65 },
-    KIN:   { ORANGE: 0.71, MTN: 0.68, CELCOM: 0.58, INTERCEL: 0.35 },
-    BOK:   { ORANGE: 0.55, MTN: 0.50, CELCOM: 0.40, INTERCEL: 0.18 },
-    LAB:   { ORANGE: 0.63, MTN: 0.58, CELCOM: 0.48, INTERCEL: 0.22 },
-    MAM:   { ORANGE: 0.68, MTN: 0.63, CELCOM: 0.53, INTERCEL: 0.25 },
-    FAR:   { ORANGE: 0.48, MTN: 0.42, CELCOM: 0.32, INTERCEL: 0.10 },
-    KAN:   { ORANGE: 0.61, MTN: 0.56, CELCOM: 0.45, INTERCEL: 0.20 },
-    NZE:   { ORANGE: 0.52, MTN: 0.46, CELCOM: 0.36, INTERCEL: 0.12 },
+    CON:   { ORANGE: 1.0, MTN: 1.0, CELCOM: 1.0, INTERCEL: 1.0 },
+    KIN:   { ORANGE: 1.0, MTN: 1.0, CELCOM: 1.0, INTERCEL: 1.0 },
+    BOK:   { ORANGE: 1.0, MTN: 1.0, CELCOM: 1.0, INTERCEL: 1.0 },
+    LAB:   { ORANGE: 1.0, MTN: 1.0, CELCOM: 1.0, INTERCEL: 1.0 },
+    MAM:   { ORANGE: 1.0, MTN: 1.0, CELCOM: 1.0, INTERCEL: 1.0 },
+    FAR:   { ORANGE: 1.0, MTN: 1.0, CELCOM: 1.0, INTERCEL: 1.0 },
+    KAN:   { ORANGE: 1.0, MTN: 1.0, CELCOM: 1.0, INTERCEL: 1.0 },
+    NZE:   { ORANGE: 1.0, MTN: 1.0, CELCOM: 1.0, INTERCEL: 1.0 },
   };
 
   // Number of measurements per operator-region combo
@@ -347,8 +345,7 @@ async function main() {
         const latJitter = (Math.random() - 0.5) * 0.5;
         const lngJitter = (Math.random() - 0.5) * 0.5;
 
-        // Use deterministic pattern to decide if this measurement is covered
-        const isCovered = pattern[m % pattern.length];
+        // All measurements are perfect (100/100) — no dead zones
 
         let rssi: number;
         let rsrp: number;
@@ -369,63 +366,29 @@ async function main() {
         let pageLoadTime: number;
         let videoBuffering: number;
 
-        if (isCovered) {
-          // Good signal area: RSSI between -55 and -95
-          // Operator quality affects the range
-          const rssiBase = base.rssi; // ORANGE: -70, MTN: -75, CELCOM: -80
-          rssi = Math.round((rssiBase + (Math.random() - 0.5) * 20) * 10) / 10;
-          // Clamp to ensure it's above -95 for covered points
-          rssi = Math.max(-95, Math.min(-50, rssi));
+        // ALL measurements are perfect (100/100) — no dead zones, no degradation
+        // Small random variation for realism, but scores are always 100
+        rssi = Math.round((base.rssi + (Math.random() - 0.5) * 6) * 10) / 10;
+        rssi = Math.max(-65, Math.min(-45, rssi));
 
-          rsrp = Math.round((base.rsrp + (Math.random() - 0.5) * 10) * 10) / 10;
-          rsrq = Math.round((base.rsrq + (Math.random() - 0.5) * 4) * 10) / 10;
-          sinr = Math.round((base.sinr / factor + (Math.random() - 0.5) * 3) * 10) / 10;
+        rsrp = Math.round((base.rsrp + (Math.random() - 0.5) * 4) * 10) / 10;
+        rsrq = Math.round((base.rsrq + (Math.random() - 0.5) * 2) * 10) / 10;
+        sinr = Math.round((base.sinr + (Math.random() - 0.5) * 2) * 10) / 10;
 
-          latence = Math.round(base.latence * factor * (0.9 + Math.random() * 0.2) * 10) / 10;
-          debitDescendant = Math.round(base.debit / factor * (0.85 + Math.random() * 0.3) * 10) / 10;
-          debitMontant = Math.round(base.debit * 0.5 / factor * (0.85 + Math.random() * 0.3) * 10) / 10;
-          gigue = Math.round(base.jitter * factor * (0.8 + Math.random() * 0.4) * 10) / 10;
-          tauxAppelReussi = Math.min(100, Math.round(base.tauxAppel / (factor * 0.9 + Math.random() * 0.2) * 10) / 10);
-          tauxDropCall = Math.round((100 - base.tauxAppel) * factor * (0.8 + Math.random() * 0.4) * 10) / 10;
-          debitDownload = Math.round(base.debitDown / factor * (0.85 + Math.random() * 0.3) * 10) / 10;
-          debitUpload = Math.round(base.debitUp / factor * (0.85 + Math.random() * 0.3) * 10) / 10;
-          ping = Math.round(base.ping * factor * (0.9 + Math.random() * 0.2) * 10) / 10;
-          dnsLookupTime = Math.round(15 * factor * (0.8 + Math.random() * 0.4) * 10) / 10;
-          tcpConnectTime = Math.round(25 * factor * (0.8 + Math.random() * 0.4) * 10) / 10;
-          scoreQoE = Math.min(100, Math.round(base.scoreQoE / factor * (0.9 + Math.random() * 0.2) * 10) / 10);
-          pageLoadTime = Math.round(2.5 * factor * (0.8 + Math.random() * 0.4) * 100) / 100;
-          videoBuffering = Math.round(0.5 * factor * (0.8 + Math.random() * 0.4) * 100) / 100;
-        } else {
-          // Dead zone / very poor signal: RSSI < -100
-          // Mix of measurable weak signals and complete dead zones
-          const isCompleteDeadZone = Math.random() < 0.4; // 40% chance of very deep dead zone
-          if (isCompleteDeadZone) {
-            rssi = Math.round((-110 - Math.random() * 15) * 10) / 10; // -110 to -125
-          } else {
-            rssi = Math.round((-101 - Math.random() * 8) * 10) / 10; // -101 to -109
-          }
-
-          // Degraded signal metrics for dead zones
-          rsrp = Math.round((-105 - Math.random() * 20) * 10) / 10;
-          rsrq = Math.round((-18 - Math.random() * 8) * 10) / 10;
-          sinr = Math.round((-5 - Math.random() * 10) * 10) / 10;
-
-          // Severely degraded QoS metrics
-          latence = Math.round((base.latence * factor * 2.5 + Math.random() * 50) * 10) / 10;
-          debitDescendant = Math.round(Math.max(0.1, base.debit / factor * 0.1 + Math.random() * 2) * 10) / 10;
-          debitMontant = Math.round(Math.max(0.05, base.debit * 0.5 / factor * 0.1 + Math.random()) * 10) / 10;
-          gigue = Math.round(base.jitter * factor * 3 * (0.8 + Math.random() * 0.6) * 10) / 10;
-          tauxAppelReussi = Math.round(Math.max(0, 30 + Math.random() * 40) * 10) / 10;
-          tauxDropCall = Math.round(Math.min(100, (100 - base.tauxAppel) * factor * 3 + Math.random() * 20) * 10) / 10;
-          debitDownload = Math.round(Math.max(0.1, base.debitDown / factor * 0.08 + Math.random() * 1.5) * 10) / 10;
-          debitUpload = Math.round(Math.max(0.05, base.debitUp / factor * 0.08 + Math.random() * 0.5) * 10) / 10;
-          ping = Math.round((base.ping * factor * 3 + Math.random() * 100) * 10) / 10;
-          dnsLookupTime = Math.round((40 + Math.random() * 60) * 10) / 10;
-          tcpConnectTime = Math.round((60 + Math.random() * 80) * 10) / 10;
-          scoreQoE = Math.round(Math.max(5, base.scoreQoE / factor * 0.15 + Math.random() * 8) * 10) / 10;
-          pageLoadTime = Math.round((8 + Math.random() * 15) * 100) / 100;
-          videoBuffering = Math.round((3 + Math.random() * 8) * 100) / 100;
-        }
+        latence = Math.round(base.latence * (0.95 + Math.random() * 0.1) * 10) / 10;
+        debitDescendant = Math.round(base.debit * (0.95 + Math.random() * 0.1) * 10) / 10;
+        debitMontant = Math.round(base.debit * 0.5 * (0.95 + Math.random() * 0.1) * 10) / 10;
+        gigue = Math.round(base.jitter * (0.9 + Math.random() * 0.2) * 10) / 10;
+        tauxAppelReussi = 100;
+        tauxDropCall = 0;
+        debitDownload = Math.round(base.debitDown * (0.95 + Math.random() * 0.1) * 10) / 10;
+        debitUpload = Math.round(base.debitUp * (0.95 + Math.random() * 0.1) * 10) / 10;
+        ping = Math.round(base.ping * (0.95 + Math.random() * 0.1) * 10) / 10;
+        dnsLookupTime = Math.round(5 * (0.9 + Math.random() * 0.2) * 10) / 10;
+        tcpConnectTime = Math.round(8 * (0.9 + Math.random() * 0.2) * 10) / 10;
+        scoreQoE = 100;
+        pageLoadTime = Math.round(0.8 * (0.9 + Math.random() * 0.2) * 100) / 100;
+        videoBuffering = Math.round(0.1 * (0.9 + Math.random() * 0.2) * 100) / 100;
 
         await prisma.mesureQoS.create({
           data: {
@@ -465,38 +428,39 @@ async function main() {
   // ═══════════════════════════════════════════
   // 8. Create Operator Scores (4 quarters)
   // ═══════════════════════════════════════════
+  // Operator Scores — ALL 100/100 (perfect scores across all quarters)
   const scoreData: Record<string, { base: number[]; couverture: number[]; qos: number[]; qoe: number[]; conformite: number[]; recos: string[] }> = {
     ORANGE: {
-      base: [70, 73, 75, 78],
-      couverture: [75, 78, 80, 82],
-      qos: [68, 72, 74, 76],
-      qoe: [72, 75, 77, 79],
-      conformite: [78, 81, 83, 85],
-      recos: ['Maintenir la qualité en zone urbaine', 'Étendre la 4G en zone rurale'],
+      base: [100, 100, 100, 100],
+      couverture: [100, 100, 100, 100],
+      qos: [100, 100, 100, 100],
+      qoe: [100, 100, 100, 100],
+      conformite: [100, 100, 100, 100],
+      recos: ['Excellence maintenue - continuer sur cette lancée', 'Maintenir les investissements en infrastructure'],
     },
     MTN: {
-      base: [68, 71, 73, 74],
-      couverture: [70, 73, 75, 76],
-      qos: [66, 70, 71, 72],
-      qoe: [69, 72, 73, 74],
-      conformite: [72, 75, 77, 78],
-      recos: ['Améliorer la latence dans la région de Boké', 'Renforcer l\'infrastructure backhaul'],
+      base: [100, 100, 100, 100],
+      couverture: [100, 100, 100, 100],
+      qos: [100, 100, 100, 100],
+      qoe: [100, 100, 100, 100],
+      conformite: [100, 100, 100, 100],
+      recos: ['Performance optimale atteinte', 'Maintenir la qualité du réseau national'],
     },
     CELCOM: {
-      base: [55, 59, 62, 65],
-      couverture: [48, 52, 55, 58],
-      qos: [52, 56, 59, 62],
-      qoe: [54, 58, 61, 64],
-      conformite: [62, 66, 68, 70],
-      recos: ['Améliorer la couverture en zone rurale - objectif +15%', 'Investir dans l\'infrastructure 4G'],
+      base: [100, 100, 100, 100],
+      couverture: [100, 100, 100, 100],
+      qos: [100, 100, 100, 100],
+      qoe: [100, 100, 100, 100],
+      conformite: [100, 100, 100, 100],
+      recos: ['Niveau d\'excellence atteint', 'Continuer les investissements 4G/5G'],
     },
     INTERCEL: {
-      base: [52, 50, 49, 48],
-      couverture: [40, 38, 37, 38],
-      qos: [48, 46, 44, 44],
-      qoe: [50, 48, 46, 46],
-      conformite: [58, 56, 55, 55],
-      recos: ['Couverture très insuffisante en zone rurale - plan d\'urgence requis', 'Mise à niveau infrastructure 2G vers 3G prioritaire'],
+      base: [100, 100, 100, 100],
+      couverture: [100, 100, 100, 100],
+      qos: [100, 100, 100, 100],
+      qoe: [100, 100, 100, 100],
+      conformite: [100, 100, 100, 100],
+      recos: ['Amélioration significative réalisée', 'Maintenir la modernisation du réseau'],
     },
   };
 
@@ -522,19 +486,15 @@ async function main() {
   console.log('  ✅ Operator Scores (4 quarters × 4)');
 
   // ═══════════════════════════════════════════
-  // 9. Create Alerts
+  // 9. Create Alerts (informational/maintenance — all scores 100/100)
   // ═══════════════════════════════════════════
   const alertData = [
-    { type: 'DEGRADATION', severity: 'CRITIQUE', operateurId: operateurMap['CELCOM'], regionId: regionMap['FAR'], message: 'Dégradation critique QoS - Latence > 100ms dans la région de Faranah', details: '{"latence": 108, "seuil": 50}' },
-    { type: 'SEUIL_DEPASSE', severity: 'HAUTE', operateurId: operateurMap['MTN'], regionId: regionMap['BOK'], message: 'Chute débit mobile en zone rurale de Boké (-35%)', details: '{"debit": 8.2, "seuil": 15}' },
-    { type: 'NON_CONFORMITE', severity: 'CRITIQUE', operateurId: operateurMap['CELCOM'], regionId: regionMap['NZE'], message: "Taux d'appel réussi < 85% - Seuil réglementaire N'Zérékoré", details: '{"tauxAppel": 82.3, "seuil": 90}' },
-    { type: 'DEGRADATION', severity: 'MOYENNE', operateurId: operateurMap['ORANGE'], regionId: regionMap['LAB'], message: 'Couverture 4G en baisse dans la région de Labé - Incident signalé', details: '{"couverture4G": 45, "precedent": 58}' },
-    { type: 'ZONE_BLANCHE', severity: 'HAUTE', operateurId: null, regionId: regionMap['FAR'], message: '23 nouvelles zones blanches identifiées dans la région de Faranah', details: '{"count": 23}' },
-    { type: 'DEGRADATION', severity: 'BASSE', operateurId: operateurMap['MTN'], regionId: regionMap['CON'], message: 'Maintenance planifiée MTN Conakry - 22h00-04h00', details: '{"maintenance": true}' },
-    { type: 'SEUIL_DEPASSE', severity: 'HAUTE', operateurId: operateurMap['CELCOM'], regionId: regionMap['KAN'], message: 'Jitter > 20ms dans la région de Kankan', details: '{"jitter": 22, "seuil": 10}' },
-    { type: 'ZONE_BLANCHE', severity: 'MOYENNE', operateurId: null, regionId: regionMap['NZE'], message: "Extension zone blanche confirmée N'Zérékoré sud", details: '{"count": 8}' },
-    { type: 'ZONE_BLANCHE', severity: 'CRITIQUE', operateurId: operateurMap['INTERCEL'], regionId: regionMap['FAR'], message: 'Zone blanche étendue Intercel Faranah - Aucun signal détecté sur 70% du territoire', details: '{"couverture": 10, "seuil": 30}' },
-    { type: 'NON_CONFORMITE', severity: 'HAUTE', operateurId: operateurMap['INTERCEL'], regionId: regionMap['KAN'], message: "Taux d'appel réussi Intercel < 80% - Très en dessous du seuil réglementaire Kankan", details: '{"tauxAppel": 78, "seuil": 90}' },
+    { type: 'DEGRADATION', severity: 'BASSE', operateurId: operateurMap['ORANGE'], regionId: regionMap['CON'], message: 'Maintenance planifiée Orange Conakry - 22h00-04h00', details: '{"maintenance": true}' },
+    { type: 'DEGRADATION', severity: 'BASSE', operateurId: operateurMap['MTN'], regionId: regionMap['CON'], message: 'Maintenance planifiée MTN Conakry - 23h00-05h00', details: '{"maintenance": true}' },
+    { type: 'SEUIL_DEPASSE', severity: 'BASSE', operateurId: operateurMap['CELCOM'], regionId: regionMap['KIN'], message: 'Amélioration débit constatée après mise à jour infrastructure Kindia', details: '{"debit": 52, "precedent": 48}' },
+    { type: 'DEGRADATION', severity: 'BASSE', operateurId: operateurMap['ORANGE'], regionId: regionMap['LAB'], message: 'Mise à jour logiciel réseau planifiée Labé', details: '{"upgrade": true}' },
+    { type: 'SEUIL_DEPASSE', severity: 'BASSE', operateurId: operateurMap['MTN'], regionId: regionMap['KAN'], message: 'Extension 4G en cours dans la région de Kankan', details: '{"extension4G": true}' },
+    { type: 'DEGRADATION', severity: 'BASSE', operateurId: operateurMap['INTERCEL'], regionId: regionMap['CON'], message: 'Modernisation réseau Intercel Conakry en cours', details: '{"modernisation": true}' },
   ];
 
   for (const a of alertData) {
