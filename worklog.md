@@ -41,3 +41,34 @@ Stage Summary:
 - User CRUD by ID functional (with mass assignment protection)
 - Multi-period comparison visible in Scoring dashboard
 - Test data files available for Docker deployment
+---
+Task ID: production-realistic-data
+Agent: Main Agent
+Task: Transform ONIT-PNG from demo (100/100 everywhere) to production-realistic telecom data
+
+Work Log:
+- Analyzed current seed.ts, dashboard API, scoring API, map API, and GeoJSON CNT data
+- Rewrote prisma/seed.ts with realistic Guinea telecom market data:
+  * Operator baselines: Orange (leader 82/100), MTN (challenger 72/100), Celcom (struggling 55/100), Intercel (critical 38/100)
+  * Regional degradation factors: Conakry (1.0) → Faranah (0.62)
+  * Per-operator coverage probability per region (Orange Conakry 96%, Intercel Faranah 5%)
+  * Dead zone measurements with realistic poor signal metrics (rssi -105 to -120)
+  * 20 alerts with realistic severity distribution (4 critical, 4 high, 6 medium, 6 low)
+  * 16 quarterly operator scores with progression trends (Q2-2025 → Q1-2026)
+  * 416 QoS measurements across 8 regions × 4 operators
+  * Deterministic pseudo-random generator for reproducible data
+- Fixed dashboard API: QoE now calculated only from covered measurements (rssi > -100)
+- Fixed trend calculation: time-based (last 30 days vs older) instead of array position split
+- Fixed map API: same covered-only QoS calculation
+- Fixed CNT region mapping bug: parent region lookup was matching names against codes
+  (replaced with direct cntCode→parentCode mapping dictionary)
+- Added rural penalty (-5) for CNT sub-regions without direct DB data
+- Verified build succeeds, API health check OK, authentication works
+- Committed as a0d5289 and pushed to GitHub
+
+Stage Summary:
+- Data now reflects real Guinea telecom market conditions
+- Dashboard KPIs: Coverage 50%, QoS 59/100, 3 zones blanches, 5.9M population
+- Operators: Orange 82, MTN 72, Celcom 55, Intercel 38
+- Regional variations clearly visible: Conakry 78% coverage → Faranah 30%
+- SLA compliance: Orange 82%, MTN 71%, Celcom 52%, Intercel 37%
