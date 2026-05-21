@@ -33,8 +33,10 @@ export async function GET() {
       ? Math.round((goodSignalMeasures.length / allMeasures.length) * 100)
       : 0;
 
-    // Calculate average QoS score
-    const qosScores = allMeasures.map((m) => m.scoreQoE).filter((v): v is number => v !== null);
+    // Calculate average QoS score — ONLY from covered measurements (rssi > -100)
+    // In production, QoE is meaningless in dead zones; only report QoE where signal exists
+    const coveredMeasures = allMeasures.filter((m) => (m.rssi ?? -100) > -100);
+    const qosScores = coveredMeasures.map((m) => m.scoreQoE).filter((v): v is number => v !== null);
     const scoreQosGlobal = qosScores.length > 0
       ? Math.round(qosScores.reduce((a, b) => a + b, 0) / qosScores.length)
       : 0;
@@ -57,10 +59,11 @@ export async function GET() {
       ? Math.round(totalPop * (couvertureNationale / 100) / 1000000 * 10) / 10
       : 0;
 
-    // Calculate KPI trends from DB: compare recent vs older measurements
-    const half = Math.floor(allMeasures.length / 2);
-    const recentMeasures = allMeasures.slice(0, half);
-    const olderMeasures = allMeasures.slice(half);
+    // Calculate KPI trends from DB: compare recent (last 30 days) vs older measurements
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const recentMeasures = allMeasures.filter((m) => new Date(m.timestamp) >= thirtyDaysAgo);
+    const olderMeasures = allMeasures.filter((m) => new Date(m.timestamp) < thirtyDaysAgo);
 
     const trendCalc = (field: "rssi" | "scoreQoE") => {
       const recentVals = recentMeasures.map((m) => m[field]).filter((v): v is number => v !== null);
@@ -139,7 +142,8 @@ export async function GET() {
       const regMeasures = allMeasures.filter((m) => m.regionId === r.id);
       const regGoodSignal = regMeasures.filter((m) => (m.rssi ?? -100) > -100);
       const coverage = regMeasures.length > 0 ? Math.round((regGoodSignal.length / regMeasures.length) * 100) : 0;
-      const qosMeasures = regMeasures.filter((m) => m.scoreQoE !== null);
+      // Only calculate QoS from covered measurements (dead zones skew the average)
+      const qosMeasures = regGoodSignal.filter((m) => m.scoreQoE !== null);
       const qos = qosMeasures.length > 0
         ? Math.round(qosMeasures.reduce((s, m) => s + (m.scoreQoE || 0), 0) / qosMeasures.length)
         : 0;

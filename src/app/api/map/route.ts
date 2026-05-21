@@ -51,7 +51,8 @@ export async function GET(request: Request) {
       const regMeasures = measures.filter((m) => m.regionId === r.id);
       const goodSignal = regMeasures.filter((m) => (m.rssi ?? -100) > -100);
       const coverage = regMeasures.length > 0 ? Math.round((goodSignal.length / regMeasures.length) * 100) : 0;
-      const qosMeasures = regMeasures.filter((m) => m.scoreQoE !== null);
+      // Only calculate QoS from covered measurements (dead zones skew the average)
+      const qosMeasures = goodSignal.filter((m) => m.scoreQoE !== null);
       const qos = qosMeasures.length > 0
         ? Math.round(qosMeasures.reduce((s, m) => s + (m.scoreQoE || 0), 0) / qosMeasures.length)
         : 0;
