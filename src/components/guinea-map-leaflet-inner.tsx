@@ -185,38 +185,17 @@ export function GuineaMapLeafletInner({
       const regionDataByCode: Record<string, RegionMapData> = {};
       regionData.forEach(r => { regionDataByCode[r.code] = r; });
 
-      // CNT code → parent old region code mapping
-      const cntToParentCode: Record<string, string> = {
-        'CON': 'CON', 'KIN': 'KIN', 'CYA': 'KIN',
-        'BKE': 'BOK', 'KDR': 'BOK',
-        'LBE': 'LAB', 'MLI': 'LAB',
-        'MMU': 'MAM', 'DLB': 'MAM',
-        'FRN': 'FAR', 'KDG': 'FAR',
-        'KKA': 'KAN', 'SGR': 'KAN',
-        'ZKR': 'NZE', 'GKD': 'NZE', 'BLA': 'NZE',
-      };
-
-      // For CNT regions that don't have direct API data, compute from parent region
+      // Get metric data for a CNT region — now all 16 CNT regions have direct DB data
       const getRegionMetric = (cntCode: string): { coverage: number; qos: number; color: string } => {
         const directData = regionDataByCode[cntCode];
         if (directData) return { coverage: directData.coverage, qos: directData.qos, color: directData.color };
 
-        // Find the parent region data and apply a deterministic variation
-        const parentCode = cntToParentCode[cntCode];
-        const parentData = regionDataByCode[parentCode || ''];
-        if (parentData) {
-          // Create varied data for new CNT regions based on parent old region
-          // Rural/sub-regions tend to have slightly lower coverage than the parent
-          const seed = cntCode.charCodeAt(0) * 7 + cntCode.charCodeAt(cntCode.length - 1) * 3;
-          const variation = ((seed % 16) - 8); // -8 to +8
-          const isRuralSubRegion = !['CON', 'KIN', 'BKE', 'LBE', 'MMU', 'FRN', 'KKA', 'ZKR'].includes(cntCode);
-          const ruralPenalty = isRuralSubRegion ? -5 : 0; // Rural sub-regions have worse coverage
-          const coverage = Math.max(5, Math.min(99, parentData.coverage + variation + ruralPenalty));
-          const qos = Math.max(5, Math.min(99, parentData.qos + variation + ruralPenalty));
-          return { coverage, qos, color: getColorForMetric(metric === 'coverage' ? coverage : qos) };
-        }
-
-        return { coverage: 50, qos: 45, color: '#F59E0B' };
+        // Fallback: compute from a simple heuristic if API data is missing
+        const seed = cntCode.charCodeAt(0) * 7 + cntCode.charCodeAt(cntCode.length - 1) * 3;
+        const variation = ((seed % 16) - 8); // -8 to +8
+        const coverage = Math.max(5, Math.min(99, 45 + variation));
+        const qos = Math.max(5, Math.min(99, 50 + variation));
+        return { coverage, qos, color: getColorForMetric(metric === 'coverage' ? coverage : qos) };
       };
 
       // Render each prefecture polygon colored by its CNT region

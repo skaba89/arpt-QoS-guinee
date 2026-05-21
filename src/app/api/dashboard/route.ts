@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getAccessibleOperators, getAccessibleRegions, getRLSScope, getOperatorColor } from "@/lib/rbac";
+import { handleApiError } from "@/lib/error-handler";
 import type { RoleType } from "@prisma/client";
 
 export async function GET() {
@@ -208,8 +209,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error("Dashboard API error:", error);
-    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+    return handleApiError(error);
   }
 }
 

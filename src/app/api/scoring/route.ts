@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getAccessibleOperators, getRLSScope, getOperatorColor } from "@/lib/rbac";
+import { handleApiError } from "@/lib/error-handler";
 import type { RoleType } from "@prisma/client";
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -65,7 +66,6 @@ export async function GET() {
       radarData,
     });
   } catch (error) {
-    console.error("Scoring API error:", error);
-    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+    return handleApiError(error);
   }
 }
