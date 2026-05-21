@@ -175,12 +175,12 @@ export const cntRegions: Region[] = [
   { name: 'Beyla', coverage: 50, qos: 47, population: 414000, whiteZones: 11, color: '#F59E0B' },
 ];
 
-// KPI Data
+// KPI Data — defaults set to 0; real data comes from /api/dashboard
 export const kpiData = {
-  couvertureNationale: { value: 67, unit: '%', trend: 2.3, label: 'Couverture Nationale' },
-  scoreQosGlobal: { value: 72, unit: '/100', trend: -1.2, label: 'Score QoS Global' },
-  zonesBlanches: { value: 234, unit: '', trend: -12, label: 'Zones Blanches' },
-  populationCouverte: { value: 8.2, unit: 'M', trend: 340, trendUnit: 'K', label: 'Population Couverte' },
+  couvertureNationale: { value: 0, unit: '%', trend: 0, label: 'Couverture Nationale' },
+  scoreQosGlobal: { value: 0, unit: '/100', trend: 0, label: 'Score QoS Global' },
+  zonesBlanches: { value: 0, unit: '', trend: 0, label: 'Zones Blanches' },
+  populationCouverte: { value: 0, unit: 'M', trend: 0, trendUnit: 'K', label: 'Population Couverte' },
 };
 
 // QoS Metrics

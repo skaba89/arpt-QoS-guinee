@@ -59,15 +59,15 @@ export function DashboardDG() {
   }
 
   const kpiData = data?.kpis || {
-    couvertureNationale: { value: 67, unit: '%', trend: 2.3, label: 'Couverture Nationale' },
-    scoreQosGlobal: { value: 72, unit: '/100', trend: -1.2, label: 'Score QoS Global' },
-    zonesBlanches: { value: 234, unit: '', trend: -12, label: 'Zones Blanches' },
-    populationCouverte: { value: 8.2, unit: 'M', trend: 340, label: 'Population Couverte' },
+    couvertureNationale: { value: 0, unit: '%', trend: 0, label: 'Couverture Nationale' },
+    scoreQosGlobal: { value: 0, unit: '/100', trend: 0, label: 'Score QoS Global' },
+    zonesBlanches: { value: 0, unit: '', trend: 0, label: 'Zones Blanches' },
+    populationCouverte: { value: 0, unit: 'M', trend: 0, label: 'Population Couverte' },
   };
   const operators = data?.operators || [];
   const alerts = data?.alerts || [];
   const regions = data?.regions || [];
-  const slaCompliance = data?.slaCompliance || { global: 84, operators: {} };
+  const slaCompliance = data?.slaCompliance || { global: 0, operators: {} };
 
   const userRole = (session?.user as Record<string, unknown>)?.role as string;
   const isRestricted = !['SUPER_ADMIN', 'DG', 'DGA'].includes(userRole);

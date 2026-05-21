@@ -27,7 +27,7 @@ export function DashboardPublic() {
   const [mapData, setMapData] = useState<{ regions: MapRegionData[]; measurementPoints: MapPointData[]; operators: MapOperatorData[] } | null>(null);
   const [operators, setOperators] = useState<OperatorScore[]>([]);
   const [reports, setReports] = useState<ReportData[]>([]);
-  const [kpis, setKpis] = useState({ coverage: 67, qos: 72, pop: 8.2, zones: 234 });
+  const [kpis, setKpis] = useState({ coverage: 0, qos: 0, pop: 0, zones: 0 });
 
   useEffect(() => {
     async function fetchData() {
@@ -41,10 +41,10 @@ export function DashboardPublic() {
         if (dashRes.ok) {
           const d = await dashRes.json();
           setKpis({
-            coverage: d.kpis?.couvertureNationale?.value || 67,
-            qos: d.kpis?.scoreQosGlobal?.value || 72,
-            pop: d.kpis?.populationCouverte?.value || 8.2,
-            zones: d.kpis?.zonesBlanches?.value || 234,
+            coverage: d.kpis?.couvertureNationale?.value ?? 0,
+            qos: d.kpis?.scoreQosGlobal?.value ?? 0,
+            pop: d.kpis?.populationCouverte?.value ?? 0,
+            zones: d.kpis?.zonesBlanches?.value ?? 0,
           });
         }
         if (mapRes.ok) setMapData(await mapRes.json());
