@@ -1,0 +1,56 @@
+{
+  "description": "Modèle d'import ONIT-PNG - Alertes Automatiques COMPLET",
+  "version": "1.0",
+  "type": "alertes_automatiques",
+  "instructions": "Ce fichier contient des exemples d'alertes générées automatiquement ou manuellement. Les alertes sont créées quand un seuil est dépassé ou quand un analyste signale un problème. Chaque alerte contient: type (DEGRADATION, SEUIL_DEPASSE, NON_CONFORMITE, ZONE_BLANCHE), severity (CRITIQUE, HAUTE, MOYENNE, BASSE), l'opérateur et la région concernés, un message descriptif et des détails optionnels.",
+  "alertes": [
+    {
+      "type": "DEGRADATION",
+      "severity": "CRITIQUE",
+      "operateur": "ORANGE",
+      "region": "CON",
+      "message": "RSRP inférieur à -110 dBm sur 40% des mesures à Conakry - Zone Kaloum",
+      "details": "Seuil critique dépassé: RSRP moyen = -115 dBm (seuil = -110 dBm). 12 mesures sur 30 en dessous du seuil. Zone affectée: Kaloum, Dixinn. Durée: depuis 3 jours."
+    },
+    {
+      "type": "SEUIL_DEPASSE",
+      "severity": "HAUTE",
+      "operateur": "MTN",
+      "region": "KIN",
+      "message": "Débit internet inférieur à 2 Mbps à Kindia - Seuil réglementaire non respecté",
+      "details": "Débit moyen = 1.8 Mbps (seuil = 2 Mbps). 8 mesures consécutives sous le seuil. Heure de pointe: 18h-21h. Impact: ~15 000 usagers."
+    },
+    {
+      "type": "ZONE_BLANCHE",
+      "severity": "CRITIQUE",
+      "operateur": "CELCOM",
+      "region": "BOK",
+      "message": "Zone blanche détectée à Boké - Aucun signal Celcom sur 25 km²",
+      "details": "Aucune mesure Celcom reçue dans un rayon de 25 km² autour de Boké centre. 0 point de mesure sur 15 tentatives. Population affectée: ~8 000 habitants."
+    },
+    {
+      "type": "NON_CONFORMITE",
+      "severity": "HAUTE",
+      "operateur": "CELCOM",
+      "region": "NZE",
+      "message": "Taux de drop call Celcom à N'Zérékoré dépasse 10% - Non conforme aux spécifications ARPT",
+      "details": "Taux drop call moyen = 12.5% (seuil ARPT = 5%). 5 mesures sur 8 au-dessus du seuil. Non-conformité persistante depuis Q1 2026."
+    },
+    {
+      "type": "DEGRADATION",
+      "severity": "MOYENNE",
+      "operateur": "ORANGE",
+      "region": "LAB",
+      "message": "Dégradation progressive du signal 4G à Labé - RSRP en baisse de 15% ce mois",
+      "details": "RSRP moyen passé de -95 dBm à -108 dBm en 30 jours. Cause probable: panne sur site relais LAB-04. Ticket maintenance ouvert."
+    },
+    {
+      "type": "SEUIL_DEPASSE",
+      "severity": "BASSE",
+      "operateur": "MTN",
+      "region": "MAM",
+      "message": "Latence MTN Mamou légèrement au-dessus du seuil - Surveillance en cours",
+      "details": "Latence moyenne = 105 ms (seuil = 100 ms). Dépassement marginal. Pas d'impact significatif sur l'expérience utilisateur pour le moment."
+    }
+  ]
+}

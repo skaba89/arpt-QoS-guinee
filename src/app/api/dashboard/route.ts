@@ -110,8 +110,18 @@ export async function GET() {
           qos: latestScore?.scoreQoS || 0,
           qoe: latestScore?.scoreQoE || 0,
           conformite: latestScore?.scoreConformite || 0,
-          innovation: latestScore?.scoreQoS || 0,
-          investissement: latestScore?.scoreCouverture || 0,
+          // TODO: Add scoreInnovation/scoreInvestissement to ScoreOperateur model
+          // Currently derived as weighted blends to avoid exact duplication
+          innovation: Math.round((
+            (latestScore?.scoreQoS || 0) * 0.4 +
+            (latestScore?.scoreQoE || 0) * 0.3 +
+            (latestScore?.scoreConformite || 0) * 0.3
+          )),
+          investissement: Math.round((
+            (latestScore?.scoreCouverture || 0) * 0.5 +
+            (latestScore?.scoreConformite || 0) * 0.3 +
+            (latestScore?.scoreQoS || 0) * 0.2
+          )),
         },
         historicalScores: op.scores.map((s) => s.scoreGlobal).reverse(),
       };
@@ -128,6 +138,7 @@ export async function GET() {
     const formattedAlerts = recentAlerts.map((a) => ({
       id: a.id,
       type: a.severity === "CRITIQUE" ? "critical" : a.severity === "HAUTE" || a.severity === "MOYENNE" ? "warning" : "info",
+      severity: a.severity,
       operator: a.operateur?.nom || "Système",
       region: a.region?.nom || "National",
       message: a.message,

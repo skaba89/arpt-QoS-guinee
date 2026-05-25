@@ -1,0 +1,7 @@
+# Modèle d'import ONIT-PNG - Fichier TEMS / Drive Test
+# Ce format correspond aux données exportées par les outils TEMS Investigation
+# Les colonnes inutiles peuvent être vides ou omises
+operateur,region,latitude,longitude,typeMesure,timestamp,rssi,rsrp,rsrq,sinr,debitDescendant,debitMontant,latence,gigue,tauxAppelReussi,tauxDropCall,campagne
+ORANGE,CON,10.0666,-12.8569,MOBILE,2026-05-15T08:00:00Z,-60,-85,-10,12,35.2,12.5,30,3,99.2,0.5,Drive Test Conakry Mai 2026
+ORANGE,CON,10.0680,-12.8580,MOBILE,2026-05-15T08:05:00Z,-63,-87,-11,10,32.1,11.8,35,4,98.8,0.8,Drive Test Conakry Mai 2026
+ORANGE,CON,10.0695,-12.8595,MOBILE,2026-05-15T08:10:00Z,-58,-82,-9,14,38.5,14.2,28,3,99.5,0.3,Drive Test Conakry Mai 2026

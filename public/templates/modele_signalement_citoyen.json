@@ -1,0 +1,38 @@
+{
+  "description": "Modèle d'import ONIT-PNG - Signalement Citoyen",
+  "version": "1.0",
+  "type": "signalement_citoyen",
+  "measurements": [
+    {
+      "operateur": "ORANGE",
+      "region": "CON",
+      "latitude": 10.0666,
+      "longitude": -12.8569,
+      "typeMesure": "INTERNET",
+      "timestamp": "2026-05-15T16:30:00Z",
+      "debitDownload": 5.2,
+      "debitUpload": 1.8,
+      "ping": 95,
+      "scoreQoE": 25,
+      "pageLoadTime": 8.5,
+      "videoBuffering": 5.2,
+      "campagne": "Signalement Citoyen Conakry Mai 2026"
+    },
+    {
+      "operateur": "MTN",
+      "region": "LAB",
+      "latitude": 8.9000,
+      "longitude": -13.2000,
+      "typeMesure": "MOBILE",
+      "timestamp": "2026-05-15T17:00:00Z",
+      "rssi": -95,
+      "rsrp": -115,
+      "rsrq": -22,
+      "sinr": -2,
+      "tauxAppelReussi": 45.0,
+      "tauxDropCall": 25.0,
+      "scoreQoE": 10,
+      "campagne": "Signalement Citoyen Labé Mai 2026"
+    }
+  ]
+}

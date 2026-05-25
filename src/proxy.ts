@@ -117,9 +117,15 @@ export function proxy(request: NextRequest) {
       );
     }
 
-    // CORS headers
+    // CORS headers — restricted to known origins only
+    const ALLOWED_ORIGINS = [
+      'http://localhost:3000',
+      'https://onit.arpt.gn',
+      'https://arpt-guinee.gn',
+    ];
     const origin = request.headers.get('origin');
-    response.headers.set('Access-Control-Allow-Origin', origin || '*');
+    const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+    response.headers.set('Access-Control-Allow-Origin', allowedOrigin);
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     response.headers.set('Access-Control-Max-Age', '86400');
@@ -129,7 +135,7 @@ export function proxy(request: NextRequest) {
       return new NextResponse(null, {
         status: 204,
         headers: {
-          'Access-Control-Allow-Origin': origin || '*',
+          'Access-Control-Allow-Origin': allowedOrigin,
           'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
           'Access-Control-Allow-Headers': 'Content-Type, Authorization',
           'Access-Control-Max-Age': '86400',

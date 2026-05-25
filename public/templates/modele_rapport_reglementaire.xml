@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Modèle d'import ONIT-PNG - Rapport Réglementaire -->
+<!-- Ce format correspond aux rapports soumis par les opérateurs à l'ARPT -->
+<!-- Conforme aux spécifications de l'ARPT Guinea -->
+<rapportReglementaire>
+  <entete>
+    <typeRapport>REGLEMENTAIRE</typeRapport>
+    <periode>2026-Q2</periode>
+    <dateSoumission>2026-05-15</dateSoumission>
+    <operateur>
+      <code>ORANGE</code>
+      <nom>Orange Guinée</nom>
+      <licence>LIC-2020-001</licence>
+    </operateur>
+    <region>
+      <code>CON</code>
+      <nom>Conakry</nom>
+    </region>
+    <responsable>Mamadou Diallo</responsable>
+    <version>1.0</version>
+  </entete>
+
+  <donnees>
+    <indicateur>
+      <code>COUVERTURE_4G</code>
+      <nom>Taux de couverture 4G</nom>
+      <valeur>85.2</valeur>
+      <unite>%</unite>
+      <seuilReglementaire>80</seuilReglementaire>
+      <statut>CONFORME</statut>
+    </indicateur>
+    <indicateur>
+      <code>DEBIT_MOYEN</code>
+      <nom>Débit moyen descendant</nom>
+      <valeur>15.8</valeur>
+      <unite>Mbps</unite>
+      <seuilReglementaire>10</seuilReglementaire>
+      <statut>CONFORME</statut>
+    </indicateur>
+    <indicateur>
+      <code>LATENCE_MOYENNE</code>
+      <nom>Latence moyenne</nom>
+      <valeur>48</valeur>
+      <unite>ms</unite>
+      <seuilReglementaire>100</seuilReglementaire>
+      <statut>CONFORME</statut>
+    </indicateur>
+    <indicateur>
+      <code>TAUX_DROP_CALL</code>
+      <nom>Taux d'appels tombés</nom>
+      <valeur>3.2</valeur>
+      <unite>%</unite>
+      <seuilReglementaire>5</seuilReglementaire>
+      <statut>CONFORME</statut>
+    </indicateur>
+    <indicateur>
+      <code>TAUX_APPEL_REUSSI</code>
+      <nom>Taux d'appels réussis</nom>
+      <valeur>96.8</valeur>
+      <unite>%</unite>
+      <seuilReglementaire>95</seuilReglementaire>
+      <statut>CONFORME</statut>
+    </indicateur>
+  </donnees>
+
+  <mesures>
+    <mesure timestamp="2026-05-15T08:00:00Z" latitude="10.0666" longitude="-12.8569">
+      <rssi>-60</rssi>
+      <rsrp>-85</rsrp>
+      <rsrq>-10</rsrq>
+      <sinr>12</sinr>
+      <debitDescendant>35.2</debitDescendant>
+      <debitMontant>12.5</debitMontant>
+      <latence>30</latence>
+      <tauxAppelReussi>99.2</tauxAppelReussi>
+    </mesure>
+    <mesure timestamp="2026-05-15T08:05:00Z" latitude="10.0680" longitude="-12.8580">
+      <rssi>-63</rssi>
+      <rsrp>-87</rsrp>
+      <rsrq>-11</rsrq>
+      <sinr>10</sinr>
+      <debitDescendant>32.1</debitDescendant>
+      <debitMontant>11.8</debitMontant>
+      <latence>35</latence>
+      <tauxAppelReussi>98.8</tauxAppelReussi>
+    </mesure>
+    <mesure timestamp="2026-05-15T08:10:00Z" latitude="10.0695" longitude="-12.8595">
+      <rssi>-58</rssi>
+      <rsrp>-82</rsrp>
+      <rsrq>-9</rsrq>
+      <sinr>14</sinr>
+      <debitDescendant>38.5</debitDescendant>
+      <debitMontant>14.2</debitMontant>
+      <latence>28</latence>
+      <tauxAppelReussi>99.5</tauxAppelReussi>
+    </mesure>
+  </mesures>
+
+  <conformite>
+    <tauxConformite>100</tauxConformite>
+    <nombreIndicateursConformes>5</nombreIndicateursConformes>
+    <nombreIndicateursNonConformes>0</nombreIndicateursNonConformes>
+    <observations>Tous les indicateurs sont conformes aux spécifications de l'ARPT pour le trimestre Q2 2026.</observations>
+  </conformite>
+</rapportReglementaire>

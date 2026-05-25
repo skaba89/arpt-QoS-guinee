@@ -1,0 +1,68 @@
+{
+  "description": "Modèle d'import ONIT-PNG - Scores Opérateurs COMPLET",
+  "version": "1.0",
+  "type": "scoring_operateur",
+  "instructions": "Ce fichier contient les scores composites calculés pour chaque opérateur par période. Les scores sont pondérés selon les spécifications de l'ARPT : 40% QoS, 25% Couverture, 20% QoE, 15% Conformité. Le score global est une moyenne pondérée de ces 4 sous-scores.",
+  "scores": [
+    {
+      "operateur": "ORANGE",
+      "periode": "2026-Q2",
+      "scoreGlobal": 82.5,
+      "scoreCouverture": 85.0,
+      "scoreQoS": 80.0,
+      "scoreQoE": 78.0,
+      "scoreConformite": 87.0,
+      "recommandation": "Maintenir les investissements en infrastructure 4G en zone rurale. Priorité: extension couverture Labé et Kankan."
+    },
+    {
+      "operateur": "MTN",
+      "periode": "2026-Q2",
+      "scoreGlobal": 75.3,
+      "scoreCouverture": 78.0,
+      "scoreQoS": 72.0,
+      "scoreQoE": 70.5,
+      "scoreConformite": 82.0,
+      "recommandation": "Amélioration urgente du débit internet en zone rurale. Taux de drop call à réduire en dessous de 3%."
+    },
+    {
+      "operateur": "CELCOM",
+      "periode": "2026-Q2",
+      "scoreGlobal": 62.8,
+      "scoreCouverture": 58.0,
+      "scoreQoS": 65.0,
+      "scoreQoE": 55.0,
+      "scoreConformite": 73.0,
+      "recommandation": "Mise en demeure: couverture 4G insuffisante dans 3 régions (Boké, Labé, N'Zérékoré). Plan de redressement requis sous 90 jours."
+    },
+    {
+      "operateur": "ORANGE",
+      "periode": "2026-Q1",
+      "scoreGlobal": 80.2,
+      "scoreCouverture": 83.0,
+      "scoreQoS": 78.0,
+      "scoreQoE": 76.0,
+      "scoreConformite": 84.0,
+      "recommandation": "Progression régulière. Maintenir le cap sur l'extension rurale."
+    },
+    {
+      "operateur": "MTN",
+      "periode": "2026-Q1",
+      "scoreGlobal": 72.1,
+      "scoreCouverture": 75.0,
+      "scoreQoS": 68.0,
+      "scoreQoE": 67.5,
+      "scoreConformite": 78.0,
+      "recommandation": "Améliorer la QoE en zone urbaine secondaire. Investissements requis sur le backhaul."
+    },
+    {
+      "operateur": "CELCOM",
+      "periode": "2026-Q1",
+      "scoreGlobal": 58.5,
+      "scoreCouverture": 52.0,
+      "scoreQoS": 60.0,
+      "scoreQoE": 50.0,
+      "scoreConformite": 72.0,
+      "recommandation": "Alerte sérieuse: non-conformité sur 4 indicateurs clés. Rencontre urgente avec la direction requise."
+    }
+  ]
+}

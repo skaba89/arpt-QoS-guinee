@@ -1,0 +1,37 @@
+# Modèle d'import ONIT-PNG - Drive Test / Walk Test COMPLET
+# Format: CSV exporté depuis TEMS Investigation, Nemo Handy ou SwissQual
+# Les lignes commençant par # sont des commentaires et seront ignorées lors de l'import
+# Colonnes requises: operateur, region, latitude, longitude, typeMesure
+# Colonnes optionnelles: toutes les métriques (laisser vide si non mesuré)
+#
+# Codes opérateurs: ORANGE, MTN, CELCOM
+# Codes régions: CON (Conakry), KIN (Kindia), BOK (Boké), LAB (Labé), MAM (Mamou), FAR (Faranah), KAN (Kankan), NZE (N'Zérékoré)
+# Types de mesure: MOBILE (RF + appels), INTERNET (débit + QoE)
+# Timestamp: format ISO 8601 (YYYY-MM-DDTHH:MM:SSZ)
+# Campagne: nom de la campagne (auto-créée si n'existe pas)
+#
+# Exemples de valeurs typiques:
+#   RSSI: -50 (excellent) à -100 (faible) dBm
+#   RSRP: -80 (bon) à -120 (très faible) dBm
+#   RSRQ: -3 (excellent) à -20 (mauvais) dB
+#   SINR: 20+ (excellent) à 0 (aucun signal) dB
+#   Débit descendant: 0.5 à 50+ Mbps
+#   Latence: 20 à 200+ ms
+#   Taux appel réussi: 90 à 100%
+#   Taux drop call: 0 à 10%
+#
+operateur,region,latitude,longitude,typeMesure,timestamp,rssi,rsrp,rsrq,sinr,debitDescendant,debitMontant,latence,gigue,tauxAppelReussi,tauxDropCall,campagne
+ORANGE,CON,10.0666,-12.8569,MOBILE,2026-05-15T08:00:00Z,-60,-85,-10,12,35.2,12.5,30,3,99.2,0.5,Drive Test Conakry Mai 2026
+ORANGE,CON,10.0680,-12.8580,MOBILE,2026-05-15T08:05:00Z,-63,-87,-11,10,32.1,11.8,35,4,98.8,0.8,Drive Test Conakry Mai 2026
+ORANGE,CON,10.0695,-12.8595,MOBILE,2026-05-15T08:10:00Z,-58,-82,-9,14,38.5,14.2,28,3,99.5,0.3,Drive Test Conakry Mai 2026
+ORANGE,CON,10.0710,-12.8610,MOBILE,2026-05-15T08:15:00Z,-72,-95,-15,5,18.7,8.3,62,8,95.2,3.1,Drive Test Conakry Mai 2026
+ORANGE,CON,10.0725,-12.8625,MOBILE,2026-05-15T08:20:00Z,-80,-102,-18,2,5.1,2.0,120,15,85.3,8.2,Drive Test Conakry Mai 2026
+MTN,CON,10.0666,-12.8569,MOBILE,2026-05-15T09:00:00Z,-65,-88,-12,9,28.5,10.2,38,4,98.5,1.0,Drive Test Conakry Mai 2026
+MTN,CON,10.0680,-12.8580,MOBILE,2026-05-15T09:05:00Z,-70,-92,-14,7,22.3,9.5,48,6,96.2,2.5,Drive Test Conakry Mai 2026
+MTN,KIN,10.0500,-12.3000,MOBILE,2026-05-15T10:00:00Z,-75,-98,-16,4,12.8,5.2,72,10,92.1,4.5,Drive Test Kindia Mai 2026
+MTN,KIN,10.0550,-12.3050,MOBILE,2026-05-15T10:05:00Z,-82,-105,-19,2,4.5,1.8,110,18,82.5,9.0,Drive Test Kindia Mai 2026
+CELCOM,CON,10.0666,-12.8569,MOBILE,2026-05-15T11:00:00Z,-70,-93,-14,7,20.1,9.5,55,7,96.8,2.0,Walk Test Conakry Mai 2026
+CELCOM,BOK,11.0500,-14.2000,MOBILE,2026-05-15T12:00:00Z,-80,-102,-18,3,8.2,3.1,95,15,88.5,5.2,Drive Test Boké Mai 2026
+CELCOM,BOK,11.0550,-14.2050,MOBILE,2026-05-15T12:05:00Z,-88,-112,-22,1,1.5,0.5,180,30,72.0,12.5,Drive Test Boké Mai 2026
+ORANGE,LAB,11.3500,-12.5000,MOBILE,2026-05-15T13:00:00Z,-78,-100,-17,4,10.5,4.2,85,12,90.2,4.8,Drive Test Labé Mai 2026
+ORANGE,KAN,10.4000,-9.3000,MOBILE,2026-05-15T14:00:00Z,-85,-108,-20,2,3.2,1.0,150,25,78.5,10.2,Drive Test Kankan Mai 2026

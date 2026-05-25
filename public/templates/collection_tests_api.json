@@ -1,0 +1,138 @@
+{
+  "description": "ONIT-PNG - Collection de tests API pour chaque source de données",
+  "version": "1.0",
+  "date": "2026-05-15",
+  "baseUrl": "http://localhost:3000",
+  "auth": {
+    "method": "NextAuth Credentials",
+    "email": "admin@arpt.gn",
+    "password": "Admin@2026!",
+    "loginEndpoint": "/api/auth/callback/credentials"
+  },
+  "tests": [
+    {
+      "id": 1,
+      "name": "Import Drive Test CSV",
+      "source": "Drive Test / Walk Test",
+      "method": "POST",
+      "endpoint": "/api/import",
+      "contentType": "multipart/form-data",
+      "fileField": "file",
+      "sampleFile": "exemple_drive_test_complet.csv",
+      "expectedStatus": 200,
+      "expectedResponse": {
+        "success": true,
+        "format": "csv",
+        "total": 15,
+        "imported": 15,
+        "errors": 0
+      },
+      "curlCommand": "curl -X POST http://localhost:3000/api/import -H 'Cookie: <session>' -F 'file=@exemple_drive_test_complet.csv'"
+    },
+    {
+      "id": 2,
+      "name": "Import QoS Internet CSV",
+      "source": "QoS Internet",
+      "method": "POST",
+      "endpoint": "/api/import",
+      "contentType": "multipart/form-data",
+      "fileField": "file",
+      "sampleFile": "exemple_qos_internet_complet.csv",
+      "expectedStatus": 200,
+      "expectedResponse": {
+        "success": true,
+        "format": "csv",
+        "total": 15,
+        "imported": 15,
+        "errors": 0
+      },
+      "curlCommand": "curl -X POST http://localhost:3000/api/import -H 'Cookie: <session>' -F 'file=@exemple_qos_internet_complet.csv'"
+    },
+    {
+      "id": 3,
+      "name": "Import Signalement Citoyen JSON",
+      "source": "Signalement Citoyen",
+      "method": "POST",
+      "endpoint": "/api/import",
+      "contentType": "multipart/form-data",
+      "fileField": "file",
+      "sampleFile": "exemple_signalement_citoyen_complet.json",
+      "expectedStatus": 200,
+      "expectedResponse": {
+        "success": true,
+        "format": "json",
+        "total": 5,
+        "imported": 5,
+        "errors": 0
+      },
+      "curlCommand": "curl -X POST http://localhost:3000/api/import -H 'Cookie: <session>' -F 'file=@exemple_signalement_citoyen_complet.json'"
+    },
+    {
+      "id": 4,
+      "name": "Import Scores Opérateurs JSON",
+      "source": "Scores Opérateurs",
+      "method": "POST",
+      "endpoint": "/api/import-scoring",
+      "contentType": "multipart/form-data",
+      "fileField": "file",
+      "sampleFile": "exemple_scoring_operateur_complet.json",
+      "expectedStatus": 200,
+      "expectedResponse": {
+        "success": true,
+        "format": "scoring",
+        "total": 6,
+        "imported": 6,
+        "errors": 0
+      },
+      "curlCommand": "curl -X POST http://localhost:3000/api/import-scoring -H 'Cookie: <session>' -F 'file=@exemple_scoring_operateur_complet.json'"
+    },
+    {
+      "id": 5,
+      "name": "Créer Alerte DEGRADATION",
+      "source": "Alertes Automatiques",
+      "method": "POST",
+      "endpoint": "/api/alerts",
+      "contentType": "application/json",
+      "body": {
+        "type": "DEGRADATION",
+        "severity": "CRITIQUE",
+        "message": "RSRP inférieur à -110 dBm sur 40% des mesures à Conakry",
+        "details": "Seuil critique dépassé: RSRP moyen = -115 dBm. Zone: Kaloum, Dixinn."
+      },
+      "expectedStatus": 200,
+      "curlCommand": "curl -X POST http://localhost:3000/api/alerts -H 'Cookie: <session>' -H 'Content-Type: application/json' -d '{\"type\":\"DEGRADATION\",\"severity\":\"CRITIQUE\",\"message\":\"RSRP inférieur à -110 dBm\"}'"
+    },
+    {
+      "id": 6,
+      "name": "Créer Alerte ZONE_BLANCHE",
+      "source": "Alertes Automatiques",
+      "method": "POST",
+      "endpoint": "/api/alerts",
+      "contentType": "application/json",
+      "body": {
+        "type": "ZONE_BLANCHE",
+        "severity": "CRITIQUE",
+        "message": "Zone blanche détectée à Boké - Aucun signal sur 25 km²",
+        "details": "0 point de mesure sur 15 tentatives. Population affectée: ~8 000 habitants."
+      },
+      "expectedStatus": 200,
+      "curlCommand": "curl -X POST http://localhost:3000/api/alerts -H 'Cookie: <session>' -H 'Content-Type: application/json' -d '{\"type\":\"ZONE_BLANCHE\",\"severity\":\"CRITIQUE\",\"message\":\"Zone blanche Boké\"}'"
+    }
+  ],
+  "codesReference": {
+    "operateurs": ["ORANGE", "MTN", "CELCOM"],
+    "regions": {
+      "CON": "Conakry",
+      "KIN": "Kindia",
+      "BOK": "Boké",
+      "LAB": "Labé",
+      "MAM": "Mamou",
+      "FAR": "Faranah",
+      "KAN": "Kankan",
+      "NZE": "N'Zérékoré"
+    },
+    "typesMesure": ["MOBILE", "INTERNET"],
+    "typesAlerte": ["DEGRADATION", "SEUIL_DEPASSE", "NON_CONFORMITE", "ZONE_BLANCHE"],
+    "severites": ["CRITIQUE", "HAUTE", "MOYENNE", "BASSE"]
+  }
+}

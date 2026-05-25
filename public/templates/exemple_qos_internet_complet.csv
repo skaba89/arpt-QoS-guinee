@@ -1,0 +1,31 @@
+# Modèle d'import ONIT-PNG - QoS Internet COMPLET
+# Format: CSV exporté depuis Speedtest, Ookla, NetMetric ou sonde automatique
+# Les lignes commençant par # sont des commentaires et seront ignorées lors de l'import
+# Colonnes requises: operateur, region, latitude, longitude, typeMesure
+#
+# Exemples de valeurs typiques pour QoS Internet:
+#   debitDownload: 2 à 50+ Mbps (débit descendant internet)
+#   debitUpload: 1 à 25+ Mbps (débit montant internet)
+#   ping: 15 à 200+ ms (temps de réponse)
+#   dnsLookupTime: 5 à 100+ ms (résolution DNS)
+#   tcpConnectTime: 20 à 200+ ms (connexion TCP)
+#   scoreQoE: 0 à 100 (qualité d'expérience, calculé ou estimé)
+#   pageLoadTime: 1 à 15+ secondes (chargement page web)
+#   videoBuffering: 0 à 10+ secondes (buffering vidéo)
+#
+operateur,region,latitude,longitude,typeMesure,timestamp,debitDownload,debitUpload,ping,dnsLookupTime,tcpConnectTime,scoreQoE,pageLoadTime,videoBuffering,campagne
+ORANGE,CON,10.0666,-12.8569,INTERNET,2026-05-15T14:00:00Z,22.5,8.3,42,15,48,75,2.8,0.6,QoS Internet Conakry Q2 2026
+ORANGE,CON,10.0700,-12.8600,INTERNET,2026-05-15T14:05:00Z,18.2,6.5,48,18,55,70,3.2,0.9,QoS Internet Conakry Q2 2026
+ORANGE,CON,10.0500,-12.8400,INTERNET,2026-05-15T14:10:00Z,28.3,10.1,35,12,40,82,2.2,0.4,QoS Internet Conakry Q2 2026
+MTN,CON,10.0666,-12.8569,INTERNET,2026-05-15T14:15:00Z,18.2,6.1,55,20,62,68,3.5,1.1,QoS Internet Conakry Q2 2026
+MTN,CON,10.0700,-12.8600,INTERNET,2026-05-15T14:20:00Z,15.8,5.2,62,25,72,62,4.1,1.5,QoS Internet Conakry Q2 2026
+CELCOM,CON,10.0666,-12.8569,INTERNET,2026-05-15T14:25:00Z,10.5,3.8,78,28,85,52,5.2,2.8,QoS Internet Conakry Q2 2026
+CELCOM,CON,10.0700,-12.8600,INTERNET,2026-05-15T14:30:00Z,7.2,2.5,95,35,102,42,7.5,4.2,QoS Internet Conakry Q2 2026
+ORANGE,KIN,10.0500,-12.3000,INTERNET,2026-05-15T14:35:00Z,8.2,3.1,85,32,92,45,6.8,3.5,QoS Internet Kindia Q2 2026
+ORANGE,KIN,10.0550,-12.3050,INTERNET,2026-05-15T14:40:00Z,5.5,2.0,110,45,125,32,9.2,5.8,QoS Internet Kindia Q2 2026
+MTN,KIN,10.0500,-12.3000,INTERNET,2026-05-15T14:45:00Z,4.8,1.8,125,52,138,28,10.5,6.5,QoS Internet Kindia Q2 2026
+CELCOM,BOK,11.0500,-14.2000,INTERNET,2026-05-15T14:50:00Z,2.5,0.8,180,65,185,15,15.2,9.5,QoS Internet Boké Q2 2026
+ORANGE,LAB,11.3500,-12.5000,INTERNET,2026-05-15T14:55:00Z,6.3,2.5,95,38,108,38,8.5,4.5,QoS Internet Labé Q2 2026
+ORANGE,KAN,10.4000,-9.3000,INTERNET,2026-05-15T15:00:00Z,3.8,1.2,150,55,160,22,12.0,7.5,QoS Internet Kankan Q2 2026
+ORANGE,NZE,7.7500,-8.8000,INTERNET,2026-05-15T15:05:00Z,4.2,1.5,135,48,145,25,11.2,7.0,QoS Internet N'Zérékoré Q2 2026
+MTN,MAM,10.4000,-13.6000,INTERNET,2026-05-15T15:10:00Z,5.5,2.2,105,40,120,35,9.0,5.2,QoS Internet Mamou Q2 2026

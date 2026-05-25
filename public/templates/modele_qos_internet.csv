@@ -1,0 +1,7 @@
+# Modèle d'import ONIT-PNG - Mesures QoS Internet (Speedtest / Ookla)
+# Ce format correspond aux résultats d'outils de test de débit internet
+operateur,region,latitude,longitude,typeMesure,timestamp,debitDownload,debitUpload,ping,dnsLookupTime,tcpConnectTime,scoreQoE,pageLoadTime,videoBuffering,campagne
+ORANGE,CON,10.0666,-12.8569,INTERNET,2026-05-15T14:00:00Z,22.5,8.3,42,15,48,75,2.8,0.6,QoS Internet Conakry Q2 2026
+MTN,CON,10.0666,-12.8569,INTERNET,2026-05-15T14:05:00Z,18.2,6.1,55,20,62,68,3.5,1.1,QoS Internet Conakry Q2 2026
+CELCOM,CON,10.0666,-12.8569,INTERNET,2026-05-15T14:10:00Z,10.5,3.8,78,28,85,52,5.2,2.8,QoS Internet Conakry Q2 2026
+ORANGE,KIN,10.0500,-12.3000,INTERNET,2026-05-15T14:30:00Z,8.2,3.1,85,32,92,45,6.8,3.5,QoS Internet Kindia Q2 2026

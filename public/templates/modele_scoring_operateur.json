@@ -1,0 +1,27 @@
+{
+  "description": "Modèle d'import ONIT-PNG - Scores Opérateurs (générés par calcul)",
+  "version": "1.0",
+  "type": "scoring_operateur",
+  "scores": [
+    {
+      "operateur": "ORANGE",
+      "periode": "2026-Q2",
+      "scoreGlobal": 82.5,
+      "scoreCouverture": 85.0,
+      "scoreQoS": 80.0,
+      "scoreQoE": 78.0,
+      "scoreConformite": 87.0,
+      "recommandation": "Maintenir les investissements en infrastructure 4G en zone rurale"
+    },
+    {
+      "operateur": "MTN",
+      "periode": "2026-Q2",
+      "scoreGlobal": 75.3,
+      "scoreCouverture": 78.0,
+      "scoreQoS": 72.0,
+      "scoreQoE": 70.0,
+      "scoreConformite": 81.2,
+      "recommandation": "Améliorer la couverture en zone intérieure et la stabilité des appels"
+    }
+  ]
+}
