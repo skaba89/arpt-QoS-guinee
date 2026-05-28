@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     const userRole = session?.user ? ((session.user as Record<string, unknown>).role as string) : "PUBLIC";
-    const userOrg = (session.user as Record<string, unknown>)?.organization as string;
+    const userOrg = session?.user ? ((session.user as Record<string, unknown>).organization as string) : undefined;
 
     const { searchParams } = new URL(request.url);
     const rawQuery = searchParams.get("q") || "";
