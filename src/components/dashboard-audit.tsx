@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ClipboardCheck, MapPin, CheckCircle2, XCircle, Clock, Car } from 'lucide-react';
+import { ClipboardCheck, MapPin, CheckCircle2, XCircle, Clock, Car, Lock, Loader2 } from 'lucide-react';
+import { useAuthGuard } from '@/hooks/use-auth-guard';
 
 interface CampaignData {
   id: string; name: string; type: string; operator: string; operatorCode: string; operatorColor: string; region: string; date: string; statut: string; responsable: string;
@@ -29,6 +30,7 @@ const QOS_THRESHOLDS = {
 };
 
 export function DashboardAudit() {
+  const { isAuthorized, isLoading: authLoading } = useAuthGuard('AUDITEUR');
   const [campaigns, setCampaigns] = useState<CampaignData[]>([]);
   const [auditResults, setAuditResults] = useState<AuditResultItem[]>([]);
   const [benchmarkData, setBenchmarkData] = useState<{ name: string; values: Record<string, number>; color: string }[]>([]);
@@ -112,6 +114,24 @@ export function DashboardAudit() {
   const activeCampaigns = campaigns.filter((c) => c.statut === 'EN_COURS').length;
   const completedCampaigns = campaigns.filter((c) => c.statut === 'TERMINEE').length;
   const plannedCampaigns = campaigns.filter((c) => c.statut === 'PLANIFIEE').length;
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+      </div>
+    );
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <Lock className="h-12 w-12 text-red-400" />
+        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
+        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+      </div>
+    );
+  }
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="text-xs text-slate-500 animate-pulse">Chargement des campagnes...</div></div>;
 

@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import {
   Users, UserPlus, Shield, Activity, Clock, Building2,
   CheckCircle2, XCircle, Loader2, Search, Eye, Key,
-  AlertTriangle, FileText, Database, Server
+  AlertTriangle, FileText, Database, Server, Lock
 } from 'lucide-react';
+import { useAuthGuard } from '@/hooks/use-auth-guard';
 import { toast } from 'sonner';
 
 interface UserData {
@@ -78,6 +79,7 @@ interface SystemStats {
 }
 
 export function DashboardAdmin() {
+  const { isAuthorized, isLoading: authLoading } = useAuthGuard('SUPER_ADMIN');
   const [users, setUsers] = useState<UserData[]>([]);
   const [roles, setRoles] = useState<RoleData[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
@@ -218,6 +220,24 @@ export function DashboardAdmin() {
     acc[u.role] = (acc[u.role] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+      </div>
+    );
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <Lock className="h-12 w-12 text-red-400" />
+        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
+        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

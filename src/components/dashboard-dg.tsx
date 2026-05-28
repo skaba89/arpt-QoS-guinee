@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Signal, Globe, Wifi, Users, AlertTriangle, TrendingUp, TrendingDown, Shield, Activity } from 'lucide-react';
+import { Signal, Globe, Wifi, Users, AlertTriangle, TrendingUp, TrendingDown, Shield, Activity, Lock, Loader2 } from 'lucide-react';
 import { MetricCard } from './metric-card';
 import { CircularGauge, Sparkline } from './mini-chart';
 import { GuineaMapLeaflet } from './guinea-map-leaflet';
-import { useSession } from 'next-auth/react';
+import { useAuthGuard } from '@/hooks/use-auth-guard';
 
 interface KPIData { value: number; unit: string; trend: number; label: string }
 interface OperatorData { id: string; name: string; code: string; color: string; score: number; trend: number; subscores: { couverture: number; qos: number; qoe: number; conformite: number; innovation: number; investissement: number }; historicalScores: number[] }
@@ -16,7 +16,7 @@ interface MapPointData { lat: number; lng: number; operator: string; operatorCol
 interface MapOperatorData { id: string; name: string; code: string; color: string }
 
 export function DashboardDG() {
-  const { data: session } = useSession();
+  const { isAuthorized, isLoading: authLoading, session } = useAuthGuard('DG');
   const [data, setData] = useState<{
     kpis: Record<string, KPIData>;
     operators: OperatorData[];
@@ -49,6 +49,24 @@ export function DashboardDG() {
     }
     fetchData();
   }, []);
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+      </div>
+    );
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <Lock className="h-12 w-12 text-red-400" />
+        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
+        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

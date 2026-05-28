@@ -1,15 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Layers, Eye, Wifi, MapPin, Route, Filter, GitBranch, Info } from 'lucide-react';
+import { Layers, Eye, Wifi, MapPin, Route, Filter, GitBranch, Info, Lock, Loader2 } from 'lucide-react';
 import { GuineaMapLeaflet } from './guinea-map-leaflet';
 import { cntRegions } from '@/lib/guinea-geojson-cnt';
+import { useAuthGuard } from '@/hooks/use-auth-guard';
 
 interface MapRegionData { code: string; nom: string; centreLat: number; centreLng: number; population: number; coverage: number; qos: number; color: string; whiteZones: number }
 interface MapPointData { lat: number; lng: number; operator: string; operatorColor: string; rssi: number | null; scoreQoE: number | null }
 interface MapOperatorData { id: string; name: string; code: string; color: string }
 
 export function DashboardSIG() {
+  const { isAuthorized, isLoading: authLoading } = useAuthGuard('ANALYSTE_QOS');
   const [selectedOperator, setSelectedOperator] = useState<string>('all');
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [layers, setLayers] = useState({ coverage: true, qosHeatmap: false, whiteZones: true, roads: false });
@@ -31,6 +33,24 @@ export function DashboardSIG() {
     }
     fetchData();
   }, []);
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+      </div>
+    );
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <Lock className="h-12 w-12 text-red-400" />
+        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
+        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+      </div>
+    );
+  }
 
   const toggleLayer = (key: keyof typeof layers) => setLayers((prev) => ({ ...prev, [key]: !prev[key] }));
   const regionData = selectedRegion ? mapData?.regions.find((r) => r.nom === selectedRegion) : null;

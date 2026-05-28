@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Shield, Lock, Key, Eye, Server, CheckCircle2, AlertTriangle, FileKey, Fingerprint, Database, Globe, XCircle } from 'lucide-react';
+import { Shield, Lock, Key, Eye, Server, CheckCircle2, AlertTriangle, FileKey, Fingerprint, Database, Globe, XCircle, Loader2 } from 'lucide-react';
 import { CircularGauge } from './mini-chart';
-import { useSession } from 'next-auth/react';
+import { useAuthGuard } from '@/hooks/use-auth-guard';
 
 interface AuditLogEntry { id: string; user: string; action: string; resource: string; details: string | null; ipAddress: string | null; time: string }
 
@@ -19,7 +19,7 @@ interface SecurityStats {
 }
 
 export function DashboardCyber() {
-  const { data: session } = useSession();
+  const { isAuthorized, isLoading: authLoading, session } = useAuthGuard('SUPER_ADMIN');
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
   const [securityStats, setSecurityStats] = useState<SecurityStats>({
     overallScore: 0,
@@ -35,7 +35,7 @@ export function DashboardCyber() {
   const [loading, setLoading] = useState(true);
 
   const userRole = (session?.user as Record<string, unknown>)?.role as string;
-  const isAdmin = ['SUPER_ADMIN', 'DG', 'DIRECTEUR_TECHNIQUE'].includes(userRole);
+  const isAdmin = isAuthorized;
 
   useEffect(() => {
     async function fetchData() {
@@ -79,6 +79,24 @@ export function DashboardCyber() {
     : securityStats.overallScore >= 60 ? 'text-blue-400'
     : securityStats.overallScore >= 40 ? 'text-amber-400'
     : 'text-red-400';
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+      </div>
+    );
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <Lock className="h-12 w-12 text-red-400" />
+        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
+        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

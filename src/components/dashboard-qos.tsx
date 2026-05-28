@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Clock, Download, Zap, Phone, Radio, Filter } from 'lucide-react';
+import { Clock, Download, Zap, Phone, Radio, Filter, Lock, Loader2 } from 'lucide-react';
 import { MetricCard } from './metric-card';
 import { LineChart, HBarChart } from './mini-chart';
-import { useSession } from 'next-auth/react';
+import { useAuthGuard } from '@/hooks/use-auth-guard';
 
 interface QoSMetricData { value: number; unit: string; label: string; trend: number }
 interface BenchmarkItem { metric: string; orange: number; mtn: number; celcom: number; threshold: number }
@@ -20,7 +20,7 @@ const defaultOperators = [
 ];
 
 export function DashboardQoS() {
-  const { data: session } = useSession();
+  const { isAuthorized, isLoading: authLoading } = useAuthGuard('ANALYSTE_QOS');
   const [selectedOperator, setSelectedOperator] = useState<string>('all');
   const [selectedRegion, setSelectedRegion] = useState<string>('all');
   const [selectedPeriod, setSelectedPeriod] = useState<string>('6m');
@@ -52,6 +52,24 @@ export function DashboardQoS() {
     }
     fetchData();
   }, [selectedOperator, selectedRegion, selectedPeriod]);
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+      </div>
+    );
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <Lock className="h-12 w-12 text-red-400" />
+        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
+        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+      </div>
+    );
+  }
 
   if (loading) {
     return <div className="flex items-center justify-center h-64"><div className="text-xs text-slate-500 animate-pulse">Chargement QoS...</div></div>;

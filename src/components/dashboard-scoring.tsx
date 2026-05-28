@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown, Award, BarChart3, Lightbulb, ChevronRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, Award, BarChart3, Lightbulb, ChevronRight, Lock, Loader2 } from 'lucide-react';
 import { CircularGauge, RadarChart, Sparkline } from './mini-chart';
+import { useAuthGuard } from '@/hooks/use-auth-guard';
 
 interface OperatorScoreData {
   id: string; name: string; code: string; color: string; score: number; trend: number;
@@ -20,6 +21,7 @@ const recommendations = [
 ];
 
 export function DashboardScoring() {
+  const { isAuthorized, isLoading: authLoading } = useAuthGuard('ANALYSTE_QOS');
   const [data, setData] = useState<{ operators: OperatorScoreData[]; radarData: { label: string; values: number[] }[] } | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState<string>('latest');
@@ -49,6 +51,24 @@ export function DashboardScoring() {
     }
     fetchData();
   }, []);
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+      </div>
+    );
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <Lock className="h-12 w-12 text-red-400" />
+        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
+        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+      </div>
+    );
+  }
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="text-xs text-slate-500 animate-pulse">Chargement scoring...</div></div>;
 

@@ -6,8 +6,9 @@ import {
   CheckCircle, XCircle, AlertTriangle, Database, Wifi, Globe,
   Smartphone, MapPin, BarChart3, ChevronDown, ChevronRight,
   FileUp, Loader2, Eye, Trash2, Play, Copy, Info, ArrowRight,
-  FileCode, Shield, Zap
+  FileCode, Shield, Zap, Lock
 } from 'lucide-react';
+import { useAuthGuard } from '@/hooks/use-auth-guard';
 
 // ─── Types ──────────────────────────────────────────────────────────
 type ImportTab = 'overview' | 'csv' | 'json' | 'scoring' | 'manual' | 'campaign' | 'alert' | 'xml';
@@ -385,6 +386,7 @@ const dataSources = [
 
 // ─── Main Component ─────────────────────────────────────────────────
 export function DataImport() {
+  const { isAuthorized, isLoading: authLoading } = useAuthGuard('ANALYSTE_QOS');
   const [activeTab, setActiveTab] = useState<ImportTab>('overview');
   const [operators, setOperators] = useState<Operator[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
@@ -615,6 +617,25 @@ export function DataImport() {
       </div>
     );
   };
+
+  // ─── Auth Guard ──────────────────────────────────────────────
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+      </div>
+    );
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <Lock className="h-12 w-12 text-red-400" />
+        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
+        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+      </div>
+    );
+  }
 
   // ─── Common Styles ────────────────────────────────────────────
   const inputClass = "w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#D4A843]/50 focus:ring-1 focus:ring-[#D4A843]/20";

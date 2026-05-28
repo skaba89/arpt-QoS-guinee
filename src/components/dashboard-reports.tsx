@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FileText, Download, Calendar, Clock, FileSpreadsheet, Globe, Shield, BarChart3, Award, CheckCircle2, Loader2 } from 'lucide-react';
+import { FileText, Download, Calendar, Clock, FileSpreadsheet, Globe, Shield, BarChart3, Award, CheckCircle2, Loader2, Lock } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAuthGuard } from '@/hooks/use-auth-guard';
 
 interface ReportData { id: string; titre: string; type: string; date: string; format: string; size: string; statut: string; isPublic: boolean }
 
 export function DashboardReports() {
+  const { isAuthorized, isLoading: authLoading } = useAuthGuard('ANALYSTE_QOS');
   const [reports, setReports] = useState<ReportData[]>([]);
   const [generating, setGenerating] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -134,6 +136,24 @@ export function DashboardReports() {
       toast.error('Erreur lors de la génération du téléchargement');
     }
   };
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+      </div>
+    );
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <Lock className="h-12 w-12 text-red-400" />
+        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
+        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+      </div>
+    );
+  }
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="text-xs text-slate-500 animate-pulse">Chargement rapports...</div></div>;
 
