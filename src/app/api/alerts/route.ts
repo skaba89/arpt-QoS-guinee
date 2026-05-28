@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getAccessibleOperators, getAccessibleRegions, getRLSScope, checkPermission, logAudit } from "@/lib/rbac";
 import { z } from "zod";
+import { checkRateLimit } from "@/lib/utils-api";
 
 // Validation schemas
 const createAlertSchema = z.object({
@@ -114,6 +115,20 @@ export async function GET(request: Request) {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function POST(request: Request) {
   try {
+    // ── Rate limiting for public submissions ──
+    const ipAddress =
+      request.headers.get("x-forwarded-for") ||
+      request.headers.get("x-real-ip") ||
+      "unknown";
+    const rateLimitKey = `alerts-post:${ipAddress}`;
+    const rateLimit = checkRateLimit(rateLimitKey, 5, 300000); // 5 per 5 minutes
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: `Limite de signalements atteinte. Réessayez dans ${rateLimit.resetIn}s.` },
+        { status: 429, headers: { "Retry-After": String(rateLimit.resetIn) } }
+      );
+    }
+
     const session = await getServerSession(authOptions);
 
     const body = await request.json();

@@ -51,7 +51,7 @@ export function DashboardReports() {
           type: data.report?.type || 'INTERNE',
           date: new Date().toISOString().split('T')[0],
           format: data.report?.format || 'PDF',
-          size: `${(Math.random() * 3 + 1).toFixed(1)} MB`,
+          size: '—',
           statut: 'ready',
           isPublic: false,
         };
@@ -71,52 +71,68 @@ export function DashboardReports() {
     handleGenerate(id, templateName);
   };
 
-  const handleDownload = (report: ReportData) => {
-    // Generate a CSV/text download
-    const lines = [
-      `Rapport: ${report.titre}`,
-      `Type: ${report.type}`,
-      `Date: ${report.date}`,
-      `Format: ${report.format}`,
-      `Taille: ${report.size}`,
-      `Statut: ${report.statut === 'ready' ? 'Prêt' : 'En génération'}`,
-      `Public: ${report.isPublic ? 'Oui' : 'Non'}`,
-      '',
-      '--- Données du rapport ---',
-      '',
-      'Ce rapport a été généré par ONIT-PNG',
-      'Observatoire National Intelligent des Télécommunications',
-      'République de Guinée - ARPT',
-      '',
-      'Données de qualité de service mesurées conformément aux spécifications techniques ARPT.',
-      '',
-      'Opérateur;Score Global;Couverture;QoS;QoE;Conformité',
-      'Orange Guinée;78;82;76;74;80',
-      'MTN Guinée;71;74;70;68;72',
-      'Celcom Guinée;62;58;66;60;64',
-      '',
-      'Région;Couverture;Score QoS;Population;Zones Blanches',
-      'Conakry;92;85;2.1M;2',
-      'Nzérékoré;68;62;2.0M;45',
-      'Kankan;65;58;1.9M;52',
-      'Kindia;72;68;1.3M;28',
-      'Boké;55;48;1.0M;68',
-      'Labé;60;55;1.0M;42',
-      'Faranah;48;42;0.9M;78',
-      'Mamou;70;65;0.8M;22',
-    ];
+  const handleDownload = async (report: ReportData) => {
+    // Fetch real data from the dashboard API for the CSV export
+    try {
+      const dashRes = await fetch('/api/dashboard');
+      if (!dashRes.ok) {
+        toast.error('Erreur lors du chargement des données');
+        return;
+      }
+      const data = await dashRes.json();
 
-    const content = lines.join('\n');
-    const blob = new Blob([content], { type: report.format === 'PDF' ? 'text/plain' : 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${report.titre.replace(/\s+/g, '_')}_${report.date}.${report.format === 'PDF' ? 'txt' : 'csv'}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast.success(`Téléchargement de "${report.titre}" lancé`);
+      // Build CSV with real data
+      const lines: string[] = [
+        `Rapport: ${report.titre}`,
+        `Type: ${report.type}`,
+        `Date: ${report.date}`,
+        `Format: ${report.format}`,
+        `Généré par: ONIT-PNG — Observatoire National Intelligent des Télécommunications`,
+        `République de Guinée — ARPT`,
+        '',
+        '=== INDICATEURS CLÉS ===',
+        '',
+        `Couverture Nationale;${data.kpis?.couvertureNationale?.value ?? '-'};%`,
+        `Score QoS Global;${data.kpis?.scoreQosGlobal?.value ?? '-'};/100`,
+        `Zones Blanches;${data.kpis?.zonesBlanches?.value ?? '-'}`,
+        `Population Couverte;${data.kpis?.populationCouverte?.value ?? '-'};M`,
+        `Conformité SLA;${data.slaCompliance?.global ?? '-'};%`,
+        '',
+        '=== SCORES OPÉRATEURS ===',
+        '',
+        'Opérateur;Score Global;Couverture;QoS;QoE;Conformité;Tendance',
+        ...(data.operators || []).map((op: { name: string; score: number; subscores: { couverture: number; qos: number; qoe: number; conformite: number }; trend: number }) =>
+          `${op.name};${op.score};${op.subscores?.couverture ?? '-'};${op.subscores?.qos ?? '-'};${op.subscores?.qoe ?? '-'};${op.subscores?.conformite ?? '-'};${op.trend > 0 ? '+' : ''}${op.trend}`
+        ),
+        '',
+        '=== DONNÉES RÉGIONALES ===',
+        '',
+        'Région;Couverture (%);Score QoS;Population;Zones Blanches',
+        ...(data.regions || []).map((r: { name: string; coverage: number; qos: number; population: number; whiteZones: number }) =>
+          `${r.name};${r.coverage};${r.qos};${r.population};${r.whiteZones}`
+        ),
+        '',
+        '=== CONFORMITÉ SLA PAR OPÉRATEUR ===',
+        '',
+        ...Object.entries(data.slaCompliance?.operators || {}).map(([code, score]) =>
+          `${code};${score}%`
+        ),
+      ];
+
+      const content = lines.join('\n');
+      const blob = new Blob([content], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${report.titre.replace(/\s+/g, '_')}_${report.date}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success(`Téléchargement de "${report.titre}" lancé`);
+    } catch {
+      toast.error('Erreur lors de la génération du téléchargement');
+    }
   };
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="text-xs text-slate-500 animate-pulse">Chargement rapports...</div></div>;

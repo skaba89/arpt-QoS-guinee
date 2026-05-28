@@ -2,17 +2,8 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { logAudit } from "@/lib/rbac";
-
-// Helper to resolve operator code to ID
-async function resolveOperatorId(codeOrId: string): Promise<string | null> {
-  const byId = await db.operateur.findUnique({ where: { id: codeOrId } });
-  if (byId) return byId.id;
-  const byCode = await db.operateur.findUnique({ where: { code: codeOrId.toUpperCase() } });
-  if (byCode) return byCode.id;
-  const byName = await db.operateur.findFirst({ where: { nom: { contains: codeOrId } } });
-  return byName?.id || null;
-}
+import { logAudit, checkPermission } from "@/lib/rbac";
+import { resolveOperatorId } from "@/lib/utils-api";
 
 interface ScoreRow {
   operateur?: string;
@@ -37,8 +28,10 @@ export async function POST(request: Request) {
     const userRole = (session.user as Record<string, unknown>).role as string;
     const userId = (session.user as Record<string, unknown>).id as string;
 
-    const allowedRoles = ["SUPER_ADMIN", "DG", "DIRECTEUR_TECHNIQUE", "ANALYSTE_QOS"];
-    if (!allowedRoles.includes(userRole)) {
+    // Use centralized permission check instead of hardcoded allowedRoles
+    const hasPermission = await checkPermission(userRole, "scoring", "admin") ||
+      await checkPermission(userRole, "scoring", "export");
+    if (!hasPermission) {
       return NextResponse.json({ error: "Permissions insuffisantes pour l'import de scores" }, { status: 403 });
     }
 

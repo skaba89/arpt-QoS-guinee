@@ -1,5 +1,6 @@
 import { PrismaClient, RoleType } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { createHash } from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -23,6 +24,11 @@ function clamp(v: number, min: number, max: number): number {
 function roundTo(v: number, decimals: number): number {
   const factor = Math.pow(10, decimals);
   return Math.round(v * factor) / factor;
+}
+
+// Helper: hash API key for secure storage
+function hashKey(key: string): string {
+  return createHash('sha256').update(key).digest('hex');
 }
 
 async function main() {
@@ -239,21 +245,34 @@ async function main() {
   console.log('  ✅ Regions (16 CNT)');
 
   // ═══════════════════════════════════════════
-  // 5. Create Operators
+  // 5. Create Operators (with secure API keys)
   // ═══════════════════════════════════════════
+  // API keys for prestataire integration — stored as SHA-256 hashes
+  const operatorApiKeys: Record<string, string> = {};
   const operateurData = [
-    { nom: 'Orange Guinée', code: 'ORANGE', type: 'MOBILE', licence: 'LIC-ORANGE-2016' },
-    { nom: 'MTN Guinée', code: 'MTN', type: 'MOBILE', licence: 'LIC-MTN-2016' },
-    { nom: 'Celcom Guinée', code: 'CELCOM', type: 'MOBILE', licence: 'LIC-CELCOM-2018' },
-    { nom: 'Intercel Guinée', code: 'INTERCEL', type: 'MOBILE', licence: 'LIC-INTERCEL-2017' },
+    { nom: 'Orange Guinée', code: 'ORANGE', type: 'MOBILE', licence: 'LIC-ORANGE-2016', cleApi: hashKey('onit-ORANGE-k8Xp2mQvR9wLjN4sT7yZ') },
+    { nom: 'MTN Guinée', code: 'MTN', type: 'MOBILE', licence: 'LIC-MTN-2016', cleApi: hashKey('onit-MTN-f3Hb7nKcP5dAqW1xY8uE') },
+    { nom: 'Celcom Guinée', code: 'CELCOM', type: 'MOBILE', licence: 'LIC-CELCOM-2018', cleApi: hashKey('onit-CELCOM-j6Rs4tGvB2mXeN9wK5pH') },
+    { nom: 'Intercel Guinée', code: 'INTERCEL', type: 'MOBILE', licence: 'LIC-INTERCEL-2017', cleApi: hashKey('onit-INTERCEL-q7Ld3oFwC8nYaP6xM2kJ') },
   ];
 
   const operateurMap: Record<string, string> = {};
   for (const o of operateurData) {
+    const apiKeyPlain = Object.entries({
+      'ORANGE': 'onit-ORANGE-k8Xp2mQvR9wLjN4sT7yZ',
+      'MTN': 'onit-MTN-f3Hb7nKcP5dAqW1xY8uE',
+      'CELCOM': 'onit-CELCOM-j6Rs4tGvB2mXeN9wK5pH',
+      'INTERCEL': 'onit-INTERCEL-q7Ld3oFwC8nYaP6xM2kJ',
+    }).find(([k]) => k === o.code)?.[1] || '';
+    operatorApiKeys[o.code] = apiKeyPlain;
     const op = await prisma.operateur.create({ data: o });
     operateurMap[o.code] = op.id;
   }
-  console.log('  ✅ Operators (4)');
+  console.log('  ✅ Operators (4) with secure API keys');
+  console.log('  📋 Prestataire API Keys (store securely):');
+  for (const [code, key] of Object.entries(operatorApiKeys)) {
+    console.log(`     ${code}: ${key}`);
+  }
 
   // ═══════════════════════════════════════════
   // 6. Create Campaigns — realistic field operations (16 CNT regions)

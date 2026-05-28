@@ -84,6 +84,7 @@ model Operateur {
   code       String           @unique
   type       String
   licence    String?
+  cleApi     String?          @unique
   isActive   Boolean          @default(true)
   scores     ScoreOperateur[]
   mesures    MesureQoS[]

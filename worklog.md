@@ -72,3 +72,44 @@ Stage Summary:
 - Operators: Orange 82, MTN 72, Celcom 55, Intercel 38
 - Regional variations clearly visible: Conakry 78% coverage → Faranah 30%
 - SLA compliance: Orange 82%, MTN 71%, Celcom 52%, Intercel 37%
+---
+Task ID: e2e-audit-corrections
+Agent: Main Agent
+Task: E2E Audit - Identify and fix all critical/high/medium severity issues
+
+Work Log:
+- Performed comprehensive E2E audit identifying 25 issues (3 critical, 5 high, 9 medium, 8 low)
+- CRITICAL: Secured prestataire API key auth (SHA-256 hash validation against DB)
+  * Added cleApi field to Operateur model in schema.prisma
+  * Created validateApiKeySecure() in utils-api.ts
+  * Updated both prestataire routes to use secure validation
+  * Seed now generates API keys with 32-char cryptographic secrets
+- CRITICAL: Added NEXTAUTH_SECRET validation at startup
+  * Production: throws fatal error if not set
+  * Development: warns and uses fallback secret
+- HIGH: Created /api/admin/stats endpoint with real DB statistics
+  * Parallel count queries for all tables
+  * Dynamic security/compliance scores from alert data
+  * Recent audit and login activity tracking
+- HIGH: Replaced dashboard-admin hardcoded data with real stats from /api/admin/stats
+- HIGH: Replaced dashboard-cyber hardcoded data with dynamic scores from /api/admin/stats
+- HIGH: Replaced dashboard-audit hardcoded results with real ARPT compliance checks
+- HIGH: Harmonized RBAC on import/import-scoring (checkPermission instead of allowedRoles arrays)
+- HIGH: Fixed report download to use real data from /api/dashboard API
+- MEDIUM: Created /src/lib/utils-api.ts centralizing shared functions
+  * stripHtml, validateApiKeySecure, logPrestataireAudit, resolveOperatorId, resolveRegionId
+  * parseCSVLine, toFloat, checkRateLimit (in-memory rate limiter)
+- MEDIUM: Added rate limiting on prestataire endpoints (30/min) and alerts POST (5/5min)
+- MEDIUM: Fixed random file sizes in report generation
+- Removed conflicting middleware.ts file
+- Fixed JSX parsing issue in dashboard-admin (as const syntax)
+- Schema pushed, DB re-seeded with secure API keys
+- Build compiles successfully, API endpoints verified
+
+Stage Summary:
+- 10/25 issues fixed (all critical + high + key medium priority items)
+- API key security: forged keys rejected with 401, only valid hashed keys accepted
+- All dashboards now display real data from database
+- RBAC is consistent across all endpoints
+- Rate limiting protects public endpoints
+- Generated audit report PDF: /home/z/my-project/download/ONIT-PNG_Audit_E2E_Corrections.pdf

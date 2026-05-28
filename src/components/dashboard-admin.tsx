@@ -61,10 +61,27 @@ const roleLabels: Record<string, string> = {
   PUBLIC: 'Public',
 };
 
+interface SystemStats {
+  database: {
+    type: string; status: string; operators: number; regions: number; measures: number;
+    activeAlerts: number; reports: number; users: number; activeUsers: number;
+    campaigns: number; activeCampaigns: number; auditLogs: number;
+  };
+  security: {
+    overallScore: number; complianceScore: number; activeThreats: number;
+    unresolvedCritical: number; unresolvedHigh: number; twoFactorEnabled: boolean;
+    encryptionStatus: string; dataResidency: string;
+  };
+  activity: {
+    recentAuditCount: number; loginCount: number; failedLoginCount: number;
+  };
+}
+
 export function DashboardAdmin() {
   const [users, setUsers] = useState<UserData[]>([]);
   const [roles, setRoles] = useState<RoleData[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
+  const [systemStats, setSystemStats] = useState<SystemStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -84,10 +101,11 @@ export function DashboardAdmin() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [usersRes, rolesRes, logsRes] = await Promise.all([
+        const [usersRes, rolesRes, logsRes, statsRes] = await Promise.all([
           fetch('/api/users'),
           fetch('/api/roles'),
           fetch('/api/audit-logs'),
+          fetch('/api/admin/stats'),
         ]);
         if (usersRes.ok) {
           const data = await usersRes.json();
@@ -103,6 +121,10 @@ export function DashboardAdmin() {
             ...l,
             time: typeof l.time === 'string' ? l.time : new Date(l.time).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
           })));
+        }
+        if (statsRes.ok) {
+          const data = await statsRes.json();
+          setSystemStats(data);
         }
       } catch (err) {
         console.error('Admin fetch error:', err);
@@ -484,14 +506,14 @@ export function DashboardAdmin() {
               </h3>
               <div className="space-y-3">
                 {[
-                  { label: 'Type', value: 'SQLite' },
-                  { label: 'Statut', value: 'Connecté', ok: true },
-                  { label: 'Utilisateurs', value: String(totalUsers) },
-                  { label: 'Opérateurs', value: '3' },
-                  { label: 'Régions', value: '8' },
-                  { label: 'Mesures QoS', value: '500+' },
-                  { label: 'Alertes actives', value: '12' },
-                  { label: 'Rapports', value: '24' },
+                  { label: 'Type', value: systemStats?.database.type || 'SQLite' },
+                  { label: 'Statut', value: systemStats?.database.status === 'connected' ? 'Connecté' : 'Déconnecté', ok: systemStats?.database.status === 'connected' },
+                  { label: 'Utilisateurs', value: String(systemStats?.database.users ?? totalUsers) },
+                  { label: 'Opérateurs', value: String(systemStats?.database.operators ?? '-') },
+                  { label: 'Régions', value: String(systemStats?.database.regions ?? '-') },
+                  { label: 'Mesures QoS', value: systemStats?.database.measures ? String(systemStats.database.measures) : '-' },
+                  { label: 'Alertes actives', value: String(systemStats?.database.activeAlerts ?? '-') },
+                  { label: 'Rapports', value: String(systemStats?.database.reports ?? '-') },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center justify-between p-2 rounded-lg bg-white/5">
                     <span className="text-xs text-slate-400">{item.label}</span>
@@ -536,9 +558,14 @@ export function DashboardAdmin() {
             </h3>
             <div className="space-y-2">
               {[
-                { type: 'warning', message: 'Certificat SSL expire dans 30 jours', time: 'Il y a 2h' },
-                { type: 'info', message: 'Sauvegarde automatique réussie', time: 'Il y a 6h' },
-                { type: 'success', message: 'Mise à jour de la base de données effectuée', time: 'Il y a 1j' },
+                ...(systemStats?.security.activeThreats ? [
+                  { type: 'warning' as string, message: `${systemStats.security.unresolvedCritical} alerte(s) critique(s) non résolue(s)`, time: 'Action requise' },
+                  { type: 'warning' as string, message: `${systemStats.security.unresolvedHigh} alerte(s) haute(s) non résolue(s)`, time: 'Surveillance' },
+                ] : [
+                  { type: 'success' as string, message: 'Aucune alerte de sécurité active', time: 'Système sécurisé' },
+                ]),
+                { type: 'info' as string, message: `${systemStats?.activity.recentAuditCount ?? 0} actions auditées ces 7 derniers jours`, time: 'Activité récente' },
+                { type: 'info' as string, message: `${systemStats?.activity.failedLoginCount ?? 0} tentative(s) de connexion échouée(s) cette semaine`, time: 'Sécurité' },
               ].map((alert, i) => (
                 <div key={i} className={`flex items-center gap-3 p-3 rounded-lg border ${
                   alert.type === 'warning' ? 'bg-amber-500/5 border-amber-500/20' :

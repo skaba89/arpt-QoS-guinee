@@ -1,42 +1,21 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { z } from "zod";
+import {
+  stripHtml,
+  validateApiKeySecure,
+  logPrestataireAudit,
+  checkRateLimit,
+} from "@/lib/utils-api";
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // POST /api/prestataires/scores
-// Accepts operator scores from external providers with API key auth
-// Header: X-API-Key with pattern onit-{OPERATOR_CODE}-{anystring}
+// Accepts operator scores from external providers with SECURE API key auth
+// Header: X-API-Key with pattern onit-{OPERATOR_CODE}-{secret}
+// Key is validated against stored hash in Operateur.cleApi
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-// ── API Key Validation ──
-
-const API_KEY_REGEX = /^onit-([A-Z]+)-(.+)$/;
-
-function validateApiKey(apiKey: string | null): {
-  valid: boolean;
-  operatorCode?: string;
-  error?: string;
-} {
-  if (!apiKey) {
-    return { valid: false, error: "X-API-Key header requis" };
-  }
-
-  const match = apiKey.match(API_KEY_REGEX);
-  if (!match) {
-    return {
-      valid: false,
-      error:
-        "Format de clé API invalide. Format attendu: onit-{OPERATOR_CODE}-{anystring}",
-    };
-  }
-
-  const operatorCode = match[1];
-  return { valid: true, operatorCode };
-}
-
 // ── Zod Schemas ──
-
-const stripHtml = (val: string) => val.replace(/<[^>]*>/g, "");
 
 const scoreField = z
   .number()
@@ -65,36 +44,6 @@ const prestataireScoresSchema = z.object({
     .max(100, "Maximum 100 scores par appel prestataire"),
 });
 
-// ── Audit Logging ──
-
-async function logPrestataireAudit(
-  action: string,
-  resource: string,
-  details: string,
-  operatorCode: string,
-  ipAddress?: string,
-  userAgent?: string
-) {
-  // Find a system user for audit logging (prestataire calls are not tied to a user session)
-  const adminUser = await db.user.findFirst({
-    where: { email: "admin@arpt.gn" },
-    select: { id: true },
-  });
-
-  if (adminUser) {
-    await db.auditLog.create({
-      data: {
-        userId: adminUser.id,
-        action: `PRESTATAIRE_${action}`,
-        resource,
-        details: `operatorCode=${operatorCode} | ${details}`,
-        ipAddress,
-        userAgent,
-      },
-    });
-  }
-}
-
 // ── POST Handler ──
 
 export async function POST(request: Request) {
@@ -105,8 +54,24 @@ export async function POST(request: Request) {
     "unknown";
   const userAgent = request.headers.get("user-agent") || "unknown";
 
-  // ── Validate API Key ──
-  const keyValidation = validateApiKey(apiKey);
+  // ── Rate Limiting ──
+  const rateLimitKey = `prestataire-scores:${ipAddress}`;
+  const rateLimit = checkRateLimit(rateLimitKey, 30, 60000);
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: `Limite de requêtes atteinte. Réessayez dans ${rateLimit.resetIn}s.` },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(rateLimit.resetIn),
+          "X-RateLimit-Remaining": "0",
+        },
+      }
+    );
+  }
+
+  // ── Validate API Key (SECURE: checks against DB hash) ──
+  const keyValidation = await validateApiKeySecure(apiKey);
   if (!keyValidation.valid) {
     return NextResponse.json(
       { error: keyValidation.error },
@@ -115,17 +80,18 @@ export async function POST(request: Request) {
   }
 
   const operatorCode = keyValidation.operatorCode!;
+  const operateurId = keyValidation.operatorId!;
 
   // ── Resolve Operator ──
   const operateur = await db.operateur.findFirst({
-    where: { code: operatorCode.toUpperCase() },
+    where: { id: operateurId },
   });
 
   if (!operateur) {
     await logPrestataireAudit(
       "REJECTED",
       "scores",
-      `Opérateur inconnu: ${operatorCode}`,
+      `Opérateur non trouvé: ${operatorCode}`,
       operatorCode,
       ipAddress,
       userAgent
@@ -252,6 +218,11 @@ export async function POST(request: Request) {
       results,
       errors: errors.length > 0 ? errors : undefined,
     },
-    { status }
+    {
+      status,
+      headers: {
+        "X-RateLimit-Remaining": String(rateLimit.remaining),
+      },
+    }
   );
 }

@@ -3,6 +3,20 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 
+// ── Security: Validate NEXTAUTH_SECRET at startup ──
+if (!process.env.NEXTAUTH_SECRET) {
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "CRITICAL: NEXTAUTH_SECRET environment variable is not set. " +
+      "JWT tokens can be forged. Set NEXTAUTH_SECRET before deploying."
+    );
+  }
+  console.warn(
+    "⚠️ NEXTAUTH_SECRET not set. Using development fallback. " +
+    "DO NOT deploy to production without setting NEXTAUTH_SECRET."
+  );
+}
+
 // Determine if we're in production (HTTPS) or development (HTTP)
 const isProduction = process.env.NODE_ENV === "production";
 const isSecureCookie = isProduction && process.env.NEXTAUTH_URL?.startsWith("https");
@@ -108,9 +122,9 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/",
   },
-  secret: process.env.NEXTAUTH_SECRET,
-  // CRITICAL: NEXTAUTH_SECRET MUST be set in environment variables.
-  // Do NOT add a fallback default value — that would allow JWT forgery.
+  secret: process.env.NEXTAUTH_SECRET || (process.env.NODE_ENV !== "production" ? "dev-only-secret-do-not-use-in-production" : undefined),
+  // CRITICAL: NEXTAUTH_SECRET MUST be set in environment variables for production.
+  // The dev fallback is ONLY for local development and will throw in production.
   debug: false,
   // SECURITY: Use secure cookies only in production with HTTPS
   // In development (HTTP), secure cookies won't work

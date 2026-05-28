@@ -2,76 +2,8 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { logAudit } from "@/lib/rbac";
-
-// Helper to parse CSV line handling quoted fields
-function parseCSVLine(line: string): string[] {
-  const result: string[] = [];
-  let current = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    if (char === '"') {
-      inQuotes = !inQuotes;
-    } else if (char === "," && !inQuotes) {
-      result.push(current.trim());
-      current = "";
-    } else {
-      current += char;
-    }
-  }
-  result.push(current.trim());
-  return result;
-}
-
-// Helper to resolve operator code to ID
-async function resolveOperatorId(codeOrId: string): Promise<string | null> {
-  // Try as ID first
-  const byId = await db.operateur.findUnique({ where: { id: codeOrId } });
-  if (byId) return byId.id;
-  // Try as code
-  const byCode = await db.operateur.findUnique({ where: { code: codeOrId.toUpperCase() } });
-  if (byCode) return byCode.id;
-  // Try partial name match
-  const byName = await db.operateur.findFirst({ where: { nom: { contains: codeOrId } } });
-  return byName?.id || null;
-}
-
-// Helper to resolve region code to ID
-async function resolveRegionId(codeOrId: string): Promise<string | null> {
-  // Try as ID first
-  const byId = await db.region.findUnique({ where: { id: codeOrId } });
-  if (byId) return byId.id;
-  // Try as code
-  const byCode = await db.region.findUnique({ where: { code: codeOrId.toUpperCase() } });
-  if (byCode) return byCode.id;
-  // Try partial name match
-  const byName = await db.region.findFirst({ where: { nom: { contains: codeOrId } } });
-  return byName?.id || null;
-}
-
-// Helper to find or create a campaign
-async function resolveCampaignId(campagneNom: string, operateurId: string, regionId: string): Promise<string> {
-  // Try to find existing campaign
-  const existing = await db.campagne.findFirst({
-    where: { nom: campagneNom, operateurId, regionId },
-  });
-  if (existing) return existing.id;
-
-  // Create a new campaign
-  const newCampaign = await db.campagne.create({
-    data: {
-      nom: campagneNom,
-      type: "QOS_INTERNET",
-      operateurId,
-      regionId,
-      dateDebut: new Date(),
-      statut: "EN_COURS",
-    },
-  });
-  return newCampaign.id;
-}
+import { logAudit, checkPermission } from "@/lib/rbac";
+import { parseCSVLine, toFloat, resolveOperatorId, resolveRegionId } from "@/lib/utils-api";
 
 interface ImportRow {
   campagne?: string;
@@ -104,10 +36,24 @@ interface ImportRow {
   videoBuffering?: number | string | null;
 }
 
-function toFloat(val: number | string | null | undefined): number | null {
-  if (val == null || val === "" || val === "-") return null;
-  const n = typeof val === "number" ? val : parseFloat(val);
-  return isNaN(n) ? null : n;
+// Helper to find or create a campaign
+async function resolveCampaignId(campagneNom: string, operateurId: string, regionId: string): Promise<string> {
+  const existing = await db.campagne.findFirst({
+    where: { nom: campagneNom, operateurId, regionId },
+  });
+  if (existing) return existing.id;
+
+  const newCampaign = await db.campagne.create({
+    data: {
+      nom: campagneNom,
+      type: "QOS_INTERNET",
+      operateurId,
+      regionId,
+      dateDebut: new Date(),
+      statut: "EN_COURS",
+    },
+  });
+  return newCampaign.id;
 }
 
 // POST /api/import — Bulk import measurements from CSV or JSON
@@ -121,8 +67,9 @@ export async function POST(request: Request) {
     const userRole = (session.user as Record<string, unknown>).role as string;
     const userId = (session.user as Record<string, unknown>).id as string;
 
-    const allowedRoles = ["SUPER_ADMIN", "DG", "DIRECTEUR_TECHNIQUE", "INGENIEUR_RF", "ANALYSTE_QOS"];
-    if (!allowedRoles.includes(userRole)) {
+    // Use centralized permission check instead of hardcoded allowedRoles
+    const hasPermission = await checkPermission(userRole, "campaign", "write");
+    if (!hasPermission) {
       return NextResponse.json({ error: "Permissions insuffisantes pour l'import" }, { status: 403 });
     }
 
