@@ -22,11 +22,13 @@ yarn-error.log*
 dev.log
 server.log
 
-# Environment
+# Environment — NEVER copy .env files into Docker build context
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.docker
 
 # IDE
 .vscode

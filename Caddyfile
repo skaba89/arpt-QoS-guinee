@@ -3,10 +3,54 @@
 # Observatoire National Intelligent des Télécommunications
 # République de Guinée — ARPT
 #
-# SECURITY: The XTransformPort SSRF vulnerability has been removed.
-# Only the Next.js application on port 3000 is proxied.
+# PRODUCTION: Replace :81 with your domain (e.g., onit.arpt.gn)
+# Caddy will automatically provision TLS via Let's Encrypt.
 # ═══════════════════════════════════════════════════════════
 
+# ── Production configuration (uncomment and configure) ──
+# onit.arpt.gn {
+#     reverse_proxy localhost:3000 {
+#         header_up Host {host}
+#         header_up X-Forwarded-For {remote_host}
+#         header_up X-Forwarded-Proto {scheme}
+#         header_up X-Real-IP {remote_host}
+#     }
+#
+#     # Security headers
+#     header {
+#         X-Content-Type-Options "nosniff"
+#         X-Frame-Options "SAMEORIGIN"
+#         Referrer-Policy "strict-origin-when-cross-origin"
+#         Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+#         Permissions-Policy "camera=(), microphone=(), geolocation=(self)"
+#         -Server
+#     }
+#
+#     # Rate limiting (requires caddy-ratelimit plugin)
+#     # rate_limit {
+#     #     zone api_zone 10r/s
+#     #     zone auth_zone 2r/s {
+#     #         key /api/auth
+#     #     }
+#     # }
+#
+#     # Access logging
+#     log {
+#         output file /var/log/caddy/onit-access.log {
+#             roll_size 50mb
+#             roll_keep 10
+#         }
+#         format json
+#     }
+#
+#     # Block common attack paths
+#     @blockpaths path /wp-admin* /wp-login* /xmlrpc* /.env* /admin.php*
+#     respond @blockpaths 403 {
+#         close
+#     }
+# }
+
+# ── Development/Local configuration (current) ──
 :81 {
         handle {
                 reverse_proxy localhost:3000 {
@@ -15,5 +59,12 @@
                         header_up X-Forwarded-Proto {scheme}
                         header_up X-Real-IP {remote_host}
                 }
+        }
+
+        # Basic security headers even in dev
+        header {
+                X-Content-Type-Options "nosniff"
+                X-Frame-Options "SAMEORIGIN"
+                -Server
         }
 }

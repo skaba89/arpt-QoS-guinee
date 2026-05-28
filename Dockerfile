@@ -15,6 +15,9 @@ COPY package.json package-lock.json* ./
 RUN npm ci --legacy-peer-deps && \
     npm cache clean --force
 
+# SECURITY: Add .dockerignore protection — never copy .env into build context
+# The .dockerignore file should exclude: .env, .env.local, .env.production, .git, node_modules
+
 # ───────────────────────────────────────────────────────────
 # Stage 2: Build
 # ───────────────────────────────────────────────────────────
@@ -27,9 +30,11 @@ COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Set environment for build
+# SECURITY: Use a build-time NEXTAUTH_SECRET (not the production one)
+# This is only needed for the build process, not runtime
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+ENV NEXTAUTH_SECRET=build-only-secret-not-for-runtime
 
 # Build the application (standalone output)
 RUN npm run build
@@ -40,7 +45,8 @@ RUN npm run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-RUN apk add --no-cache curl
+# SECURITY: Use wget instead of curl (smaller attack surface — already in Alpine)
+# HEALTHCHECK uses wget below
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -78,9 +84,9 @@ USER nextjs
 
 EXPOSE 3000
 
-# Health check
+# Health check (using wget which is built into Alpine — no need for curl)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
-  CMD curl -f http://localhost:3000/api/auth/session || exit 1
+  CMD wget -qO- http://localhost:3000/api/auth/session || exit 1
 
 # Startup: run migrations then start server
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
