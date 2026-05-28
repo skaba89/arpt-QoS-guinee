@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { validateApiKeySecure, stripHtml, checkRateLimit } from "@/lib/utils-api";
 
 // Safe audit logging for prestataire API (handles non-existent userId)
 async function safeAuditLog(action: string, resource: string, details?: string, resourceId?: string) {
@@ -36,18 +37,15 @@ async function safeAuditLog(action: string, resource: string, details?: string, 
 //   GET  /api/prestataire/status      — Vérifier le statut de la connexion
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-// API Keys mapping (en production, stockées en DB chiffrées)
-const PRESTATAIRE_API_KEYS: Record<string, { operateurCode: string; name: string }> = {
-  "prest-orange-2026-ak1a2b3c4d": { operateurCode: "ORANGE", name: "Orange Guinée" },
-  "prest-mtn-2026-x9y8z7w6v5": { operateurCode: "MTN", name: "MTN Guinée" },
-  "prest-celcom-2026-p1q2r3s4t5": { operateurCode: "CELCOM", name: "Celcom Guinée" },
-  "prest-intercel-2026-m6n7o8p9q0": { operateurCode: "INTERCEL", name: "Intercel Guinée" },
-};
+// SECURITY FIX: API keys are now validated against hashed values in the database
+// via validateApiKeySecure() — no more hardcoded keys in source code.
+// Operators must have a cleApi hash stored in the Operateur table.
 
-function validateApiKey(request: Request): { operateurCode: string; name: string } | null {
+async function validateApiKey(request: Request): Promise<{ operateurCode: string; operateurId: string } | null> {
   const apiKey = request.headers.get("X-API-Key");
-  if (!apiKey) return null;
-  return PRESTATAIRE_API_KEYS[apiKey] || null;
+  const result = await validateApiKeySecure(apiKey);
+  if (!result.valid) return null;
+  return { operateurCode: result.operatorCode!, operateurId: result.operatorId! };
 }
 
 // Helper to parse number or return undefined
@@ -61,7 +59,14 @@ const pf = (val: unknown): number | undefined => {
 // GET /api/prestataire/status — Vérifier la connexion API
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function GET(request: Request) {
-  const prestataire = validateApiKey(request);
+  // Rate limiting
+  const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+  const rl = checkRateLimit(`prestataire-get:${ip}`, 30, 60000);
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Limite de requêtes atteinte" }, { status: 429, headers: { "Retry-After": String(rl.resetIn) } });
+  }
+
+  const prestataire = await validateApiKey(request);
   if (!prestataire) {
     return NextResponse.json({ error: "Clé API invalide. Utilisez le header X-API-Key" }, { status: 401 });
   }
@@ -102,7 +107,14 @@ export async function GET(request: Request) {
 // Body: { action: "mesures"|"scores"|"alertes", ...data }
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function POST(request: Request) {
-  const prestataire = validateApiKey(request);
+  // Rate limiting
+  const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+  const rl = checkRateLimit(`prestataire-post:${ip}`, 30, 60000);
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Limite de requêtes atteinte" }, { status: 429, headers: { "Retry-After": String(rl.resetIn) } });
+  }
+
+  const prestataire = await validateApiKey(request);
   if (!prestataire) {
     return NextResponse.json({ error: "Clé API invalide. Utilisez le header X-API-Key" }, { status: 401 });
   }
@@ -400,13 +412,13 @@ async function handleAlertes(body: Record<string, unknown>, operateur: { id: str
     operateurId: string;
     regionId?: string;
   } = {
-    type: (body.type as string) || "DEGRADATION",
-    severity: (body.severity as string) || "MOYENNE",
-    message: body.message as string,
+    type: stripHtml((body.type as string) || "DEGRADATION"),
+    severity: stripHtml((body.severity as string) || "MOYENNE"),
+    message: stripHtml(body.message as string),
     operateurId: operateur.id,
   };
 
-  if (body.details) alertData.details = body.details as string;
+  if (body.details) alertData.details = stripHtml(body.details as string);
 
   if (body.regionCode) {
     const reg = await db.region.findFirst({ where: { code: (body.regionCode as string).toUpperCase() } });
