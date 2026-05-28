@@ -57,6 +57,9 @@ model User {
   sessions     Session[]
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+
+  @@index([roleId])
+  @@index([isActive])
 }
 
 // ═══════════════════════════════════════════
@@ -122,6 +125,10 @@ model Campagne {
   mesures     MesureQoS[]
   rapport     Rapport?
   createdAt   DateTime    @default(now())
+
+  @@index([operateurId])
+  @@index([regionId])
+  @@index([statut])
 }
 
 model MesureQoS {
@@ -159,6 +166,13 @@ model MesureQoS {
 
   typeMesure      String
   createdAt       DateTime  @default(now())
+
+  @@index([operateurId])
+  @@index([regionId])
+  @@index([campagneId])
+  @@index([timestamp])
+  @@index([operateurId, regionId])
+  @@index([operateurId, timestamp])
 }
 
 model ScoreOperateur {
@@ -175,6 +189,8 @@ model ScoreOperateur {
   createdAt       DateTime  @default(now())
 
   @@unique([operateurId, periode])
+  @@index([operateurId])
+  @@index([periode])
 }
 
 model Alerte {
@@ -190,6 +206,11 @@ model Alerte {
   isResolved  Boolean   @default(false)
   resolvedAt  DateTime?
   createdAt   DateTime  @default(now())
+
+  @@index([operateurId])
+  @@index([regionId])
+  @@index([severity])
+  @@index([isResolved])
 }
 
 model Rapport {
@@ -222,6 +243,11 @@ model AuditLog {
   ipAddress  String?
   userAgent  String?
   createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([resource])
+  @@index([createdAt])
 }
 
 model Session {
@@ -231,4 +257,7 @@ model Session {
   token     String   @unique
   expiresAt DateTime
   createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
 }
