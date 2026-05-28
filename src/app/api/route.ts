@@ -1,11 +1,23 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // GET /api — API root: health check and available endpoints
+// REQUIRES AUTHENTICATION — stats & endpoint map are not public
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function GET() {
   try {
+    // Auth check — reject unauthenticated requests
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: "Authentification requise" },
+        { status: 401 }
+      );
+    }
+
     // Quick DB health check
     let dbStatus = "ok";
     let dbLatency = 0;
@@ -17,7 +29,7 @@ export async function GET() {
       dbStatus = "error";
     }
 
-    // Count key entities
+    // Count key entities (only for authenticated users)
     const [users, operators, regions, campaigns, measures, alerts, reports] = await Promise.all([
       db.user.count().catch(() => -1),
       db.operateur.count().catch(() => -1),
