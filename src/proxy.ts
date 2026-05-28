@@ -1,10 +1,54 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // ONIT-PNG Production Proxy (Next.js 16 middleware)
-// Rate limiting, security headers, CORS, logging
+// Auth enforcement, rate limiting, security headers, CORS, logging
+//
+// SECURITY: This is the centralized auth gate.
+// Even if an API route forgets getServerSession(), the proxy blocks
+// unauthenticated access. Routes must explicitly opt-in to public access.
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// ─── Route classification ───
+
+// Routes that DON'T require authentication (NextAuth, health, static pages)
+const PUBLIC_ROUTES = [
+  '/api/auth',        // NextAuth endpoints (signin, signout, session)
+  '/api/health',      // Public health check
+  '/api/scoring',     // Public scoring data (intentionally public)
+  '/login',           // Login page
+];
+
+// API routes accessible to unauthenticated users (handlers apply RLS filtering)
+const PUBLIC_API_ROUTES = [
+  '/api/map',         // Map data (public-only scope in handler)
+  '/api/search',      // Search (public-only scope in handler)
+  '/api/reports',     // Reports (only isPublic=true returned)
+  '/api/dashboard',   // Dashboard (public-only scope in handler)
+  '/api/scores',      // Scores (public-only scope in handler)
+];
+
+// Routes requiring SUPER_ADMIN or DG role
+const ADMIN_ONLY_ROUTES = [
+  '/api/users',
+  '/api/roles',
+  '/api/admin',
+  '/api/audit-logs',
+];
+
+function isPublicRoute(pathname: string): boolean {
+  return PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
+}
+
+function isPublicApiRoute(pathname: string): boolean {
+  return PUBLIC_API_ROUTES.some((route) => pathname.startsWith(route));
+}
+
+function isAdminRoute(pathname: string): boolean {
+  return ADMIN_ONLY_ROUTES.some((route) => pathname.startsWith(route));
+}
 
 // ─── Login rate limiter (strict: 5 attempts / 15 min) ───
 const loginAttempts = new Map<string, { count: number; resetTime: number }>();
@@ -66,26 +110,85 @@ const SECURITY_HEADERS: Record<string, string> = {
     "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://unpkg.com; connect-src 'self' https://*.basemaps.cartocdn.com https://*.tile.openstreetmap.org;",
 };
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip static files and internal routes
   if (
     pathname.startsWith('/_next') ||
-    pathname.startsWith('/api/auth') ||
     pathname.startsWith('/images') ||
     pathname.includes('.')
   ) {
     return NextResponse.next();
   }
 
-  const startTime = Date.now();
-  const response = NextResponse.next();
+  // Allow public routes without auth check
+  if (isPublicRoute(pathname)) {
+    const response = NextResponse.next();
+    for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+      response.headers.set(key, value);
+    }
+    return response;
+  }
 
-  // ─── Security headers on all responses ───
+  const startTime = Date.now();
+
+  // ─── Authentication check (centralized) ───
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET || (process.env.NODE_ENV !== "production" ? "dev-only-secret-do-not-use-in-production" : undefined),
+  });
+
+  // For API routes that allow PUBLIC access (with RLS filtering in handler)
+  if (pathname.startsWith('/api/') && isPublicApiRoute(pathname)) {
+    const response = NextResponse.next();
+    for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+      response.headers.set(key, value);
+    }
+    // Pass role info to handler via custom headers
+    const role = token ? (token.role as string) || 'PUBLIC' : 'PUBLIC';
+    const userId = token ? (token.id as string) || '' : '';
+    response.headers.set('x-auth-role', role);
+    response.headers.set('x-auth-user-id', userId);
+    return response;
+  }
+
+  // All other routes require authentication
+  if (!token) {
+    // API routes get 401 JSON
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json(
+        { error: 'Authentification requise' },
+        { status: 401 }
+      );
+    }
+    // Page routes redirect to home (which shows login modal)
+    return NextResponse.redirect(new URL('/', request.url));
+  }
+
+  // ─── Role-based access: Admin-only routes ───
+  if (isAdminRoute(pathname)) {
+    const role = token.role as string;
+    if (role !== 'SUPER_ADMIN' && role !== 'DG') {
+      if (pathname.startsWith('/api/')) {
+        return NextResponse.json(
+          { error: 'Accès réservé aux administrateurs' },
+          { status: 403 }
+        );
+      }
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+  }
+
+  // ─── Security headers on all authenticated responses ───
+  const response = NextResponse.next();
   for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
     response.headers.set(key, value);
   }
+
+  // Pass auth info to downstream handlers
+  response.headers.set('x-auth-role', (token.role as string) || 'PUBLIC');
+  response.headers.set('x-auth-user-id', (token.id as string) || '');
 
   // ─── Login rate limiting (strict) ───
   if (pathname === '/api/auth/callback/credentials' && request.method === 'POST') {
