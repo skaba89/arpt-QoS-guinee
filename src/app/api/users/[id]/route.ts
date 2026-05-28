@@ -94,9 +94,11 @@ export async function PATCH(
 
     const { id } = await params;
 
+    // Read body ONCE (fix: double body read bug)
+    const rawBody = await request.json();
+
     // Prevent self-deactivation
     if (id === currentUserId) {
-      const rawBody = await request.json();
       if (rawBody.isActive === false) {
         return NextResponse.json(
           { error: "Vous ne pouvez pas désactiver votre propre compte" },
@@ -112,7 +114,6 @@ export async function PATCH(
     }
 
     // Only SUPER_ADMIN can change roles
-    const rawBody = await request.json();
     if (rawBody.roleId && !canAdmin) {
       return NextResponse.json(
         { error: "Seul un SUPER_ADMIN peut modifier les rôles" },

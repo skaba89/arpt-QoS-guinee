@@ -4,7 +4,7 @@
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 import { db } from "@/lib/db";
-import { createHash } from "crypto";
+import { createHash, randomBytes } from "crypto";
 
 // ── HTML Sanitization ──
 
@@ -92,11 +92,9 @@ export function hashApiKey(apiKey: string): string {
  * Format: onit-{OPERATOR_CODE}-{random32chars}
  */
 export function generateApiKey(operatorCode: string): string {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let secret = "";
-  for (let i = 0; i < 32; i++) {
-    secret += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
+  // Use crypto.randomBytes for cryptographically secure randomness (fix: Math.random is not secure)
+  const bytes = randomBytes(24); // 24 bytes = 32 base64 chars
+  const secret = bytes.toString("base64url").slice(0, 32);
   return `onit-${operatorCode}-${secret}`;
 }
 

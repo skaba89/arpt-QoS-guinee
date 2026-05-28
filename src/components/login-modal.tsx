@@ -23,6 +23,10 @@ const demoAccounts = [
   { email: 'tech@intercel.gn', label: 'Intercel Guinée', role: 'OPERATEUR_READONLY', color: 'bg-red-500/20 text-red-400 border-red-500/30' },
 ];
 
+// SECURITY: Only show demo accounts in development mode.
+// In production, users must know their own email addresses.
+const visibleAccounts = process.env.NODE_ENV === 'development' ? demoAccounts : [];
+
 export function LoginModal({ isOpen }: LoginModalProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -172,7 +176,8 @@ export function LoginModal({ isOpen }: LoginModalProps) {
             </button>
           </form>
 
-          {/* Quick Account Selection */}
+          {/* Quick Account Selection — Only visible in development */}
+          {visibleAccounts.length > 0 && (
           <div className="px-6 pb-6">
             <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5">
               <div className="flex items-center gap-2 mb-3">
@@ -180,7 +185,7 @@ export function LoginModal({ isOpen }: LoginModalProps) {
                 <p className="text-[11px] text-slate-400 font-medium">Connexion rapide — Sélectionnez un compte</p>
               </div>
               <div className="grid grid-cols-2 gap-1.5">
-                {demoAccounts.map((account) => (
+                {visibleAccounts.map((account) => (
                   <button
                     key={account.email}
                     type="button"
@@ -200,6 +205,7 @@ export function LoginModal({ isOpen }: LoginModalProps) {
               <p className="text-[9px] text-slate-600 mt-2 text-center">Saisissez votre mot de passe pour vous connecter</p>
             </div>
           </div>
+          )}
 
           {/* Footer */}
           <div className="px-6 pb-5 text-center">

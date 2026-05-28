@@ -48,9 +48,9 @@ export async function getAccessibleRegions(
   });
 
   if (!policy) {
-    // If no policy, return all region IDs
-    const regions = await db.region.findMany({ select: { id: true } });
-    return regions.map((r) => r.id);
+    // SECURITY: Fail-closed — no policy means NO access, not ALL access
+    // Previously returned all IDs which was a fail-open vulnerability
+    return [];
   }
 
   if (policy.scope === "all" || policy.scope === "public_only") {
@@ -96,9 +96,9 @@ export async function getAccessibleOperators(
   });
 
   if (!policy) {
-    // If no policy, return all operator IDs
-    const operators = await db.operateur.findMany({ select: { id: true } });
-    return operators.map((o) => o.id);
+    // SECURITY: Fail-closed — no policy means NO access, not ALL access
+    // Previously returned all IDs which was a fail-open vulnerability
+    return [];
   }
 
   if (policy.scope === "all" || policy.scope === "public_only") {
