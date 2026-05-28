@@ -193,25 +193,42 @@ async function main() {
   console.log('  ✅ Data Access Policies (18)');
 
   // ═══════════════════════════════════════════
-  // 3. Create Users
+  // 3. Create Users (SECURITY: unique password per user)
   // ═══════════════════════════════════════════
-  const adminHash = await bcrypt.hash('Admin@2026!', 12);
+  // Each user gets a unique password based on their role
+  // Default pattern: {RoleName}@2026! (change on first login in production)
+  const passwordMap: Record<string, string> = {
+    'admin@arpt.gn': 'Admin@2026!',
+    'dg@arpt.gn': 'Directeur@2026!',
+    'dga@arpt.gn': 'Adjoint@2026!',
+    'dir.tech@arpt.gn': 'Technique@2026!',
+    'ing.rf@arpt.gn': 'Ingenieur@2026!',
+    'analyste@arpt.gn': 'Analyste@2026!',
+    'auditeur@arpt.gn': 'Auditeur@2026!',
+    'tech@orange.gn': 'Orange@2026!',
+    'tech@mtn.gn': 'MTN@2026!',
+    'tech@celcom.gn': 'Celcom@2026!',
+    'tech@intercel.gn': 'Intercel@2026!',
+  };
+
   const users = [
-    { email: 'admin@arpt.gn', name: 'Mamadou Diallo', passwordHash: adminHash, roleId: roleMap['SUPER_ADMIN']!, organization: 'ARPT' },
-    { email: 'dg@arpt.gn', name: 'Dr. Aissatou Bah', passwordHash: adminHash, roleId: roleMap['DG']!, organization: 'ARPT' },
-    { email: 'dga@arpt.gn', name: 'Ibrahim Camara', passwordHash: adminHash, roleId: roleMap['DGA']!, organization: 'ARPT' },
-    { email: 'dir.tech@arpt.gn', name: 'Cheikh Touré', passwordHash: adminHash, roleId: roleMap['DIRECTEUR_TECHNIQUE']!, organization: 'ARPT' },
-    { email: 'ing.rf@arpt.gn', name: 'Fatoumata Binta Diallo', passwordHash: adminHash, roleId: roleMap['INGENIEUR_RF']!, organization: 'ARPT' },
-    { email: 'analyste@arpt.gn', name: 'Mamadou Saliou Touré', passwordHash: adminHash, roleId: roleMap['ANALYSTE_QOS']!, organization: 'ARPT' },
-    { email: 'auditeur@arpt.gn', name: 'Aminata Condé', passwordHash: adminHash, roleId: roleMap['AUDITEUR']!, organization: 'ARPT' },
-    { email: 'tech@orange.gn', name: 'Aboubacar Sidiki Diakité', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Orange Guinée' },
-    { email: 'tech@mtn.gn', name: 'Moussa Kaba', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'MTN Guinée' },
-    { email: 'tech@celcom.gn', name: 'Saa Marcel Loua', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Celcom Guinée' },
-    { email: 'tech@intercel.gn', name: 'Fodé Soumah', passwordHash: adminHash, roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Intercel Guinée' },
+    { email: 'admin@arpt.gn', name: 'Mamadou Diallo', roleId: roleMap['SUPER_ADMIN']!, organization: 'ARPT' },
+    { email: 'dg@arpt.gn', name: 'Dr. Aissatou Bah', roleId: roleMap['DG']!, organization: 'ARPT' },
+    { email: 'dga@arpt.gn', name: 'Ibrahim Camara', roleId: roleMap['DGA']!, organization: 'ARPT' },
+    { email: 'dir.tech@arpt.gn', name: 'Cheikh Touré', roleId: roleMap['DIRECTEUR_TECHNIQUE']!, organization: 'ARPT' },
+    { email: 'ing.rf@arpt.gn', name: 'Fatoumata Binta Diallo', roleId: roleMap['INGENIEUR_RF']!, organization: 'ARPT' },
+    { email: 'analyste@arpt.gn', name: 'Mamadou Saliou Touré', roleId: roleMap['ANALYSTE_QOS']!, organization: 'ARPT' },
+    { email: 'auditeur@arpt.gn', name: 'Aminata Condé', roleId: roleMap['AUDITEUR']!, organization: 'ARPT' },
+    { email: 'tech@orange.gn', name: 'Aboubacar Sidiki Diakité', roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Orange Guinée' },
+    { email: 'tech@mtn.gn', name: 'Moussa Kaba', roleId: roleMap['OPERATEUR_READONLY']!, organization: 'MTN Guinée' },
+    { email: 'tech@celcom.gn', name: 'Saa Marcel Loua', roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Celcom Guinée' },
+    { email: 'tech@intercel.gn', name: 'Fodé Soumah', roleId: roleMap['OPERATEUR_READONLY']!, organization: 'Intercel Guinée' },
   ];
 
   for (const u of users) {
-    await prisma.user.create({ data: u });
+    const password = passwordMap[u.email] || 'ChangeMe@2026!';
+    const passwordHash = await bcrypt.hash(password, 12);
+    await prisma.user.create({ data: { ...u, passwordHash } });
   }
   console.log('  ✅ Users (11)');
 

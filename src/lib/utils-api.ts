@@ -7,9 +7,39 @@ import { db } from "@/lib/db";
 import { createHash, randomBytes } from "crypto";
 
 // ── HTML Sanitization ──
+// Robust sanitizer that handles:
+// 1. HTML tags (including unclosed/malformed)
+// 2. HTML entities (e.g., &lt;script&gt;)
+// 3. Event handlers in attributes (onerror, onclick, etc.)
+// 4. JavaScript: URLs
+// 5. Null bytes and control characters
 
 export function stripHtml(val: string): string {
-  return val.replace(/<[^>]*>/g, "");
+  return val
+    // Remove null bytes and control characters (except common whitespace)
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "")
+    // Decode HTML entities first (so &lt;script&gt; becomes <script>)
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#x2f;/gi, "/")
+    .replace(/&#x3c;/gi, "<")
+    .replace(/&#x3e;/gi, ">")
+    .replace(/&#0*60;/gi, "<")
+    .replace(/&#0*62;/gi, ">")
+    // Now strip all HTML tags (including malformed/unclosed)
+    .replace(/<[^>]*>?/g, "")
+    // Strip any remaining event-handler-like patterns
+    .replace(/\bon\w+\s*=\s*["'][^"']*["']/gi, "")
+    // Strip javascript: URLs
+    .replace(/javascript\s*:/gi, "")
+    // Strip vbscript: URLs
+    .replace(/vbscript\s*:/gi, "")
+    // Strip data: URLs with script content
+    .replace(/data\s*:\s*text\/html/gi, "")
+    // Trim whitespace
+    .trim();
 }
 
 // ── API Key Validation (Secure: validates against DB) ──
