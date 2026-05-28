@@ -6,7 +6,7 @@ import { checkPermission, logAudit } from "@/lib/rbac";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 
-const stripHtml = (val: string) => val.replace(/<[^>]*>/g, "");
+import { checkRateLimit, stripHtml } from "@/lib/utils-api";
 
 const resetPasswordSchema = z.object({
   userId: z.string().max(50).transform(stripHtml),
@@ -24,6 +24,16 @@ const resetPasswordSchema = z.object({
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function POST(request: Request) {
   try {
+    // SECURITY: Rate limiting on password reset — 5 requests per 5 minutes per IP
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    const rl = checkRateLimit(`reset-password:${ip}`, 5, 300000);
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: `Limite de réinitialisation atteinte. Réessayez dans ${rl.resetIn}s.` },
+        { status: 429, headers: { "Retry-After": String(rl.resetIn) } }
+      );
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });

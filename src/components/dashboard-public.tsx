@@ -57,7 +57,7 @@ export function DashboardPublic() {
         }
         if (reportRes.ok) {
           const rd = await reportRes.json();
-          setReports(rd.reports?.filter((r: ReportData) => r.isPublic) || []);
+          setReports(rd.data?.filter((r: ReportData) => r.isPublic) || []);
         }
       } catch (err) {
         console.error('Public fetch error:', err);

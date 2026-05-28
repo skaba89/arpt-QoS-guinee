@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { logAudit, checkPermission } from "@/lib/rbac";
-import { parseCSVLine, toFloat, resolveOperatorId, resolveRegionId } from "@/lib/utils-api";
+import { parseCSVLine, toFloat, resolveOperatorId, resolveRegionId, checkRateLimit } from "@/lib/utils-api";
 
 interface ImportRow {
   campagne?: string;
@@ -59,6 +59,12 @@ async function resolveCampaignId(campagneNom: string, operateurId: string, regio
 // POST /api/import — Bulk import measurements from CSV or JSON
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    const rl = checkRateLimit(`import-post:${ip}`, 10, 60000);
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Limite de requêtes atteinte" }, { status: 429, headers: { "Retry-After": String(rl.resetIn) } });
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });

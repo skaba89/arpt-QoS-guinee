@@ -3,6 +3,7 @@
 import { useState, useCallback, useSyncExternalStore, useEffect } from 'react';
 import { OnitLayout } from '@/components/onit-layout';
 import { AuthProvider } from '@/components/auth-provider';
+import { ErrorBoundary } from '@/components/error-boundary';
 import { LoginModal } from '@/components/login-modal';
 import { useSession } from 'next-auth/react';
 
@@ -66,7 +67,9 @@ function AppContent() {
 export default function Home() {
   return (
     <AuthProvider>
-      <AppContent />
+      <ErrorBoundary>
+        <AppContent />
+      </ErrorBoundary>
     </AuthProvider>
   );
 }

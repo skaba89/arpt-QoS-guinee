@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { checkPermission, logAudit, getAccessibleOperators, getRLSScope } from "@/lib/rbac";
+import { checkRateLimit } from "@/lib/utils-api";
 import { z } from "zod";
 
 const stripHtml = (val: string) => val.replace(/<[^>]*>/g, "");
@@ -67,6 +68,12 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    const rl = checkRateLimit(`users-id:${ip}`, 15, 60000);
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Limite de requêtes atteinte" }, { status: 429, headers: { "Retry-After": String(rl.resetIn) } });
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
@@ -192,6 +199,12 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    const rl = checkRateLimit(`users-id:${ip}`, 15, 60000);
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Limite de requêtes atteinte" }, { status: 429, headers: { "Retry-After": String(rl.resetIn) } });
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });

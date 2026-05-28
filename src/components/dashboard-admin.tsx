@@ -109,7 +109,7 @@ export function DashboardAdmin() {
         ]);
         if (usersRes.ok) {
           const data = await usersRes.json();
-          setUsers(data.users || []);
+          setUsers(data.data || []);
         }
         if (rolesRes.ok) {
           const data = await rolesRes.json();

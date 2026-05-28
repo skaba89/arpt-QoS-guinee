@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getRLSScope, logAudit, checkPermission } from "@/lib/rbac";
 import type { RoleType } from "@prisma/client";
+import { checkRateLimit } from "@/lib/utils-api";
 import { z } from "zod";
 
 // ── Zod Schema ──
@@ -19,20 +20,41 @@ const createReportSchema = z.object({
   contenu: z.string().max(100000).optional(),
 });
 
+const updateReportSchema = z.object({
+  id: z.string().min(1, "ID rapport requis").max(50).transform(stripHtml),
+  titre: z.string().min(1).max(200).transform(stripHtml).optional(),
+  contenu: z.string().max(100000).optional().transform(v => v ? stripHtml(v) : v),
+  statut: z.enum(["PLANIFIE", "EN_COURS", "GENERE", "PUBLIE", "ARCHIVE"]).optional(),
+  isPublic: z.boolean().optional(),
+});
+
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // GET /api/reports — List reports (RLS-filtered)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     const userRole = session?.user ? ((session.user as Record<string, unknown>).role as string) : "PUBLIC";
     const scope = await getRLSScope(userRole as RoleType, "reports");
 
-    const reports = await db.rapport.findMany({
-      where: scope === "public_only" ? { isPublic: true } : {},
-      include: { campagne: true },
-      orderBy: { createdAt: "desc" },
-    });
+    // Pagination params
+    const { searchParams } = new URL(request.url);
+    const limit = Math.min(parseInt(searchParams.get("limit") || "100"), 500);
+    const offset = parseInt(searchParams.get("offset") || "0");
+
+    const where = scope === "public_only" ? { isPublic: true } : {};
+
+    const [reports, total] = await Promise.all([
+      db.rapport.findMany({
+        where,
+        include: { campagne: true },
+        orderBy: { createdAt: "desc" },
+        take: limit,
+        skip: offset,
+      }),
+      db.rapport.count({ where }),
+    ]);
+
 
     const result = reports.map((r) => {
       // Calculate size from contenu length instead of random values
@@ -65,7 +87,13 @@ export async function GET() {
       };
     });
 
-    return NextResponse.json({ reports: result });
+    return NextResponse.json({
+      data: result,
+      total,
+      limit,
+      offset,
+      hasMore: offset + limit < total,
+    });
   } catch (error) {
     console.error("Reports API error:", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
@@ -78,6 +106,12 @@ export async function GET() {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    const rl = checkRateLimit(`reports-post:${ip}`, 15, 60000);
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Limite de requêtes atteinte" }, { status: 429, headers: { "Retry-After": String(rl.resetIn) } });
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
@@ -152,6 +186,12 @@ export async function POST(request: Request) {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function PATCH(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    const rl = checkRateLimit(`reports-post:${ip}`, 15, 60000);
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Limite de requêtes atteinte" }, { status: 429, headers: { "Retry-After": String(rl.resetIn) } });
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
@@ -165,29 +205,22 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "Permissions insuffisantes" }, { status: 403 });
     }
 
-    const body = await request.json();
-    if (!body.id) {
-      return NextResponse.json({ error: "ID rapport requis" }, { status: 400 });
+    const rawBody = await request.json();
+    const parsed = updateReportSchema.safeParse(rawBody);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Données invalides", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
     }
+    const body = parsed.data;
 
-    // Build update data
+    // Build update data from validated fields (excluding id)
     const updateData: Record<string, unknown> = {};
-    if (body.statut !== undefined) {
-      const validStatuses = ["PLANIFIE", "EN_COURS", "GENERE", "PUBLIE", "ARCHIVE"];
-      if (!validStatuses.includes(body.statut)) {
-        return NextResponse.json({ error: `Statut invalide. Valeurs autorisées: ${validStatuses.join(", ")}` }, { status: 400 });
-      }
-      updateData.statut = body.statut;
-    }
-    if (body.contenu !== undefined) {
-      updateData.contenu = body.contenu;
-    }
-    if (body.isPublic !== undefined) {
-      updateData.isPublic = body.isPublic;
-    }
-    if (body.titre !== undefined) {
-      updateData.titre = body.titre;
-    }
+    if (body.titre !== undefined) updateData.titre = body.titre;
+    if (body.statut !== undefined) updateData.statut = body.statut;
+    if (body.contenu !== undefined) updateData.contenu = body.contenu;
+    if (body.isPublic !== undefined) updateData.isPublic = body.isPublic;
 
     if (Object.keys(updateData).length === 0) {
       return NextResponse.json({ error: "Aucune donnée à mettre à jour" }, { status: 400 });

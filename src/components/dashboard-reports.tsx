@@ -17,7 +17,7 @@ export function DashboardReports() {
         const res = await fetch('/api/reports');
         if (res.ok) {
           const data = await res.json();
-          setReports(data.reports || []);
+          setReports(data.data || []);
         }
       } catch (err) {
         console.error('Reports fetch error:', err);

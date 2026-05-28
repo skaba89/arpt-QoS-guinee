@@ -32,6 +32,7 @@ import { DashboardReports } from './dashboard-reports';
 import { DashboardPublic } from './dashboard-public';
 import { DashboardCyber } from './dashboard-cyber';
 import { DashboardAdmin } from './dashboard-admin';
+import { ErrorBoundary } from './error-boundary';
 import { UserMenu } from './user-menu';
 import { useSession } from 'next-auth/react';
 
@@ -331,7 +332,9 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
         </header>
 
         <main className="flex-1 p-4 lg:p-6 overflow-auto">
-          <ActiveDashboard />
+          <ErrorBoundary key={activeTab}>
+            <ActiveDashboard />
+          </ErrorBoundary>
         </main>
       </div>
     </div>

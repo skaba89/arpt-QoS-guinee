@@ -437,7 +437,7 @@ export function DataImport() {
       }
       if (campsRes.ok) {
         const data = await campsRes.json();
-        if (data.campaigns) setCampaigns(data.campaigns);
+        if (data.data) setCampaigns(data.data);
       }
     } catch (err) { console.error('Error fetching reference data:', err); }
   }, []);

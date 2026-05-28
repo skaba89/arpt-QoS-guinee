@@ -41,7 +41,7 @@ export function DashboardAudit() {
         const campRes = await fetch('/api/campaigns');
         if (campRes.ok) {
           const data = await campRes.json();
-          setCampaigns(data.campaigns || []);
+          setCampaigns(data.data || []);
         }
 
         // Fetch dashboard data to compute audit results from real measurements

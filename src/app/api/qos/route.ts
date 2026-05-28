@@ -37,6 +37,7 @@ export async function GET(request: Request) {
     const operateurFilter = searchParams.get("operateur");
     const regionFilter = searchParams.get("region");
     const type = searchParams.get("type");
+    const measureLimit = Math.min(parseInt(searchParams.get("limit") || "2000"), 5000);
 
     const userRole = (session.user as Record<string, unknown>).role as string;
     const userOrg = (session.user as Record<string, unknown>).organization as string;
@@ -66,7 +67,7 @@ export async function GET(request: Request) {
       where: measureWhere,
       include: { operateur: true, region: true },
       orderBy: { timestamp: "desc" },
-      take: 2000,
+      take: measureLimit,
     });
 
     // ── 2. Calculate aggregated metrics from DB ──
@@ -222,6 +223,7 @@ export async function GET(request: Request) {
       benchmark,
       regionalHeatmap,
       perOperator,
+      limit: measureLimit,
     });
   } catch (error) {
     console.error("QoS API error:", error);

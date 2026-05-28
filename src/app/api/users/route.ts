@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { checkPermission, logAudit } from "@/lib/rbac";
 import { z } from "zod";
+import { checkRateLimit } from "@/lib/utils-api";
 
 // ── Zod Schemas ──
 
@@ -28,8 +29,9 @@ const updateUserSchema = z.object({
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // GET /api/users — List users (admin only)
+// Query params: limit, offset
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -44,10 +46,20 @@ export async function GET() {
       return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
     }
 
-    const users = await db.user.findMany({
-      include: { role: { include: { permissions: true } } },
-      orderBy: { createdAt: "desc" },
-    });
+    // Pagination params
+    const { searchParams } = new URL(request.url);
+    const limit = Math.min(parseInt(searchParams.get("limit") || "100"), 500);
+    const offset = parseInt(searchParams.get("offset") || "0");
+
+    const [users, total] = await Promise.all([
+      db.user.findMany({
+        include: { role: { include: { permissions: true } } },
+        orderBy: { createdAt: "desc" },
+        take: limit,
+        skip: offset,
+      }),
+      db.user.count(),
+    ]);
 
     const result = users.map((u) => ({
       id: u.id,
@@ -61,7 +73,13 @@ export async function GET() {
       createdAt: u.createdAt,
     }));
 
-    return NextResponse.json({ users: result });
+    return NextResponse.json({
+      data: result,
+      total,
+      limit,
+      offset,
+      hasMore: offset + limit < total,
+    });
   } catch (error) {
     console.error("Users API error:", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
@@ -74,6 +92,12 @@ export async function GET() {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    const rl = checkRateLimit(`users-post:${ip}`, 15, 60000);
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Limite de requêtes atteinte" }, { status: 429, headers: { "Retry-After": String(rl.resetIn) } });
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
@@ -151,6 +175,12 @@ export async function POST(request: Request) {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function PATCH(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    const rl = checkRateLimit(`users-post:${ip}`, 15, 60000);
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Limite de requêtes atteinte" }, { status: 429, headers: { "Retry-After": String(rl.resetIn) } });
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });

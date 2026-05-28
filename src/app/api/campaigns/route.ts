@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getAccessibleOperators, getAccessibleRegions, getRLSScope, logAudit, checkPermission, getOperatorColor } from "@/lib/rbac";
 import { z } from "zod";
+import { checkRateLimit } from "@/lib/utils-api";
 
 // ── Zod Schema ──
 
@@ -65,11 +66,20 @@ export async function GET(request: Request) {
     if (statut) where.statut = statut;
     if (type) where.type = type;
 
-    const campaigns = await db.campagne.findMany({
-      where,
-      include: { operateur: true, region: true },
-      orderBy: { dateDebut: "desc" },
-    });
+    // Pagination params
+    const limit = Math.min(parseInt(searchParams.get("limit") || "100"), 500);
+    const offset = parseInt(searchParams.get("offset") || "0");
+
+    const [campaigns, total] = await Promise.all([
+      db.campagne.findMany({
+        where,
+        include: { operateur: true, region: true },
+        orderBy: { dateDebut: "desc" },
+        take: limit,
+        skip: offset,
+      }),
+      db.campagne.count({ where }),
+    ]);
 
     const result = campaigns.map((c) => ({
       id: c.id,
@@ -86,7 +96,13 @@ export async function GET(request: Request) {
 
     await logAudit(userId, "READ", "campaign");
 
-    return NextResponse.json({ campaigns: result });
+    return NextResponse.json({
+      data: result,
+      total,
+      limit,
+      offset,
+      hasMore: offset + limit < total,
+    });
   } catch (error) {
     console.error("Campaigns API error:", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
@@ -99,6 +115,12 @@ export async function GET(request: Request) {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    const rl = checkRateLimit(`campaigns-post:${ip}`, 30, 60000);
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Limite de requêtes atteinte" }, { status: 429, headers: { "Retry-After": String(rl.resetIn) } });
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
@@ -165,6 +187,12 @@ export async function POST(request: Request) {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export async function PATCH(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    const rl = checkRateLimit(`campaigns-post:${ip}`, 30, 60000);
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Limite de requêtes atteinte" }, { status: 429, headers: { "Retry-After": String(rl.resetIn) } });
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
