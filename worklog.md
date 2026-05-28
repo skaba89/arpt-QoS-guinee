@@ -135,3 +135,39 @@ Stage Summary:
 - Build Next.js passe sans erreur après toutes corrections
 - Rapport PDF: /home/z/my-project/download/ARPT-QoS-Audit-E2E-Rapport.pdf (67 KB, 9 pages)
 - Problèmes restants: C5 (cleApi hash), H8 (Auth.js v5), M1-M10, B2-B5
+
+---
+Task ID: phase1-4-security-hardening
+Agent: Super Z (Main)
+Task: Security hardening phases 1-4 + push Git
+
+Work Log:
+- Verified project state: Prisma valid, Next.js build passes, disk 20% used
+- Updated Git remote with new token, pushed all commits to GitHub
+- Deep audit via Explore subagent: 5 CRITICAL, 7 HIGH, 7 MEDIUM, 5 LOW issues
+- Phase 1 (CRITICAL):
+  * Merged auth enforcement into proxy.ts (Next.js 16 middleware)
+  * Added centralized auth gate: all routes require auth except whitelist
+  * Secured GET /api (was information disclosure without auth)
+  * Created public /api/health endpoint for monitoring
+  * Removed .env from git tracking (NEXTAUTH_SECRET exposed)
+- Phase 2 (HIGH):
+  * Fixed double body read bug in /api/users/[id] (caused 500 errors)
+  * Replaced Math.random() with crypto.randomBytes() in generateApiKey
+  * Changed RBAC from fail-open to fail-closed (no policy = no access)
+  * Hidden demo account emails in production login modal
+- Phase 3 (MEDIUM):
+  * Rewrote stripHtml with robust sanitizer (entities, event handlers, JS URLs, null bytes)
+  * Unique passwords per seed user (was shared Admin@2026!)
+  * Verified pagination exists on all data-heavy endpoints
+- Phase 4 (LOW):
+  * Added 22 database indexes on frequently queried fields
+  * Prisma schema validated, DB synced with prisma db push
+- Build verified after each phase
+- 4 commits pushed to GitHub
+
+Stage Summary:
+- Phase 1-4 security hardening complete
+- Critical vulnerabilities fixed: unauth API access, info disclosure, fail-open RBAC, weak crypto
+- Build passes cleanly, all 27 routes functional
+- Commits: f7f8f6f, 26d9a7d, 5e08338, 30fb83a on main
