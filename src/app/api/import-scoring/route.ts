@@ -3,21 +3,31 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { logAudit, checkPermission } from "@/lib/rbac";
-import { resolveOperatorId } from "@/lib/utils-api";
+import { resolveOperatorId, stripHtml } from "@/lib/utils-api";
+import { z } from "zod";
 
-interface ScoreRow {
-  operateur?: string;
-  operateurId?: string;
-  periode: string;
-  scoreGlobal: number;
-  scoreCouverture: number;
-  scoreQoS: number;
-  scoreQoE: number;
-  scoreConformite: number;
-  recommandation?: string;
-}
+// ── Zod validation schema for score rows ──
+const scoreRowSchema = z.object({
+  operateur: z.string().max(100).optional(),
+  operateurId: z.string().max(50).optional(),
+  periode: z.string()
+    .min(1, "Période requise")
+    .max(20)
+    .regex(/^\d{4}-Q[1-4]$/, "Format période invalide (attendu: YYYY-Q1/Q2/Q3/Q4)")
+    .transform(stripHtml),
+  scoreGlobal: z.coerce.number().min(0, "Score minimum: 0").max(100, "Score maximum: 100"),
+  scoreCouverture: z.coerce.number().min(0).max(100),
+  scoreQoS: z.coerce.number().min(0).max(100),
+  scoreQoE: z.coerce.number().min(0).max(100),
+  scoreConformite: z.coerce.number().min(0).max(100),
+  recommandation: z.string().max(2000).transform(stripHtml).optional(),
+});
 
-// POST /api/import-scoring — Import operator scores
+const scoresArraySchema = z.object({
+  scores: z.array(scoreRowSchema).min(1, "Au moins un score requis").max(1000, "Maximum 1000 scores par import"),
+});
+
+// POST /api/import-scoring — Import operator scores with Zod validation
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -36,7 +46,7 @@ export async function POST(request: Request) {
     }
 
     const contentType = request.headers.get("content-type") || "";
-    let rows: ScoreRow[] = [];
+    let rawRows: unknown[] = [];
 
     if (contentType.includes("multipart/form-data")) {
       const formData = await request.formData();
@@ -47,36 +57,61 @@ export async function POST(request: Request) {
       const text = await file.text();
       const data = JSON.parse(text);
       if (data.scores && Array.isArray(data.scores)) {
-        rows = data.scores;
+        rawRows = data.scores;
       } else if (Array.isArray(data)) {
-        rows = data;
+        rawRows = data;
       } else {
         return NextResponse.json({ error: "Format JSON invalide. Utilisez { scores: [...] }" }, { status: 400 });
       }
     } else {
       const body = await request.json();
       if (body.scores && Array.isArray(body.scores)) {
-        rows = body.scores;
+        rawRows = body.scores;
       } else if (Array.isArray(body)) {
-        rows = body;
+        rawRows = body;
       } else {
         return NextResponse.json({ error: "Format invalide. Envoyez { scores: [...] }" }, { status: 400 });
       }
     }
 
-    if (rows.length === 0) {
-      return NextResponse.json({ error: "Aucun score à importer" }, { status: 400 });
+    // ── Validate all rows with Zod ──
+    const validatedRows: z.infer<typeof scoreRowSchema>[] = [];
+    const validationErrors: { row: number; message: string }[] = [];
+
+    for (let i = 0; i < rawRows.length; i++) {
+      const parsed = scoreRowSchema.safeParse(rawRows[i]);
+      if (!parsed.success) {
+        const firstError = parsed.error.issues[0];
+        validationErrors.push({
+          row: i + 1,
+          message: firstError ? `${firstError.path.join('.')}: ${firstError.message}` : "Données invalides",
+        });
+      } else {
+        validatedRows.push(parsed.data);
+      }
     }
 
+    // If all rows failed validation, return early
+    if (validatedRows.length === 0) {
+      return NextResponse.json({
+        success: false,
+        total: rawRows.length,
+        imported: 0,
+        errors: validationErrors.length,
+        errorDetails: validationErrors.slice(0, 20),
+      }, { status: 400 });
+    }
+
+    // ── Process validated rows ──
     const results = {
       success: 0,
-      errors: 0,
-      errorDetails: [] as { row: number; message: string }[],
+      errors: validationErrors.length, // Start with validation error count
+      errorDetails: [...validationErrors] as { row: number; message: string }[],
     };
 
-    for (let i = 0; i < rows.length; i++) {
+    for (let i = 0; i < validatedRows.length; i++) {
       try {
-        const row = rows[i];
+        const row = validatedRows[i];
 
         const operateurId = row.operateurId
           ? await resolveOperatorId(row.operateurId)
@@ -87,12 +122,6 @@ export async function POST(request: Request) {
         if (!operateurId) {
           results.errors++;
           results.errorDetails.push({ row: i + 1, message: `Opérateur non trouvé: "${row.operateurId || row.operateur}"` });
-          continue;
-        }
-
-        if (!row.periode) {
-          results.errors++;
-          results.errorDetails.push({ row: i + 1, message: "Période manquante" });
           continue;
         }
 
@@ -138,13 +167,14 @@ export async function POST(request: Request) {
       userId,
       "IMPORT",
       "scores",
-      JSON.stringify({ total: rows.length, success: results.success, errors: results.errors })
+      JSON.stringify({ total: rawRows.length, validated: validatedRows.length, success: results.success, errors: results.errors })
     );
 
     return NextResponse.json({
       success: true,
       format: "scoring",
-      total: rows.length,
+      total: rawRows.length,
+      validated: validatedRows.length,
       imported: results.success,
       errors: results.errors,
       errorDetails: results.errorDetails.slice(0, 20),

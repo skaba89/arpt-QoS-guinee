@@ -21,28 +21,66 @@ export async function GET() {
       ...(scope !== "all" && scope !== "public_only" && accessibleRegIds.length > 0 ? { regionId: { in: accessibleRegIds } } : {}),
     };
 
-    // Get total measurements for calculations
-    const allMeasures = await db.mesureQoS.findMany({
-      where: rlsFilter,
-      include: { operateur: true, region: true },
-      take: 5000,
+    // ── PERFORMANCE OPTIMIZATION: Use SQL aggregation instead of loading 5000 rows ──
+
+    // 1. Total measurements count
+    const totalCount = await db.mesureQoS.count({ where: rlsFilter });
+
+    // 2. Covered measurements count (rssi > -100)
+    const coveredFilter = {
+      ...rlsFilter,
+      rssi: { gt: -100 },
+    };
+    const coveredCount = await db.mesureQoS.count({ where: coveredFilter });
+
+    // 3. Average QoE from covered measurements only
+    const coveredMeasures = await db.mesureQoS.findMany({
+      where: { ...coveredFilter, scoreQoE: { not: null } },
+      select: { scoreQoE: true },
+    });
+    const scoreQosGlobal = coveredMeasures.length > 0
+      ? Math.round(coveredMeasures.reduce((sum, m) => sum + (m.scoreQoE || 0), 0) / coveredMeasures.length)
+      : 0;
+
+    // 4. Coverage percentage
+    const couvertureNationale = totalCount > 0
+      ? Math.round((coveredCount / totalCount) * 100)
+      : 0;
+
+    // 5. Trend calculation: recent (30d) vs older — using SQL aggregation
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const recentRssi = await db.mesureQoS.aggregate({
+      _avg: { rssi: true },
+      _count: true,
+      where: { ...rlsFilter, timestamp: { gte: thirtyDaysAgo }, rssi: { not: null } },
+    });
+    const olderRssi = await db.mesureQoS.aggregate({
+      _avg: { rssi: true },
+      _count: true,
+      where: { ...rlsFilter, timestamp: { lt: thirtyDaysAgo }, rssi: { not: null } },
     });
 
-    // Calculate coverage: average of measurements with rssi > -100
-    const goodSignalMeasures = allMeasures.filter((m) => (m.rssi ?? -100) > -100);
-    const couvertureNationale = allMeasures.length > 0
-      ? Math.round((goodSignalMeasures.length / allMeasures.length) * 100)
+    const recentQoE = await db.mesureQoS.aggregate({
+      _avg: { scoreQoE: true },
+      _count: true,
+      where: { ...rlsFilter, timestamp: { gte: thirtyDaysAgo }, scoreQoE: { not: null } },
+    });
+    const olderQoE = await db.mesureQoS.aggregate({
+      _avg: { scoreQoE: true },
+      _count: true,
+      where: { ...rlsFilter, timestamp: { lt: thirtyDaysAgo }, scoreQoE: { not: null } },
+    });
+
+    const trendRssi = (recentRssi._count > 0 && olderRssi._count > 0 && recentRssi._avg.rssi && olderRssi._avg.rssi)
+      ? Math.round((recentRssi._avg.rssi - olderRssi._avg.rssi) * 10) / 10
+      : 0;
+    const trendQoE = (recentQoE._count > 0 && olderQoE._count > 0 && recentQoE._avg.scoreQoE && olderQoE._avg.scoreQoE)
+      ? Math.round((recentQoE._avg.scoreQoE - olderQoE._avg.scoreQoE) * 10) / 10
       : 0;
 
-    // Calculate average QoS score — ONLY from covered measurements (rssi > -100)
-    // In production, QoE is meaningless in dead zones; only report QoE where signal exists
-    const coveredMeasures = allMeasures.filter((m) => (m.rssi ?? -100) > -100);
-    const qosScores = coveredMeasures.map((m) => m.scoreQoE).filter((v): v is number => v !== null);
-    const scoreQosGlobal = qosScores.length > 0
-      ? Math.round(qosScores.reduce((a, b) => a + b, 0) / qosScores.length)
-      : 0;
-
-    // Count zones blanches (unresolved alerts of type ZONE_BLANCHE)
+    // 6. Zones blanches count
     const zonesBlanches = await db.alerte.count({
       where: {
         type: "ZONE_BLANCHE",
@@ -51,31 +89,7 @@ export async function GET() {
       },
     });
 
-    // Population couverte
-    const coveredRegions = await db.region.findMany({
-      where: (scope !== "all" && scope !== "public_only") ? { id: { in: accessibleRegIds } } : {},
-    });
-    const totalPop = coveredRegions.reduce((sum, r) => sum + (r.population || 0), 0);
-    const populationCouverte = totalPop > 0
-      ? Math.round(totalPop * (couvertureNationale / 100) / 1000000 * 10) / 10
-      : 0;
-
-    // Calculate KPI trends from DB: compare recent (last 30 days) vs older measurements
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    const recentMeasures = allMeasures.filter((m) => new Date(m.timestamp) >= thirtyDaysAgo);
-    const olderMeasures = allMeasures.filter((m) => new Date(m.timestamp) < thirtyDaysAgo);
-
-    const trendCalc = (field: "rssi" | "scoreQoE") => {
-      const recentVals = recentMeasures.map((m) => m[field]).filter((v): v is number => v !== null);
-      const olderVals = olderMeasures.map((m) => m[field]).filter((v): v is number => v !== null);
-      if (!recentVals.length || !olderVals.length) return 0;
-      const recentAvg = recentVals.reduce((a, b) => a + b, 0) / recentVals.length;
-      const olderAvg = olderVals.reduce((a, b) => a + b, 0) / olderVals.length;
-      return Math.round((recentAvg - olderAvg) * 10) / 10;
-    };
-
-    // Count previous period zones blanches for trend
+    // 7. Previous period zones blanches for trend
     const prevMonthDate = new Date();
     prevMonthDate.setMonth(prevMonthDate.getMonth() - 1);
     const prevZonesBlanches = await db.alerte.count({
@@ -87,7 +101,17 @@ export async function GET() {
       },
     }).catch(() => 0);
 
-    // Operator rankings with latest scores
+    // 8. Population couverte (lightweight — only region population data)
+    const coveredRegions = await db.region.findMany({
+      where: (scope !== "all" && scope !== "public_only") ? { id: { in: accessibleRegIds } } : {},
+      select: { population: true },
+    });
+    const totalPop = coveredRegions.reduce((sum, r) => sum + (r.population || 0), 0);
+    const populationCouverte = totalPop > 0
+      ? Math.round(totalPop * (couvertureNationale / 100) / 1000000 * 10) / 10
+      : 0;
+
+    // 9. Operator rankings with latest scores (unchanged — already efficient)
     const operators = await db.operateur.findMany({
       where: (scope !== "all" && scope !== "public_only") ? { id: { in: accessibleOpIds } } : {},
       include: {
@@ -110,8 +134,6 @@ export async function GET() {
           qos: latestScore?.scoreQoS || 0,
           qoe: latestScore?.scoreQoE || 0,
           conformite: latestScore?.scoreConformite || 0,
-          // TODO: Add scoreInnovation/scoreInvestissement to ScoreOperateur model
-          // Currently derived as weighted blends to avoid exact duplication
           innovation: Math.round((
             (latestScore?.scoreQoS || 0) * 0.4 +
             (latestScore?.scoreQoE || 0) * 0.3 +
@@ -127,7 +149,7 @@ export async function GET() {
       };
     });
 
-    // Recent alerts
+    // 10. Recent alerts (already limited to 10)
     const recentAlerts = await db.alerte.findMany({
       where: rlsFilter,
       include: { operateur: true, region: true },
@@ -145,22 +167,29 @@ export async function GET() {
       time: formatTimeAgo(a.createdAt),
     }));
 
-    // Region data
+    // 11. Region stats — OPTIMIZED: use aggregation per region instead of loading all measures
     const regionData = await db.region.findMany({
       where: (scope !== "all" && scope !== "public_only") ? { id: { in: accessibleRegIds } } : {},
+      select: { id: true, nom: true, code: true, population: true },
     });
 
+    // Batch: get per-region counts in parallel using aggregation
     const regionStats = await Promise.all(regionData.map(async (r) => {
-      const regMeasures = allMeasures.filter((m) => m.regionId === r.id);
-      const regGoodSignal = regMeasures.filter((m) => (m.rssi ?? -100) > -100);
-      const coverage = regMeasures.length > 0 ? Math.round((regGoodSignal.length / regMeasures.length) * 100) : 0;
-      // Only calculate QoS from covered measurements (dead zones skew the average)
-      const qosMeasures = regGoodSignal.filter((m) => m.scoreQoE !== null);
-      const qos = qosMeasures.length > 0
-        ? Math.round(qosMeasures.reduce((s, m) => s + (m.scoreQoE || 0), 0) / qosMeasures.length)
+      const regTotal = await db.mesureQoS.count({ where: { ...rlsFilter, regionId: r.id } });
+      const regCovered = await db.mesureQoS.count({ where: { ...rlsFilter, regionId: r.id, rssi: { gt: -100 } } });
+      const coverage = regTotal > 0 ? Math.round((regCovered / regTotal) * 100) : 0;
+
+      // Average QoE for this region from covered measurements
+      const regQoE = await db.mesureQoS.aggregate({
+        _avg: { scoreQoE: true },
+        _count: true,
+        where: { ...rlsFilter, regionId: r.id, rssi: { gt: -100 }, scoreQoE: { not: null } },
+      });
+      const qos = regQoE._count > 0 && regQoE._avg.scoreQoE
+        ? Math.round(regQoE._avg.scoreQoE)
         : 0;
 
-      // Count actual white zone alerts for this region
+      // White zone alerts for this region
       const regionWhiteZones = await db.alerte.count({
         where: {
           type: "ZONE_BLANCHE",
@@ -180,7 +209,7 @@ export async function GET() {
       };
     }));
 
-    // SLA compliance from DB scores
+    // 12. SLA compliance from DB scores (unchanged)
     const allScores = await db.scoreOperateur.findMany({
       where: scope !== "all" && scope !== "public_only" ? { operateurId: { in: accessibleOpIds } } : {},
       orderBy: { periode: "desc" },
@@ -206,8 +235,8 @@ export async function GET() {
 
     return NextResponse.json({
       kpis: {
-        couvertureNationale: { value: couvertureNationale, unit: "%", trend: trendCalc("rssi"), label: "Couverture Nationale" },
-        scoreQosGlobal: { value: scoreQosGlobal, unit: "/100", trend: trendCalc("scoreQoE"), label: "Score QoS Global" },
+        couvertureNationale: { value: couvertureNationale, unit: "%", trend: trendRssi, label: "Couverture Nationale" },
+        scoreQosGlobal: { value: scoreQosGlobal, unit: "/100", trend: trendQoE, label: "Score QoS Global" },
         zonesBlanches: { value: zonesBlanches, unit: "", trend: zonesBlanches > 0 ? Math.round((zonesBlanches - prevZonesBlanches) * 10) / 10 : 0, label: "Zones Blanches" },
         populationCouverte: { value: populationCouverte, unit: "M", trend: 0, label: "Population Couverte" },
       },
