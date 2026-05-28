@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>ONIT-PNG Audit E2E et Recommandations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+@page { size: 794px 1123px; margin: 0; }
+html, body { margin: 0; padding: 0; width: 794px; height: 1123px; background: #fff; font-family: 'Inter', sans-serif; }
+
+.cover {
+  position: relative; width: 794px; height: 1123px; overflow: hidden;
+}
+
+/* Layer 1 - Background */
+.bg-layer {
+  position: absolute; inset: 0; overflow: hidden; z-index: 1;
+}
+.year-watermark {
+  position: absolute; right: -20px; top: 60px;
+  font-size: 220px; font-weight: 800; color: #27728a; opacity: 0.04;
+  letter-spacing: -8px; line-height: 1; user-select: none;
+}
+
+/* Layer 2 - Structure */
+.line-layer {
+  position: absolute; inset: 0; z-index: 2;
+}
+.top-bar {
+  position: absolute; top: 0; left: 0; width: 100%; height: 12px;
+  background: #27728a;
+}
+.right-accent {
+  position: absolute; right: 0; top: 750px; width: 5px; height: 160px;
+  background: #27728a;
+}
+.bottom-line {
+  position: absolute; bottom: 100px; left: 95px; right: 95px; height: 1px;
+  background: #27728a; opacity: 0.2;
+}
+
+/* Layer 3 - Content */
+.content-layer {
+  position: absolute; inset: 0; z-index: 3;
+  padding: 0 95px;
+}
+
+.kicker {
+  position: absolute; top: 168px; left: 95px;
+  font-size: 16px; font-weight: 400; letter-spacing: 4px;
+  color: #27728a; opacity: 0.6; text-transform: uppercase;
+}
+
+.hero-title {
+  position: absolute; top: 220px; left: 95px;
+  width: 600px;
+  font-size: 52px; font-weight: 800; line-height: 1.15;
+  color: #161917;
+}
+
+.summary {
+  position: absolute; top: 500px; left: 95px;
+  width: 480px;
+  font-size: 17px; font-weight: 400; line-height: 1.7;
+  color: #7e8883;
+}
+
+.meta-block {
+  position: absolute; top: 780px; left: 95px;
+}
+.meta-org {
+  font-size: 20px; font-weight: 600; color: #161917; margin-bottom: 8px;
+}
+.meta-date {
+  font-size: 16px; font-weight: 400; color: #7e8883; line-height: 1.8;
+}
+
+.footer-block {
+  position: absolute; bottom: 50px; left: 95px; right: 95px;
+  display: flex; justify-content: space-between;
+}
+.footer-left, .footer-right {
+  font-size: 14px; color: #7e8883; opacity: 0.6;
+}
+</style>
+</head>
+<body>
+<div class="cover">
+  <!-- Layer 1: Background -->
+  <div class="bg-layer">
+    <div class="year-watermark">2026</div>
+  </div>
+
+  <!-- Layer 2: Structure -->
+  <div class="line-layer">
+    <div class="top-bar"></div>
+    <div class="right-accent"></div>
+    <div class="bottom-line"></div>
+  </div>
+
+  <!-- Layer 3: Content -->
+  <div class="content-layer">
+    <div class="kicker">RAPPORT D'AUDIT END-TO-END</div>
+    <div class="hero-title">ONIT-PNG<br/>Recommandations</div>
+    <div class="summary">
+      Audit complet de la plateforme de supervision des telecommunications de l'ARPT Guinee :
+      securite, architecture API, base de donnees, deploiement et feuille de route corrective.
+    </div>
+    <div class="meta-block">
+      <div class="meta-org">ARPT Guinee</div>
+      <div class="meta-date">
+        Observatoire National Intelligent des Telecommunications<br/>
+        Mai 2026
+      </div>
+    </div>
+    <div class="footer-block">
+      <div class="footer-left">CONFIDENTIEL</div>
+      <div class="footer-right">VERSION 1.0</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
