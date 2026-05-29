@@ -63,12 +63,12 @@ function isApiRateLimited(key: string): boolean {
 // ─── Security headers ───
 const SECURITY_HEADERS: Record<string, string> = {
   'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY',
+  'X-Frame-Options': 'ALLOWALL',
   'X-XSS-Protection': '1; mode=block',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
   'Content-Security-Policy':
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://unpkg.com; connect-src 'self' https://*.basemaps.cartocdn.com https://*.tile.openstreetmap.org;",
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://unpkg.com; connect-src 'self' https://*.basemaps.cartocdn.com https://*.tile.openstreetmap.org; frame-ancestors 'self' https://*.space.chatglm.site https://*.space-z.ai;",
 };
 
 export function proxy(request: NextRequest) {
@@ -126,9 +126,15 @@ export function proxy(request: NextRequest) {
       'http://localhost:3000',
       'https://onit.arpt.gn',
       'https://arpt-guinee.gn',
+      'https://preview-chat-1c5a029f-d700-4278-8e9f-bc42658bff19.space-z.ai',
     ];
     const origin = request.headers.get('origin');
-    const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+    // Also allow any space-z.ai or space.chatglm.site subdomain for preview
+    const isPreviewOrigin = origin && (
+      origin.endsWith('.space-z.ai') ||
+      origin.endsWith('.space.chatglm.site')
+    );
+    const allowedOrigin = (origin && (ALLOWED_ORIGINS.includes(origin) || isPreviewOrigin)) ? origin : ALLOWED_ORIGINS[0];
     response.headers.set('Access-Control-Allow-Origin', allowedOrigin);
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');

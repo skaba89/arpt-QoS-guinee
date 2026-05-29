@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 const securityHeaders = [
-  // Prevent clickjacking — only allow same-origin framing
-  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  // Allow framing from preview domains
+  { key: "X-Frame-Options", value: "ALLOWALL" },
   // Prevent MIME type sniffing
   { key: "X-Content-Type-Options", value: "nosniff" },
   // Control referrer information sent with requests
@@ -21,7 +21,7 @@ const securityHeaders = [
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https://*.tile.openstreetmap.org https://unpkg.com",
       "connect-src 'self' https://*.tile.openstreetmap.org https://unpkg.com",
-      "frame-ancestors 'self'",
+      "frame-ancestors 'self' https://*.space.chatglm.site https://*.space-z.ai",
       "base-uri 'self'",
       "form-action 'self'",
     ].join("; "),
@@ -47,6 +47,10 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: [
     "http://21.0.12.210:3000",
     "http://localhost:3000",
+    "http://21.0.4.116:3000",
+    "https://preview-chat-1c5a029f-d700-4278-8e9f-bc42658bff19.space-z.ai",
+    "https://*.space-z.ai",
+    "https://*.space.chatglm.site",
   ],
   // SECURITY: Add security headers to all responses
   async headers() {
