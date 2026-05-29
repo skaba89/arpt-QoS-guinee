@@ -78,6 +78,17 @@ interface SystemStats {
   };
 }
 
+/* ─── Tricolor Dot for Role Badges ─── */
+function TricolorDot() {
+  return (
+    <span className="inline-flex h-2.5 w-2.5 flex-shrink-0 overflow-hidden rounded-full">
+      <span className="h-full w-1/3 bg-[#CE1126]" />
+      <span className="h-full w-1/3 bg-[#FCD116]" />
+      <span className="h-full w-1/3 bg-[#009460]" />
+    </span>
+  );
+}
+
 export function DashboardAdmin() {
   const { isAuthorized, isLoading: authLoading } = useAuthGuard('SUPER_ADMIN');
   const [users, setUsers] = useState<UserData[]>([]);
@@ -249,66 +260,70 @@ export function DashboardAdmin() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* ─── Header with Section Title ─── */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-50">Administration</h1>
+          <h1 className="section-title mb-0 pb-0">ADMINISTRATION</h1>
           <p className="text-sm text-slate-400 mt-1">Gestion des utilisateurs, rôles et sécurité</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[#D4A843] to-[#B8922E] text-sm font-semibold text-[#0A0F1E] hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-[#D4A843] to-[#B8922E] text-sm font-semibold text-[#0A0F1E] hover:opacity-90 transition-opacity shadow-md shadow-[#D4A843]/10"
         >
           <UserPlus className="h-4 w-4" />
           Nouvel Utilisateur
         </button>
       </div>
 
-      {/* Stats Cards */}
+      {/* ─── Stats Cards — institutional-card with tricolor accents ─── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#D4A843]" />
+        {/* Red accent — Total Users */}
+        <div className="institutional-card relative overflow-hidden !p-5">
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#CE1126]" style={{ zIndex: 1 }} />
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-slate-400">Total Utilisateurs</p>
-              <p className="text-2xl font-bold text-slate-50 mt-1">{totalUsers}</p>
+              <p className="text-xs text-slate-400 uppercase tracking-wider">Total Utilisateurs</p>
+              <p className="text-3xl font-bold text-slate-50 mt-1">{totalUsers}</p>
             </div>
-            <div className="p-3 rounded-lg bg-[#D4A843]/10"><Users className="h-5 w-5 text-[#D4A843]" /></div>
+            <div className="p-3 rounded-lg bg-[#CE1126]/10"><Users className="h-5 w-5 text-[#CE1126]" /></div>
           </div>
         </div>
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-emerald-500" />
+        {/* Gold accent — Active Users */}
+        <div className="institutional-card relative overflow-hidden !p-5">
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#FCD116]" style={{ zIndex: 1 }} />
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-slate-400">Utilisateurs Actifs</p>
-              <p className="text-2xl font-bold text-slate-50 mt-1">{activeUsers}</p>
+              <p className="text-xs text-slate-400 uppercase tracking-wider">Utilisateurs Actifs</p>
+              <p className="text-3xl font-bold text-slate-50 mt-1">{activeUsers}</p>
             </div>
-            <div className="p-3 rounded-lg bg-emerald-500/10"><CheckCircle2 className="h-5 w-5 text-emerald-400" /></div>
+            <div className="p-3 rounded-lg bg-[#FCD116]/10"><CheckCircle2 className="h-5 w-5 text-[#FCD116]" /></div>
           </div>
         </div>
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-blue-500" />
+        {/* Green accent — Roles */}
+        <div className="institutional-card relative overflow-hidden !p-5">
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#009460]" style={{ zIndex: 1 }} />
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-slate-400">Rôles Définis</p>
-              <p className="text-2xl font-bold text-slate-50 mt-1">{roles.length}</p>
+              <p className="text-xs text-slate-400 uppercase tracking-wider">Rôles Définis</p>
+              <p className="text-3xl font-bold text-slate-50 mt-1">{roles.length}</p>
             </div>
-            <div className="p-3 rounded-lg bg-blue-500/10"><Shield className="h-5 w-5 text-blue-400" /></div>
+            <div className="p-3 rounded-lg bg-[#009460]/10"><Shield className="h-5 w-5 text-[#009460]" /></div>
           </div>
         </div>
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-purple-500" />
+        {/* Blue accent — Audit Entries */}
+        <div className="institutional-card relative overflow-hidden !p-5">
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#3B82F6]" style={{ zIndex: 1 }} />
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-slate-400">Entrées d&apos;Audit</p>
-              <p className="text-2xl font-bold text-slate-50 mt-1">{auditLogs.length}</p>
+              <p className="text-xs text-slate-400 uppercase tracking-wider">Entrées d&apos;Audit</p>
+              <p className="text-3xl font-bold text-slate-50 mt-1">{auditLogs.length}</p>
             </div>
-            <div className="p-3 rounded-lg bg-purple-500/10"><Activity className="h-5 w-5 text-purple-400" /></div>
+            <div className="p-3 rounded-lg bg-blue-500/10"><Activity className="h-5 w-5 text-blue-400" /></div>
           </div>
         </div>
       </div>
 
-      {/* Section Tabs */}
+      {/* ─── Section Tabs — with gold underline on active ─── */}
       <div className="flex gap-2">
         {[
           { id: 'users' as const, label: 'Utilisateurs', icon: Users },
@@ -318,7 +333,7 @@ export function DashboardAdmin() {
           <button
             key={tab.id}
             onClick={() => setActiveSection(tab.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all ${
+            className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-medium transition-all ${
               activeSection === tab.id
                 ? 'bg-[#D4A843]/10 text-[#D4A843] border border-[#D4A843]/20'
                 : 'text-slate-400 hover:bg-white/5 hover:text-slate-300 border border-transparent'
@@ -326,42 +341,48 @@ export function DashboardAdmin() {
           >
             <tab.icon className="h-3.5 w-3.5" />
             {tab.label}
+            {/* Gold underline on active tab */}
+            {activeSection === tab.id && (
+              <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent" />
+            )}
           </button>
         ))}
       </div>
 
-      {/* Users Section */}
+      {/* ═══════════════════════════════════════════════════════════
+          USERS SECTION
+          ═══════════════════════════════════════════════════════════ */}
       {activeSection === 'users' && (
         <div className="space-y-4">
-          {/* Search + Role Filter */}
+          {/* Search — slightly more spacious */}
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 flex-1">
-              <Search className="h-3.5 w-3.5 text-slate-500" />
+            <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/10 flex-1">
+              <Search className="h-4 w-4 text-slate-500" />
               <input
                 type="text"
-                placeholder="Rechercher un utilisateur..."
+                placeholder="Rechercher un utilisateur par nom, email ou organisation..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-transparent text-xs text-slate-300 placeholder-slate-600 focus:outline-none w-full"
+                className="bg-transparent text-sm text-slate-300 placeholder-slate-600 focus:outline-none w-full"
               />
             </div>
           </div>
 
-          {/* Users by Role Summary */}
+          {/* Users by Role Summary — with tricolor dots */}
           <div className="flex flex-wrap gap-2">
             {Object.entries(usersByRole).map(([role, count]) => (
-              <div key={role} className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/5">
-                <span className={`inline-flex items-center justify-center h-5 w-5 rounded-full text-[9px] font-bold ${roleBadgeColors[role] || roleBadgeColors.PUBLIC} border`}>
+              <div key={role} className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.06]">
+                <span className={`inline-flex items-center gap-1 justify-center h-5 w-5 rounded-full text-[9px] font-bold ${roleBadgeColors[role] || roleBadgeColors.PUBLIC} border`}>
                   {count}
                 </span>
+                <TricolorDot />
                 <span className="text-[10px] text-slate-400">{roleLabels[role] || role}</span>
               </div>
             ))}
           </div>
 
-          {/* Users Table */}
-          <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-60" />
+          {/* Users Table — institutional-card container */}
+          <div className="guinea-stripe-top institutional-card !p-0 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-xs">
                 <thead>
@@ -376,7 +397,7 @@ export function DashboardAdmin() {
                 </thead>
                 <tbody>
                   {filteredUsers.map((user) => (
-                    <tr key={user.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                    <tr key={user.id} className="border-b border-white/[0.04] hover:bg-white/[0.03] transition-colors">
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
                           <div className="h-8 w-8 rounded-full bg-[#D4A843]/10 flex items-center justify-center flex-shrink-0">
@@ -391,8 +412,8 @@ export function DashboardAdmin() {
                         </div>
                       </td>
                       <td className="py-3 px-4">
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium border ${roleBadgeColors[user.role] || roleBadgeColors.PUBLIC}`}>
-                          <Key className="h-2.5 w-2.5" />
+                        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium border ${roleBadgeColors[user.role] || roleBadgeColors.PUBLIC}`}>
+                          <TricolorDot />
                           {roleLabels[user.role] || user.role}
                         </span>
                       </td>
@@ -459,17 +480,18 @@ export function DashboardAdmin() {
         </div>
       )}
 
-      {/* Audit Log Section */}
+      {/* ═══════════════════════════════════════════════════════════
+          AUDIT LOG SECTION
+          ═══════════════════════════════════════════════════════════ */}
       {activeSection === 'audit' && (
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-60" />
-          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+        <div className="guinea-stripe-top institutional-card">
+          <h2 className="section-title mb-0 pb-0 text-sm flex items-center gap-2">
             <FileText className="h-4 w-4 text-[#D4A843]" />
-            Journal d&apos;Audit
+            JOURNAL D&apos;AUDIT
           </h2>
-          <div className="space-y-2 max-h-[500px] overflow-y-auto custom-scrollbar pr-1">
+          <div className="space-y-2 max-h-[500px] overflow-y-auto custom-scrollbar pr-1 mt-4">
             {auditLogs.map((entry) => (
-              <div key={entry.id} className="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5">
+              <div key={entry.id} className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.03] border border-white/[0.04]">
                 <div className={`mt-0.5 h-2 w-2 rounded-full flex-shrink-0 ${
                   entry.action === 'LOGIN' ? 'bg-emerald-400' :
                   entry.action === 'CREATE' ? 'bg-blue-400' :
@@ -514,17 +536,19 @@ export function DashboardAdmin() {
         </div>
       )}
 
-      {/* System Section */}
+      {/* ═══════════════════════════════════════════════════════════
+          SYSTEM SECTION
+          ═══════════════════════════════════════════════════════════ */}
       {activeSection === 'system' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#3B82F6]" />
-              <h3 className="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+            {/* Database Card */}
+            <div className="guinea-stripe-top institutional-card">
+              <h3 className="section-title mb-0 pb-0 text-sm flex items-center gap-2">
                 <Database className="h-4 w-4 text-blue-400" />
-                Base de Données
+                BASE DE DONNÉES
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-3 mt-4">
                 {[
                   { label: 'Type', value: systemStats?.database.type || 'SQLite' },
                   { label: 'Statut', value: systemStats?.database.status === 'connected' ? 'Connecté' : 'Déconnecté', ok: systemStats?.database.status === 'connected' },
@@ -535,7 +559,7 @@ export function DashboardAdmin() {
                   { label: 'Alertes actives', value: String(systemStats?.database.activeAlerts ?? '-') },
                   { label: 'Rapports', value: String(systemStats?.database.reports ?? '-') },
                 ].map((item) => (
-                  <div key={item.label} className="flex items-center justify-between p-2 rounded-lg bg-white/5">
+                  <div key={item.label} className="flex items-center justify-between p-2.5 rounded-lg bg-white/[0.03] border border-white/[0.04]">
                     <span className="text-xs text-slate-400">{item.label}</span>
                     <span className={`text-xs font-medium ${item.ok ? 'text-emerald-400' : 'text-slate-200'}`}>
                       {item.value}
@@ -545,18 +569,18 @@ export function DashboardAdmin() {
               </div>
             </div>
 
-            <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#10B981]" />
-              <h3 className="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+            {/* Roles & Permissions Card */}
+            <div className="guinea-stripe-top institutional-card">
+              <h3 className="section-title mb-0 pb-0 text-sm flex items-center gap-2">
                 <Shield className="h-4 w-4 text-emerald-400" />
-                Rôles & Permissions
+                RÔLES & PERMISSIONS
               </h3>
-              <div className="space-y-2">
+              <div className="space-y-2 mt-4">
                 {roles.map((role) => (
-                  <div key={role.id} className="flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <div key={role.id} className="flex items-center justify-between p-2.5 rounded-lg bg-white/[0.03] border border-white/[0.04]">
                     <div className="flex items-center gap-2">
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium border ${roleBadgeColors[role.name] || roleBadgeColors.PUBLIC}`}>
-                        <Key className="h-2.5 w-2.5" />
+                      <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium border ${roleBadgeColors[role.name] || roleBadgeColors.PUBLIC}`}>
+                        <TricolorDot />
                         {roleLabels[role.name] || role.name}
                       </span>
                       {role.description && (
@@ -570,13 +594,13 @@ export function DashboardAdmin() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#F59E0B]" />
-            <h3 className="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+          {/* System Alerts */}
+          <div className="guinea-stripe-top institutional-card">
+            <h3 className="section-title mb-0 pb-0 text-sm flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-amber-400" />
-              Alertes Système Récentes
+              ALERTES SYSTÈME RÉCENTES
             </h3>
-            <div className="space-y-2">
+            <div className="space-y-2 mt-4">
               {[
                 ...(systemStats?.security.activeThreats ? [
                   { type: 'warning' as string, message: `${systemStats.security.unresolvedCritical} alerte(s) critique(s) non résolue(s)`, time: 'Action requise' },
@@ -610,12 +634,13 @@ export function DashboardAdmin() {
         </div>
       )}
 
-      {/* Create User Modal */}
+      {/* ═══════════════════════════════════════════════════════════
+          CREATE USER MODAL — with guinea-stripe-top
+          ═══════════════════════════════════════════════════════════ */}
       {showCreateModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setShowCreateModal(false)}>
           <div className="relative w-full max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
-            <div className="relative overflow-hidden rounded-2xl bg-[#0D1321] border border-white/10 shadow-2xl">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D4A843] to-transparent" />
+            <div className="relative overflow-hidden rounded-2xl bg-[#0D1321] border border-white/10 shadow-2xl guinea-stripe-top">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2">

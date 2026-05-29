@@ -83,8 +83,12 @@ export function DashboardScoring() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div><h1 className="text-2xl font-bold text-slate-50">Scoring Opérateurs</h1><p className="text-sm text-slate-400 mt-1">Évaluation multi-critères et classement des opérateurs de télécommunications</p></div>
+      {/* ── Page Header ── */}
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h1 className="section-title text-2xl">Scoring Opérateurs</h1>
+          <p className="text-sm text-slate-400 -mt-1">Évaluation multi-critères et classement des opérateurs de télécommunications</p>
+        </div>
         {/* Multi-period selector */}
         {availablePeriods.length > 0 && (
           <div className="flex items-center gap-2">
@@ -103,10 +107,10 @@ export function DashboardScoring() {
         )}
       </div>
 
+      {/* ── Operator Score Cards ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         {operators.map((op) => (
-          <div key={op.id} className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20">
-            <div className="absolute top-0 left-0 right-0 h-1" style={{ backgroundColor: op.color }} />
+          <div key={op.id} className="institutional-card guinea-stripe-top transition-all duration-300 hover:bg-white/[0.06]">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="h-12 w-12 rounded-xl flex items-center justify-center font-bold text-lg" style={{ backgroundColor: `${op.color}20`, color: op.color }}>{op.name.charAt(0)}</div>
@@ -131,19 +135,28 @@ export function DashboardScoring() {
         ))}
       </div>
 
+      {/* ── Radar / Historical / Recommendations ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-60" />
-          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2"><Award className="h-4 w-4 text-[#D4A843]" />Comparaison Radar</h2>
+        <div className="institutional-card guinea-stripe-top">
+          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <Award className="h-4 w-4 text-[#D4A843]" />Comparaison Radar
+          </h2>
           <div className="flex justify-center"><RadarChart data={radarData} series={operators.map((op) => ({ name: op.name, color: op.color }))} size={240} /></div>
           <div className="flex justify-center gap-4 mt-3">
             {operators.map((op) => (<span key={op.id} className="flex items-center gap-1.5 text-[10px] text-slate-400"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: op.color }} />{op.name.split(' ')[0]}</span>))}
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent opacity-60" />
-          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2"><BarChart3 className="h-4 w-4 text-[#3B82F6]" />Évolution Historique</h2>
+        <div className="institutional-card guinea-stripe-top">
+          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <BarChart3 className="h-4 w-4 text-[#D4A843]" />Évolution Historique
+          </h2>
           <div className="space-y-4">
             {operators.map((op) => (
               <div key={op.id} className="p-3 rounded-lg bg-white/5 border border-white/5">
@@ -157,9 +170,13 @@ export function DashboardScoring() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#10B981] to-transparent opacity-60" />
-          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2"><Lightbulb className="h-4 w-4 text-[#D4A843]" />Recommandations IA</h2>
+        <div className="institutional-card guinea-stripe-top">
+          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <Lightbulb className="h-4 w-4 text-[#D4A843]" />Recommandations IA
+          </h2>
           <div className="space-y-3">
             {recommendations.map((rec, i) => (
               <div key={i} className={`p-3 rounded-lg border ${rec.priority === 'high' ? 'bg-red-500/5 border-red-500/20' : rec.priority === 'medium' ? 'bg-amber-500/5 border-amber-500/20' : 'bg-blue-500/5 border-blue-500/20'}`}>
@@ -180,12 +197,14 @@ export function DashboardScoring() {
         </div>
       </div>
 
-      {/* Multi-Period Comparison */}
+      {/* ── Multi-Period Comparison ── */}
       {periodScores && comparisonPeriods.length >= 2 && (
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#8B5CF6] to-transparent opacity-60" />
-          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-            <BarChart3 className="h-4 w-4 text-[#8B5CF6]" />
+        <div className="institutional-card guinea-stripe-top">
+          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <BarChart3 className="h-4 w-4 text-[#D4A843]" />
             Comparaison Multi-Périodes
             <span className="text-[10px] text-slate-500 font-normal normal-case">
               {comparisonPeriods[0]} vs {comparisonPeriods[1]}
@@ -195,14 +214,14 @@ export function DashboardScoring() {
             <table className="w-full text-xs">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="text-left py-2 px-3 text-slate-400 font-medium">Opérateur</th>
-                  <th className="text-center py-2 px-2 text-slate-400 font-medium">{comparisonPeriods[0]}</th>
-                  <th className="text-center py-2 px-2 text-slate-400 font-medium">{comparisonPeriods[1]}</th>
-                  <th className="text-center py-2 px-2 text-slate-400 font-medium">Variation</th>
-                  <th className="text-center py-2 px-2 text-slate-400 font-medium">Couv.</th>
-                  <th className="text-center py-2 px-2 text-slate-400 font-medium">QoS</th>
-                  <th className="text-center py-2 px-2 text-slate-400 font-medium">QoE</th>
-                  <th className="text-center py-2 px-2 text-slate-400 font-medium">Conf.</th>
+                  <th className="text-left py-2 px-3 text-[#D4A843]/80 font-semibold">Opérateur</th>
+                  <th className="text-center py-2 px-2 text-[#D4A843]/80 font-semibold">{comparisonPeriods[0]}</th>
+                  <th className="text-center py-2 px-2 text-[#D4A843]/80 font-semibold">{comparisonPeriods[1]}</th>
+                  <th className="text-center py-2 px-2 text-[#D4A843]/80 font-semibold">Variation</th>
+                  <th className="text-center py-2 px-2 text-[#D4A843]/80 font-semibold">Couv.</th>
+                  <th className="text-center py-2 px-2 text-[#D4A843]/80 font-semibold">QoS</th>
+                  <th className="text-center py-2 px-2 text-[#D4A843]/80 font-semibold">QoE</th>
+                  <th className="text-center py-2 px-2 text-[#D4A843]/80 font-semibold">Conf.</th>
                 </tr>
               </thead>
               <tbody>
@@ -241,23 +260,28 @@ export function DashboardScoring() {
         </div>
       )}
 
-      <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-60" />
-        <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Tableau Comparatif Détaillé</h2>
+      {/* ── Detailed Comparison Table ── */}
+      <div className="institutional-card guinea-stripe-top">
+        <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+          Tableau Comparatif Détaillé
+        </h2>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b border-white/10">
-                <th className="text-left py-3 px-3 text-slate-400 font-medium">Opérateur</th>
-                <th className="text-center py-3 px-2 text-slate-400 font-medium">Rang</th>
-                <th className="text-center py-3 px-2 text-slate-400 font-medium">Score</th>
-                <th className="text-center py-3 px-2 text-slate-400 font-medium">Couverture</th>
-                <th className="text-center py-3 px-2 text-slate-400 font-medium">QoS</th>
-                <th className="text-center py-3 px-2 text-slate-400 font-medium">QoE</th>
-                <th className="text-center py-3 px-2 text-slate-400 font-medium">Conformité</th>
-                <th className="text-center py-3 px-2 text-slate-400 font-medium">Innovation</th>
-                <th className="text-center py-3 px-2 text-slate-400 font-medium">Investissement</th>
-                <th className="text-center py-3 px-2 text-slate-400 font-medium">Tendance</th>
+                <th className="text-left py-3 px-3 text-[#D4A843]/80 font-semibold">Opérateur</th>
+                <th className="text-center py-3 px-2 text-[#D4A843]/80 font-semibold">Rang</th>
+                <th className="text-center py-3 px-2 text-[#D4A843]/80 font-semibold">Score</th>
+                <th className="text-center py-3 px-2 text-[#D4A843]/80 font-semibold">Couverture</th>
+                <th className="text-center py-3 px-2 text-[#D4A843]/80 font-semibold">QoS</th>
+                <th className="text-center py-3 px-2 text-[#D4A843]/80 font-semibold">QoE</th>
+                <th className="text-center py-3 px-2 text-[#D4A843]/80 font-semibold">Conformité</th>
+                <th className="text-center py-3 px-2 text-[#D4A843]/80 font-semibold">Innovation</th>
+                <th className="text-center py-3 px-2 text-[#D4A843]/80 font-semibold">Investissement</th>
+                <th className="text-center py-3 px-2 text-[#D4A843]/80 font-semibold">Tendance</th>
               </tr>
             </thead>
             <tbody>

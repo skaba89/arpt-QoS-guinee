@@ -41,7 +41,7 @@ export function MetricCard({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:shadow-lg hover:shadow-black/20 group animate-stagger-in ${className}`}
+      className={`institutional-card overflow-hidden group animate-stagger-in ${className}`}
     >
       {/* Color accent line - uses the color prop */}
       <div className="absolute top-0 left-0 right-0 h-[2px] opacity-70" style={{ background: `linear-gradient(90deg, transparent, ${color}, transparent)` }} />

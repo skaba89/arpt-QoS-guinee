@@ -137,23 +137,57 @@ export function DashboardAudit() {
 
   return (
     <div className="space-y-6">
+      {/* ── Page Header ── */}
       <div className="flex items-center justify-between">
-        <div><h1 className="text-2xl font-bold text-slate-50">Audit Terrain</h1><p className="text-sm text-slate-400 mt-1">Gestion des campagnes d&apos;audit et tests terrain</p></div>
+        <div>
+          <h1 className="section-title text-2xl">Audit Terrain</h1>
+          <p className="text-sm text-slate-400 -mt-1">Gestion des campagnes d&apos;audit et tests terrain</p>
+        </div>
       </div>
 
+      {/* ── Campaign Stats Cards ── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5"><div className="absolute top-0 left-0 right-0 h-[2px] bg-[#3B82F6]" /><div className="flex items-center gap-3"><div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20"><Clock className="h-5 w-5 text-blue-400" /></div><div><p className="text-3xl font-bold text-slate-50">{activeCampaigns}</p><p className="text-xs text-slate-400">En cours</p></div></div></div>
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5"><div className="absolute top-0 left-0 right-0 h-[2px] bg-[#10B981]" /><div className="flex items-center gap-3"><div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20"><CheckCircle2 className="h-5 w-5 text-emerald-400" /></div><div><p className="text-3xl font-bold text-slate-50">{completedCampaigns}</p><p className="text-xs text-slate-400">Complétées</p></div></div></div>
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5"><div className="absolute top-0 left-0 right-0 h-[2px] bg-[#F59E0B]" /><div className="flex items-center gap-3"><div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20"><ClipboardCheck className="h-5 w-5 text-amber-400" /></div><div><p className="text-3xl font-bold text-slate-50">{plannedCampaigns}</p><p className="text-xs text-slate-400">Planifiées</p></div></div></div>
+        <div className="institutional-card guinea-stripe-top p-5">
+          <div className="flex items-center gap-3">
+            <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20"><Clock className="h-5 w-5 text-blue-400" /></div>
+            <div><p className="text-3xl font-bold text-slate-50">{activeCampaigns}</p><p className="text-xs text-slate-400">En cours</p></div>
+          </div>
+        </div>
+        <div className="institutional-card guinea-stripe-top p-5">
+          <div className="flex items-center gap-3">
+            <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20"><CheckCircle2 className="h-5 w-5 text-emerald-400" /></div>
+            <div><p className="text-3xl font-bold text-slate-50">{completedCampaigns}</p><p className="text-xs text-slate-400">Complétées</p></div>
+          </div>
+        </div>
+        <div className="institutional-card guinea-stripe-top p-5">
+          <div className="flex items-center gap-3">
+            <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20"><ClipboardCheck className="h-5 w-5 text-amber-400" /></div>
+            <div><p className="text-3xl font-bold text-slate-50">{plannedCampaigns}</p><p className="text-xs text-slate-400">Planifiées</p></div>
+          </div>
+        </div>
       </div>
 
+      {/* ── Campaign Table + Drive Test ── */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        <div className="lg:col-span-3 relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-60" />
-          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Liste des Campagnes</h2>
+        <div className="lg:col-span-3 institutional-card guinea-stripe-top">
+          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            Liste des Campagnes
+          </h2>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
-              <thead><tr className="border-b border-white/10"><th className="text-left py-2.5 px-2 text-slate-400 font-medium">Campagne</th><th className="text-left py-2.5 px-2 text-slate-400 font-medium">Type</th><th className="text-left py-2.5 px-2 text-slate-400 font-medium">Opérateur</th><th className="text-left py-2.5 px-2 text-slate-400 font-medium">Région</th><th className="text-left py-2.5 px-2 text-slate-400 font-medium">Date</th><th className="text-left py-2.5 px-2 text-slate-400 font-medium">Statut</th></tr></thead>
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Campagne</th>
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Type</th>
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Opérateur</th>
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Région</th>
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Date</th>
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Statut</th>
+                </tr>
+              </thead>
               <tbody>
                 {campaigns.map((campaign) => (
                   <tr key={campaign.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
@@ -170,9 +204,13 @@ export function DashboardAudit() {
           </div>
         </div>
 
-        <div className="lg:col-span-2 relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent opacity-60" />
-          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2"><Car className="h-4 w-4 text-[#3B82F6]" />Drive Test - Conakry</h2>
+        <div className="lg:col-span-2 institutional-card guinea-stripe-top">
+          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <Car className="h-4 w-4 text-[#D4A843]" />Drive Test - Conakry
+          </h2>
           <div className="relative h-64 rounded-lg bg-[#0A0F1E] border border-white/5 overflow-hidden flex items-center justify-center">
             <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 300 250">
@@ -187,10 +225,15 @@ export function DashboardAudit() {
         </div>
       </div>
 
+      {/* ── Compliance + Benchmark ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#10B981] to-transparent opacity-60" />
-          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Résultats de Conformité ARPT</h2>
+        <div className="institutional-card guinea-stripe-top">
+          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            Résultats de Conformité ARPT
+          </h2>
           <div className="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
             {auditResults.map((result) => (
               <div key={result.id} className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
@@ -207,9 +250,13 @@ export function DashboardAudit() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-60" />
-          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Résumé Benchmark — Dernier Audit</h2>
+        <div className="institutional-card guinea-stripe-top">
+          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            Résumé Benchmark — Dernier Audit
+          </h2>
           <div className="space-y-4">
             {['Latence', 'Débit', 'Taux Appel', 'Jitter', 'Disponibilité'].map((metric) => {
               const opData = benchmarkData.map((d) => ({

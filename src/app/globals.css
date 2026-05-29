@@ -111,6 +111,11 @@
   --sidebar-accent-foreground: #F1F5F9;
   --sidebar-border: rgba(255, 255, 255, 0.1);
   --sidebar-ring: #D4A843;
+
+  /* ─── Guinea National Tricolor ─── */
+  --guinea-red: #CE1126;
+  --guinea-gold: #FCD116;
+  --guinea-green: #009460;
 }
 
 @layer base {
@@ -378,4 +383,314 @@ tr {
 .chart-responsive svg {
   width: 100%;
   height: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   GUINEA NATIONAL STYLING — ARPT-QoS-Guinée / ONIT-PNG
+   République de Guinée Tricolor: Rouge · Or · Vert
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Guinea Tricolor Stripe: Top ─── */
+.guinea-stripe-top {
+  position: relative;
+}
+.guinea-stripe-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    #CE1126 0%,
+    #CE1126 33.333%,
+    #FCD116 33.333%,
+    #FCD116 66.666%,
+    #009460 66.666%,
+    #009460 100%
+  );
+  z-index: 1;
+}
+
+/* ─── Guinea Tricolor Stripe: Left ─── */
+.guinea-stripe-left {
+  position: relative;
+}
+.guinea-stripe-left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(
+    to bottom,
+    #CE1126 0%,
+    #CE1126 33.333%,
+    #FCD116 33.333%,
+    #FCD116 66.666%,
+    #009460 66.666%,
+    #009460 100%
+  );
+  z-index: 1;
+}
+
+/* ─── Institutional Card ─── */
+.institutional-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+  padding: 1.75rem;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.institutional-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(206, 17, 38, 0.15),
+    rgba(252, 209, 22, 0.15),
+    rgba(0, 148, 96, 0.15)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.institutional-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(212, 168, 67, 0.08);
+}
+.institutional-card:hover::after {
+  opacity: 1;
+}
+
+/* ─── Official Seal ─── */
+.official-seal {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  border: 2px solid rgba(212, 168, 67, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: rgba(212, 168, 67, 0.08);
+  box-shadow:
+    0 0 0 3px rgba(10, 15, 30, 0.8),
+    0 0 0 4px rgba(212, 168, 67, 0.3),
+    inset 0 0 12px rgba(212, 168, 67, 0.1);
+}
+.official-seal::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(252, 209, 22, 0.2);
+}
+.official-seal::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px dashed rgba(212, 168, 67, 0.15);
+}
+
+/* ─── Section Title ─── */
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #F1F5F9;
+  padding-bottom: 0.75rem;
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 3rem;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    #CE1126,
+    #FCD116,
+    #009460
+  );
+  border-radius: 1px;
+}
+
+/* ─── Institutional Footer ─── */
+.institutional-footer {
+  position: relative;
+  border-top: 3px solid transparent;
+  border-image: linear-gradient(
+    to right,
+    #CE1126 0%,
+    #CE1126 33.333%,
+    #FCD116 33.333%,
+    #FCD116 66.666%,
+    #009460 66.666%,
+    #009460 100%
+  ) 1;
+  background: rgba(10, 15, 30, 0.95);
+  backdrop-filter: blur(20px);
+}
+
+/* ─── Government Badge ─── */
+.government-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid rgba(212, 168, 67, 0.3);
+  background: rgba(212, 168, 67, 0.1);
+  color: #D4A843;
+  box-shadow: 0 0 8px rgba(212, 168, 67, 0.08);
+}
+.government-badge::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #CE1126, #FCD116, #009460);
+  flex-shrink: 0;
+}
+
+/* ─── Institutional Animations ─── */
+
+/* Gentle opacity fade — deliberate, unhurried */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Slide up with fade — measured, authoritative */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ─── Guinea Tricolor Accent Utilities ─── */
+
+/* Subtle tricolor bottom border on any element */
+.guinea-accent-bottom {
+  position: relative;
+}
+.guinea-accent-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    rgba(206, 17, 38, 0.6),
+    rgba(252, 209, 22, 0.6),
+    rgba(0, 148, 96, 0.6)
+  );
+  opacity: 0.4;
+}
+
+/* Background with very faint tricolor gradient — for hero sections */
+.guinea-bg-subtle {
+  background: linear-gradient(
+    135deg,
+    rgba(206, 17, 38, 0.03) 0%,
+    rgba(252, 209, 22, 0.02) 50%,
+    rgba(0, 148, 96, 0.03) 100%
+  );
+}
+
+/* Institutional divider line */
+.institutional-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(212, 168, 67, 0.3),
+    rgba(206, 17, 38, 0.15),
+    rgba(252, 209, 22, 0.15),
+    rgba(0, 148, 96, 0.15),
+    rgba(212, 168, 67, 0.3),
+    transparent
+  );
+  border: none;
+  margin: 1.5rem 0;
+}
+
+/* ─── Institutional Typography ─── */
+
+.text-institutional {
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+  color: #94A3B8;
+}
+
+.text-official {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #F1F5F9;
+}
+
+.text-guinea-red {
+  color: var(--guinea-red);
+}
+
+.text-guinea-gold {
+  color: var(--guinea-gold);
+}
+
+.text-guinea-green {
+  color: var(--guinea-green);
+}
+
+.bg-guinea-red {
+  background-color: var(--guinea-red);
+}
+
+.bg-guinea-gold {
+  background-color: var(--guinea-gold);
+}
+
+.bg-guinea-green {
+  background-color: var(--guinea-green);
 }

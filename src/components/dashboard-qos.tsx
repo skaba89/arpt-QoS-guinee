@@ -102,10 +102,11 @@ export function DashboardQoS() {
 
   return (
     <div className="space-y-6">
+      {/* ── Page Header ── */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-50">Monitoring QoS</h1>
-          <p className="text-sm text-slate-400 mt-1">Supervision technique de la qualité de service en temps réel</p>
+          <h1 className="section-title text-2xl">Monitoring QoS</h1>
+          <p className="text-sm text-slate-400 -mt-1">Supervision technique de la qualité de service en temps réel</p>
         </div>
         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
           <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -113,7 +114,8 @@ export function DashboardQoS() {
         </div>
       </div>
 
-      <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-4">
+      {/* ── Filter Bar ── */}
+      <div className="institutional-card guinea-stripe-top p-4">
         <div className="flex items-center gap-2 flex-wrap">
           <Filter className="h-4 w-4 text-[#D4A843] mr-1" />
           <div className="flex items-center gap-1">
@@ -144,6 +146,7 @@ export function DashboardQoS() {
         </div>
       </div>
 
+      {/* ── Metric Cards ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard value={metrics.latency.value} suffix={metrics.latency.unit} label={metrics.latency.label} trend={metrics.latency.trend} trendLabel="ms" icon={Clock} />
         <MetricCard value={metrics.debit.value} suffix={metrics.debit.unit} label={metrics.debit.label} trend={metrics.debit.trend} trendLabel="Mbps" icon={Download} />
@@ -151,11 +154,16 @@ export function DashboardQoS() {
         <MetricCard value={metrics.jitter.value} suffix={metrics.jitter.unit} label={metrics.jitter.label} trend={metrics.jitter.trend} trendLabel="ms" icon={Radio} />
       </div>
 
+      {/* ── Charts Row ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-60" />
+        <div className="institutional-card guinea-stripe-top">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">Tendance QoS</h2>
+            <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest flex items-center gap-2">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              Tendance QoS
+            </h2>
             <div className="flex items-center gap-3 text-[10px]">
               {ops.map((op) => (<span key={op.id} className="flex items-center gap-1"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: op.color }} />{op.name.split(' ')[0]}</span>))}
             </div>
@@ -165,9 +173,13 @@ export function DashboardQoS() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent opacity-60" />
-          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Benchmark Opérateurs</h2>
+        <div className="institutional-card guinea-stripe-top">
+          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            Benchmark Opérateurs
+          </h2>
           <div className="space-y-4">
             {benchmark.map((item, i) => (
               <div key={i}>
@@ -188,9 +200,14 @@ export function DashboardQoS() {
         </div>
       </div>
 
-      <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#10B981] to-transparent opacity-60" />
-        <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Heatmap QoS Régional</h2>
+      {/* ── Heatmap ── */}
+      <div className="institutional-card guinea-stripe-top">
+        <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+          Heatmap QoS Régional
+        </h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {regionalHeatmap.map((region) => {
             const scoreColor = region.qos >= 80 ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-300' : region.qos >= 60 ? 'bg-blue-500/20 border-blue-500/30 text-blue-300' : region.qos >= 50 ? 'bg-amber-500/20 border-amber-500/30 text-amber-300' : 'bg-red-500/20 border-red-500/30 text-red-300';
@@ -199,10 +216,10 @@ export function DashboardQoS() {
         </div>
       </div>
 
+      {/* ── Per-Operator Cards ── */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {perOperator.map((op) => (
-          <div key={op.id} className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5 transition-all hover:bg-white/[0.08]">
-            <div className="absolute top-0 left-0 h-full w-1" style={{ backgroundColor: operatorColors[op.code] || op.color }} />
+          <div key={op.id} className="institutional-card guinea-stripe-left transition-all duration-300 hover:bg-white/[0.06]">
             <div className="flex items-center gap-2 mb-4">
               <div className="h-8 w-8 rounded-lg flex items-center justify-center font-bold text-xs" style={{ backgroundColor: `${operatorColors[op.code] || op.color}20`, color: operatorColors[op.code] || op.color }}>{op.name.charAt(0)}</div>
               <div><p className="text-sm font-semibold text-slate-100">{op.name}</p><p className="text-[10px] text-slate-500">Score Global: {op.score}/100</p></div>

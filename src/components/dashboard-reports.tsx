@@ -168,22 +168,26 @@ export function DashboardReports() {
 
   return (
     <div className="space-y-6">
+      {/* ── Page Header ── */}
       <div className="flex items-center justify-between">
-        <div><h1 className="text-2xl font-bold text-slate-50">Rapports</h1><p className="text-sm text-slate-400 mt-1">Génération, planification et gestion des rapports</p></div>
+        <div>
+          <h1 className="section-title text-2xl">Rapports</h1>
+          <p className="text-sm text-slate-400 -mt-1">Génération, planification et gestion des rapports</p>
+        </div>
       </div>
 
+      {/* ── Template Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {reportTemplates.map((template) => {
-          const icons: Record<string, React.ReactNode> = { FileText: <FileText className="h-5 w-5 text-[#D4A843]" />, BarChart3: <BarChart3 className="h-5 w-5 text-[#3B82F6]" />, Award: <Award className="h-5 w-5 text-[#10B981]" />, Globe: <Globe className="h-5 w-5 text-[#8B5CF6]" />, FileSpreadsheet: <FileSpreadsheet className="h-5 w-5 text-[#F59E0B]" />, Shield: <Shield className="h-5 w-5 text-[#EF4444]" /> };
+          const icons: Record<string, React.ReactNode> = { FileText: <FileText className="h-5 w-5 text-[#D4A843]" />, BarChart3: <BarChart3 className="h-5 w-5 text-[#D4A843]" />, Award: <Award className="h-5 w-5 text-[#D4A843]" />, Globe: <Globe className="h-5 w-5 text-[#D4A843]" />, FileSpreadsheet: <FileSpreadsheet className="h-5 w-5 text-[#D4A843]" />, Shield: <Shield className="h-5 w-5 text-[#D4A843]" /> };
           const templateId = `template-${template.name.replace(/\s+/g, '-').toLowerCase()}`;
           const isGenerating = generating === templateId;
           return (
             <div
               key={template.name}
               onClick={() => !generating && handleTemplateGenerate(template.name, template.type)}
-              className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-4 text-center transition-all hover:bg-white/[0.08] hover:border-white/20 cursor-pointer group"
+              className="institutional-card guinea-stripe-top text-center cursor-pointer group p-4"
             >
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-0 group-hover:opacity-60 transition-opacity" />
               <div className="p-2 rounded-lg bg-white/5 inline-flex mb-2">
                 {isGenerating ? <Loader2 className="h-5 w-5 text-[#D4A843] animate-spin" /> : (icons[template.icon] || <FileText className="h-5 w-5 text-[#D4A843]" />)}
               </div>
@@ -194,16 +198,31 @@ export function DashboardReports() {
         })}
       </div>
 
+      {/* ── Reports Table + Sidebar ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-60" />
+        <div className="lg:col-span-2 institutional-card guinea-stripe-top">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">Rapports Récents</h2>
+            <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest flex items-center gap-2">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              Rapports Récents
+            </h2>
             <span className="text-xs text-slate-500">{reports.length} rapports</span>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
-              <thead><tr className="border-b border-white/10"><th className="text-left py-2.5 px-2 text-slate-400 font-medium">Titre</th><th className="text-left py-2.5 px-2 text-slate-400 font-medium">Type</th><th className="text-left py-2.5 px-2 text-slate-400 font-medium">Date</th><th className="text-left py-2.5 px-2 text-slate-400 font-medium">Format</th><th className="text-left py-2.5 px-2 text-slate-400 font-medium">Taille</th><th className="text-left py-2.5 px-2 text-slate-400 font-medium">Statut</th><th className="text-left py-2.5 px-2 text-slate-400 font-medium"></th></tr></thead>
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Titre</th>
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Type</th>
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Date</th>
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Format</th>
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Taille</th>
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Statut</th>
+                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold"></th>
+                </tr>
+              </thead>
               <tbody>
                 {reports.map((report) => (
                   <tr key={report.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
@@ -230,9 +249,14 @@ export function DashboardReports() {
         </div>
 
         <div className="space-y-4">
-          <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#D4A843]" />
-            <h3 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2"><FileText className="h-4 w-4 text-[#D4A843]" />Génération Rapide</h3>
+          {/* ── Quick Generation ── */}
+          <div className="institutional-card guinea-stripe-top p-5">
+            <h3 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-3 flex items-center gap-2">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              <FileText className="h-4 w-4 text-[#D4A843]" />Génération Rapide
+            </h3>
             <div className="space-y-2">
               {[{ name: 'Rapport QoS Trimestriel', id: 'qos-tri' }, { name: 'Score Card Mensuel', id: 'score-monthly' }, { name: 'Benchmark Opérateurs', id: 'benchmark' }, { name: 'Export Données Brutes', id: 'raw-export' }].map((item) => (
                 <button key={item.id} onClick={() => handleGenerate(item.id, item.name)} disabled={generating !== null} className="w-full flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left disabled:opacity-50">
@@ -243,8 +267,14 @@ export function DashboardReports() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-            <h3 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2"><Calendar className="h-4 w-4 text-[#3B82F6]" />Planification</h3>
+          {/* ── Scheduling ── */}
+          <div className="institutional-card guinea-stripe-top p-5">
+            <h3 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-3 flex items-center gap-2">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              <Calendar className="h-4 w-4 text-[#D4A843]" />Planification
+            </h3>
             <div className="space-y-3 text-xs">
               {[{ label: 'Rapport QoS Trimestriel', schedule: 'Tous les trimestres', next: '30 Juin 2026' }, { label: 'Score Card Mensuel', schedule: '1er de chaque mois', next: '1er Mai 2026' }, { label: 'Rapport Public Annuel', schedule: 'Annuel', next: '31 Déc 2026' }].map((item) => (
                 <div key={item.label} className="p-2.5 rounded-lg bg-white/5 border border-white/5">

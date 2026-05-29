@@ -107,10 +107,11 @@ export function DashboardSIG() {
 
   return (
     <div className="space-y-6">
+      {/* ── Page Header ── */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-50">Cartographie SIG</h1>
-          <p className="text-sm text-slate-400 mt-1">Système d&apos;Information Géographique - Visualisation spatiale des données télécom</p>
+          <h1 className="section-title text-2xl">Cartographie SIG</h1>
+          <p className="text-sm text-slate-400 -mt-1">Système d&apos;Information Géographique - Visualisation spatiale des données télécom</p>
         </div>
 
         {/* Découpage Toggle */}
@@ -153,7 +154,7 @@ export function DashboardSIG() {
 
       {/* CNT Info Banner */}
       {showCNTInfo && useCNTDecoupage && (
-        <div className="rounded-xl bg-[#D4A843]/5 border border-[#D4A843]/20 p-4">
+        <div className="institutional-card guinea-stripe-top p-4 border-[#D4A843]/20">
           <div className="flex items-start gap-3">
             <div className="mt-0.5 h-5 w-5 rounded-full bg-[#D4A843]/20 flex items-center justify-center flex-shrink-0">
               <GitBranch className="h-3 w-3 text-[#D4A843]" />
@@ -178,6 +179,7 @@ export function DashboardSIG() {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3 space-y-4">
+          {/* ── Operator Filter Buttons ── */}
           <div className="flex items-center gap-2 flex-wrap">
             <Filter className="h-4 w-4 text-[#D4A843] mr-1" />
             <span className="text-xs text-slate-500">Opérateur:</span>
@@ -188,9 +190,9 @@ export function DashboardSIG() {
             ))}
           </div>
 
-          <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-5">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-60" />
-            <div className="absolute top-4 left-4 z-10 flex items-center gap-2 text-[10px]">
+          {/* ── Map Container ── */}
+          <div className="institutional-card guinea-stripe-top p-5">
+            <div className="absolute top-6 left-6 z-10 flex items-center gap-2 text-[10px]">
               <div className="px-2 py-1 rounded bg-[#0A0F1E]/80 backdrop-blur-sm border border-white/10 flex items-center gap-1">
                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="text-slate-300">Données en direct</span>
@@ -223,12 +225,12 @@ export function DashboardSIG() {
             )}
           </div>
 
-          {/* Region cards grid */}
+          {/* ── Region Cards Grid ── */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {displayRegions.map((region) => {
               const isSelected = selectedRegion === region.nom;
               return (
-                <button key={region.code} onClick={() => setSelectedRegion(isSelected ? null : region.nom)} className={`rounded-lg border p-3 text-left transition-all ${isSelected ? 'bg-[#D4A843]/10 border-[#D4A843]/30' : 'bg-white/5 border-white/10 hover:bg-white/[0.08]'}`}>
+                <button key={region.code} onClick={() => setSelectedRegion(isSelected ? null : region.nom)} className={`rounded-lg border p-3 text-left transition-all ${isSelected ? 'guinea-stripe-left bg-[#D4A843]/10 border-[#D4A843]/30' : 'bg-white/5 border-white/10 hover:bg-white/[0.08]'}`}>
                   <div className="flex items-center justify-between">
                     <p className="text-xs font-semibold text-slate-200">{region.nom}</p>
                     {useCNTDecoupage && region.code !== 'CON' && (
@@ -246,10 +248,14 @@ export function DashboardSIG() {
         </div>
 
         <div className="space-y-4">
-          {/* Layer controls */}
-          <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-4">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4A843] to-transparent opacity-60" />
-            <h3 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2"><Layers className="h-4 w-4 text-[#D4A843]" />Couches</h3>
+          {/* ── Layer Controls ── */}
+          <div className="institutional-card guinea-stripe-top p-4">
+            <h3 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-3 flex items-center gap-2">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              <Layers className="h-4 w-4 text-[#D4A843]" />Couches
+            </h3>
             <div className="space-y-2">
               {[
                 { key: 'coverage' as const, label: 'Couverture Mobile', icon: Wifi, color: '#10B981' },
@@ -268,9 +274,14 @@ export function DashboardSIG() {
             </div>
           </div>
 
-          {/* Legend */}
-          <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-4">
-            <h3 className="text-sm font-semibold text-slate-300 mb-3">Légende</h3>
+          {/* ── Legend ── */}
+          <div className="institutional-card p-4">
+            <h3 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-3 flex items-center gap-2">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              Légende
+            </h3>
             <div className="space-y-2">
               {[{ label: 'Excellente (≥80%)', color: '#10B981' }, { label: 'Bonne (65-79%)', color: '#3B82F6' }, { label: 'Moyenne (50-64%)', color: '#F59E0B' }, { label: 'Faible (<50%)', color: '#EF4444' }].map((item) => (
                 <div key={item.label} className="flex items-center gap-2"><span className="h-3 w-3 rounded-sm" style={{ backgroundColor: item.color }} /><span className="text-xs text-slate-400">{item.label}</span></div>
@@ -287,10 +298,9 @@ export function DashboardSIG() {
             </div>
           </div>
 
-          {/* Region detail card */}
+          {/* ── Region Detail Card ── */}
           {regionData && (
-            <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-[#D4A843]/30 p-4">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#D4A843]" />
+            <div className="institutional-card guinea-stripe-left p-4 border-[#D4A843]/30">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-[#D4A843]">{regionData.nom}</h3>
                 <button onClick={() => setSelectedRegion(null)} className="text-xs text-slate-500 hover:text-slate-300">✕</button>
@@ -330,8 +340,7 @@ export function DashboardSIG() {
 
           {/* CNT region selected - show extra info */}
           {useCNTDecoupage && selectedRegion && !regionData && (
-            <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-[#D4A843]/30 p-4">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#D4A843]" />
+            <div className="institutional-card guinea-stripe-left p-4 border-[#D4A843]/30">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-[#D4A843]">{selectedRegion}</h3>
                 <button onClick={() => setSelectedRegion(null)} className="text-xs text-slate-500 hover:text-slate-300">✕</button>
@@ -369,9 +378,14 @@ export function DashboardSIG() {
             </div>
           )}
 
-          {/* Quick stats */}
-          <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 p-4">
-            <h3 className="text-sm font-semibold text-slate-300 mb-3">Statistiques Rapides</h3>
+          {/* ── Quick Stats ── */}
+          <div className="institutional-card p-4">
+            <h3 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-3 flex items-center gap-2">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              Statistiques Rapides
+            </h3>
             <div className="space-y-2 text-xs">
               <div className="flex justify-between">
                 <span className="text-slate-400">Régions supervisées</span>
