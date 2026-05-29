@@ -39,7 +39,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   serverExternalPackages: ["bcryptjs"],
   // Enable standalone output for production - much less memory
-  output: "standalone",
+  // TEMPORARILY DISABLED for dev server stability
+  // output: "standalone",
   // Remove X-Powered-By header to avoid framework fingerprinting
   poweredByHeader: false,
   // Allow cross-origin requests in dev mode (for preview iframe and external IP access)
