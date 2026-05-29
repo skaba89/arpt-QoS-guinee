@@ -70,8 +70,9 @@ export function DashboardDG() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-xs text-slate-500 animate-pulse">Chargement du tableau de bord...</div>
+      <div className="flex flex-col items-center justify-center h-64 gap-3">
+        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+        <div className="text-xs text-slate-400">Chargement du tableau de bord...</div>
       </div>
     );
   }
@@ -112,10 +113,10 @@ export function DashboardDG() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard value={kpiData.couvertureNationale.value} suffix={kpiData.couvertureNationale.unit} label={kpiData.couvertureNationale.label} trend={kpiData.couvertureNationale.trend} trendLabel="%" icon={Signal} />
-        <MetricCard value={kpiData.scoreQosGlobal.value} suffix={kpiData.scoreQosGlobal.unit} label={kpiData.scoreQosGlobal.label} trend={kpiData.scoreQosGlobal.trend} trendLabel="" icon={Activity} />
-        <MetricCard value={kpiData.zonesBlanches.value} label={kpiData.zonesBlanches.label} trend={kpiData.zonesBlanches.trend} trendLabel="" icon={Wifi} />
-        <MetricCard value={kpiData.populationCouverte.value} suffix={kpiData.populationCouverte.unit} label={kpiData.populationCouverte.label} trend={kpiData.populationCouverte.trend} trendLabel="K" icon={Users} />
+        <MetricCard value={kpiData.couvertureNationale.value} suffix={kpiData.couvertureNationale.unit} label={kpiData.couvertureNationale.label} trend={kpiData.couvertureNationale.trend} trendLabel="%" icon={Signal} color="#10B981" />
+        <MetricCard value={kpiData.scoreQosGlobal.value} suffix={kpiData.scoreQosGlobal.unit} label={kpiData.scoreQosGlobal.label} trend={kpiData.scoreQosGlobal.trend} trendLabel="" icon={Activity} color="#3B82F6" />
+        <MetricCard value={kpiData.zonesBlanches.value} label={kpiData.zonesBlanches.label} trend={kpiData.zonesBlanches.trend} trendLabel="" icon={Wifi} color="#EF4444" />
+        <MetricCard value={kpiData.populationCouverte.value} suffix={kpiData.populationCouverte.unit} label={kpiData.populationCouverte.label} trend={kpiData.populationCouverte.trend} trendLabel="K" icon={Users} color="#D4A843" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
