@@ -592,9 +592,9 @@ export function DataImport() {
           </span>
         </div>
         <div className="grid grid-cols-3 gap-3 text-xs">
-          <div className="bg-white/5 rounded-lg p-2 text-center">
-            <div className="text-slate-400">Total</div>
-            <div className="text-slate-200 font-bold text-lg">{importResult.total}</div>
+          <div className="bg-muted rounded-lg p-2 text-center">
+            <div className="text-muted-foreground">Total</div>
+            <div className="text-foreground font-bold text-lg">{importResult.total}</div>
           </div>
           <div className="bg-emerald-500/10 rounded-lg p-2 text-center">
             <div className="text-emerald-400">Importés</div>
@@ -622,7 +622,7 @@ export function DataImport() {
   if (authLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -631,16 +631,16 @@ export function DataImport() {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <Lock className="h-12 w-12 text-red-400" />
-        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
-        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+        <h3 className="text-lg font-semibold text-foreground">Accès non autorisé</h3>
+        <p className="text-muted-foreground text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
       </div>
     );
   }
 
   // ─── Common Styles ────────────────────────────────────────────
-  const inputClass = "w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#D4A843]/50 focus:ring-1 focus:ring-[#D4A843]/20";
-  const labelClass = "text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-1";
-  const selectClass = "w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-[#D4A843]/50 appearance-none";
+  const inputClass = "w-full px-3 py-2 bg-muted border border-border rounded-lg text-xs text-foreground placeholder-slate-600 focus:outline-none focus:border-[#D4A843]/50 focus:ring-1 focus:ring-[#D4A843]/20";
+  const labelClass = "text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1";
+  const selectClass = "w-full px-3 py-2 bg-muted border border-border rounded-lg text-xs text-foreground focus:outline-none focus:border-[#D4A843]/50 appearance-none";
 
   // ─── OVERVIEW TAB ──────────────────────────────────────────────
   if (activeTab === 'overview') {
@@ -648,11 +648,11 @@ export function DataImport() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-slate-50">Sources de Données & Exemples</h2>
-            <p className="text-xs text-slate-400 mt-1">Cliquez sur chaque source pour voir le format détaillé, les exemples concrets, et tester l&apos;import</p>
+            <h2 className="text-xl font-bold text-foreground">Sources de Données & Exemples</h2>
+            <p className="text-xs text-muted-foreground mt-1">Cliquez sur chaque source pour voir le format détaillé, les exemples concrets, et tester l&apos;import</p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] bg-[#D4A843]/10 text-[#D4A843] border border-[#D4A843]/20">
+            <span className="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] bg-primary/10 text-primary border border-[#D4A843]/20">
               <Database className="h-3 w-3" /> {dataSources.length} sources
             </span>
           </div>
@@ -667,47 +667,47 @@ export function DataImport() {
             const isExpanded = expandedSource === source.id;
             const isFullExample = showFullExample === source.id;
             return (
-              <div key={source.id} className="rounded-xl border border-white/10 overflow-hidden bg-white/[0.02]">
+              <div key={source.id} className="rounded-xl border border-border overflow-hidden bg-white/[0.02]">
                 <button
                   onClick={() => { setExpandedSource(isExpanded ? null : source.id); setShowFullExample(null); }}
-                  className="w-full flex items-center gap-4 p-4 hover:bg-white/5 transition-colors"
+                  className="w-full flex items-center gap-4 p-4 hover:bg-muted transition-colors"
                 >
                   <div className="h-10 w-10 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${source.color}20` }}>
                     <Icon className="h-5 w-5" style={{ color: source.color }} />
                   </div>
                   <div className="flex-1 text-left min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-semibold text-slate-200">{source.title}</span>
-                      <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-white/10 text-slate-400">{source.subtitle}</span>
+                      <span className="text-sm font-semibold text-foreground">{source.title}</span>
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-accent text-muted-foreground">{source.subtitle}</span>
                       <span className="px-1.5 py-0.5 rounded text-[9px] font-medium border" style={{ borderColor: `${source.color}40`, color: source.color, backgroundColor: `${source.color}10` }}>{source.format}</span>
                     </div>
-                    <p className="text-[11px] text-slate-500 mt-0.5 truncate">{source.description}</p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5 truncate">{source.description}</p>
                   </div>
-                  {isExpanded ? <ChevronDown className="h-4 w-4 text-slate-400 shrink-0" /> : <ChevronRight className="h-4 w-4 text-slate-400 shrink-0" />}
+                  {isExpanded ? <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" /> : <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />}
                 </button>
 
                 {isExpanded && (
-                  <div className="px-4 pb-4 space-y-4 border-t border-white/5 pt-4">
+                  <div className="px-4 pb-4 space-y-4 border-t border-border pt-4">
                     {/* Field descriptions table */}
                     <div>
-                      <h4 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">Description des champs</h4>
-                      <div className="bg-[#050810] rounded-lg border border-white/5 overflow-hidden">
+                      <h4 className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-2">Description des champs</h4>
+                      <div className="bg-background rounded-lg border border-border overflow-hidden">
                         <table className="w-full text-[10px]">
                           <thead>
-                            <tr className="border-b border-white/10">
-                              <th className="text-left py-1.5 px-2 text-slate-400 font-medium">Champ</th>
-                              <th className="text-left py-1.5 px-2 text-slate-400 font-medium">Unité</th>
-                              <th className="text-left py-1.5 px-2 text-slate-400 font-medium">Plage typique</th>
-                              <th className="text-left py-1.5 px-2 text-slate-400 font-medium">Description</th>
+                            <tr className="border-b border-border">
+                              <th className="text-left py-1.5 px-2 text-muted-foreground font-medium">Champ</th>
+                              <th className="text-left py-1.5 px-2 text-muted-foreground font-medium">Unité</th>
+                              <th className="text-left py-1.5 px-2 text-muted-foreground font-medium">Plage typique</th>
+                              <th className="text-left py-1.5 px-2 text-muted-foreground font-medium">Description</th>
                             </tr>
                           </thead>
                           <tbody>
                             {source.fieldDescriptions?.map((fd) => (
-                              <tr key={fd.name} className="border-b border-white/5">
-                                <td className="py-1.5 px-2 font-mono text-[#D4A843]">{fd.label}</td>
-                                <td className="py-1.5 px-2 text-slate-400">{fd.unit}</td>
-                                <td className="py-1.5 px-2 text-slate-300">{fd.range}</td>
-                                <td className="py-1.5 px-2 text-slate-400">{fd.desc}</td>
+                              <tr key={fd.name} className="border-b border-border">
+                                <td className="py-1.5 px-2 font-mono text-primary">{fd.label}</td>
+                                <td className="py-1.5 px-2 text-muted-foreground">{fd.unit}</td>
+                                <td className="py-1.5 px-2 text-foreground">{fd.range}</td>
+                                <td className="py-1.5 px-2 text-muted-foreground">{fd.desc}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -718,11 +718,11 @@ export function DataImport() {
                     {/* Example data with copy & load buttons */}
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <h4 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Exemple de données {source.format}</h4>
+                        <h4 className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Exemple de données {source.format}</h4>
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => copyToClipboard(source.example, source.id)}
-                            className="flex items-center gap-1 px-2 py-1 rounded text-[9px] bg-white/5 text-slate-400 hover:text-slate-200 hover:bg-white/10 transition-colors"
+                            className="flex items-center gap-1 px-2 py-1 rounded text-[9px] bg-muted text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
                           >
                             <Copy className="h-3 w-3" />
                             {copied === source.id ? 'Copié !' : 'Copier'}
@@ -730,7 +730,7 @@ export function DataImport() {
                           {source.format !== 'Formulaire' && source.format !== 'XML' && (
                             <button
                               onClick={() => loadExampleAndImport(source.id)}
-                              className="flex items-center gap-1 px-2 py-1 rounded text-[9px] bg-[#D4A843]/10 text-[#D4A843] hover:bg-[#D4A843]/20 transition-colors"
+                              className="flex items-center gap-1 px-2 py-1 rounded text-[9px] bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
                               disabled={loading}
                             >
                               {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
@@ -739,14 +739,14 @@ export function DataImport() {
                           )}
                           <button
                             onClick={() => setShowFullExample(isFullExample ? null : source.id)}
-                            className="flex items-center gap-1 px-2 py-1 rounded text-[9px] bg-white/5 text-slate-400 hover:text-slate-200 hover:bg-white/10 transition-colors"
+                            className="flex items-center gap-1 px-2 py-1 rounded text-[9px] bg-muted text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
                           >
                             <Eye className="h-3 w-3" />
                             {isFullExample ? 'Réduire' : 'Voir tout'}
                           </button>
                         </div>
                       </div>
-                      <pre className={`bg-[#050810] border border-white/10 rounded-lg p-3 text-[10px] text-emerald-300 overflow-x-auto font-mono leading-relaxed ${!isFullExample ? 'max-h-40' : ''}`}>
+                      <pre className={`bg-background border border-border rounded-lg p-3 text-[10px] text-emerald-300 overflow-x-auto font-mono leading-relaxed ${!isFullExample ? 'max-h-40' : ''}`}>
                         {source.example}
                       </pre>
                     </div>
@@ -754,38 +754,38 @@ export function DataImport() {
                     {/* Actions */}
                     <div className="flex items-center gap-3 flex-wrap">
                       {source.template && (
-                        <a href={source.template} download className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#D4A843]/10 text-[#D4A843] border border-[#D4A843]/20 text-xs font-medium hover:bg-[#D4A843]/20 transition-colors">
+                        <a href={source.template} download className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary/10 text-primary border border-[#D4A843]/20 text-xs font-medium hover:bg-primary/20 transition-colors">
                           <Download className="h-3.5 w-3.5" /> Télécharger modèle {source.format}
                         </a>
                       )}
                       {source.simpleTemplate && source.simpleTemplate !== source.template && (
-                        <a href={source.simpleTemplate} download className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/5 text-slate-300 border border-white/10 text-xs font-medium hover:bg-white/10 transition-colors">
+                        <a href={source.simpleTemplate} download className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-muted text-foreground border border-border text-xs font-medium hover:bg-accent transition-colors">
                           <FileSpreadsheet className="h-3.5 w-3.5" /> Modèle simple
                         </a>
                       )}
                       {source.format !== 'Formulaire' && source.format !== 'XML' && (
                         <button
                           onClick={() => setActiveTab(source.tabTarget)}
-                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/5 text-slate-300 border border-white/10 text-xs font-medium hover:bg-white/10 transition-colors"
+                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-muted text-foreground border border-border text-xs font-medium hover:bg-accent transition-colors"
                         >
                           <Upload className="h-3.5 w-3.5" /> Importer un fichier {source.format}
                         </button>
                       )}
                       {source.format === 'Formulaire' && (
-                        <button onClick={() => setActiveTab('alert')} className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/5 text-slate-300 border border-white/10 text-xs font-medium hover:bg-white/10 transition-colors">
+                        <button onClick={() => setActiveTab('alert')} className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-muted text-foreground border border-border text-xs font-medium hover:bg-accent transition-colors">
                           <Plus className="h-3.5 w-3.5" /> Créer une alerte
                         </button>
                       )}
                       {source.format === 'XML' && (
-                        <a href={source.template} download className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/5 text-slate-300 border border-white/10 text-xs font-medium hover:bg-white/10 transition-colors">
+                        <a href={source.template} download className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-muted text-foreground border border-border text-xs font-medium hover:bg-accent transition-colors">
                           <FileCode className="h-3.5 w-3.5" /> Télécharger modèle XML
                         </a>
                       )}
                     </div>
 
                     {/* How data is collected */}
-                    <div className="bg-[#050810] rounded-lg p-3 border border-white/5">
-                      <h4 className="text-[10px] font-medium text-[#D4A843] uppercase tracking-wider mb-3 flex items-center gap-1">
+                    <div className="bg-background rounded-lg p-3 border border-border">
+                      <h4 className="text-[10px] font-medium text-primary uppercase tracking-wider mb-3 flex items-center gap-1">
                         <Info className="h-3 w-3" /> Comment ces données sont-elles collectées et renseignées ?
                       </h4>
                       <div className="space-y-3">
@@ -795,8 +795,8 @@ export function DataImport() {
                               {cs.step}
                             </div>
                             <div>
-                              <div className="text-[11px] font-semibold text-slate-300">{cs.title}</div>
-                              <div className="text-[10px] text-slate-400 leading-relaxed">{cs.desc}</div>
+                              <div className="text-[11px] font-semibold text-foreground">{cs.title}</div>
+                              <div className="text-[10px] text-muted-foreground leading-relaxed">{cs.desc}</div>
                             </div>
                           </div>
                         ))}
@@ -810,39 +810,39 @@ export function DataImport() {
         </div>
 
         {/* Quick Reference */}
-        <div className="bg-[#050810] rounded-xl border border-white/10 p-4">
-          <h3 className="text-xs font-semibold text-[#D4A843] mb-3 flex items-center gap-2">
+        <div className="bg-background rounded-xl border border-border p-4">
+          <h3 className="text-xs font-semibold text-primary mb-3 flex items-center gap-2">
             <Zap className="h-3.5 w-3.5" /> Référence rapide - Codes utilisables
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-[10px]">
             <div>
-              <div className="text-slate-300 font-semibold mb-1">Opérateurs</div>
+              <div className="text-foreground font-semibold mb-1">Opérateurs</div>
               <div className="space-y-0.5">
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-orange-500/10 text-orange-400 rounded font-mono">ORANGE</span><span className="text-slate-500">Orange Guinée</span></div>
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-yellow-500/10 text-yellow-400 rounded font-mono">MTN</span><span className="text-slate-500">MTN Guinée</span></div>
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 rounded font-mono">CELCOM</span><span className="text-slate-500">Celcom Guinée</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-orange-500/10 text-orange-400 rounded font-mono">ORANGE</span><span className="text-muted-foreground">Orange Guinée</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-yellow-500/10 text-yellow-400 rounded font-mono">MTN</span><span className="text-muted-foreground">MTN Guinée</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 rounded font-mono">CELCOM</span><span className="text-muted-foreground">Celcom Guinée</span></div>
               </div>
             </div>
             <div>
-              <div className="text-slate-300 font-semibold mb-1">Régions</div>
+              <div className="text-foreground font-semibold mb-1">Régions</div>
               <div className="space-y-0.5">
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">CON</span><span className="text-slate-500">Conakry</span></div>
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">KIN</span><span className="text-slate-500">Kindia</span></div>
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">BOK</span><span className="text-slate-500">Boké</span></div>
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">LAB</span><span className="text-slate-500">Labé</span></div>
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">MAM</span><span className="text-slate-500">Mamou</span></div>
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">FAR</span><span className="text-slate-500">Faranah</span></div>
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">KAN</span><span className="text-slate-500">Kankan</span></div>
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">NZE</span><span className="text-slate-500">N&apos;Zérékoré</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">CON</span><span className="text-muted-foreground">Conakry</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">KIN</span><span className="text-muted-foreground">Kindia</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">BOK</span><span className="text-muted-foreground">Boké</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">LAB</span><span className="text-muted-foreground">Labé</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">MAM</span><span className="text-muted-foreground">Mamou</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">FAR</span><span className="text-muted-foreground">Faranah</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">KAN</span><span className="text-muted-foreground">Kankan</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 rounded font-mono">NZE</span><span className="text-muted-foreground">N&apos;Zérékoré</span></div>
               </div>
             </div>
             <div>
-              <div className="text-slate-300 font-semibold mb-1">Types de mesure</div>
+              <div className="text-foreground font-semibold mb-1">Types de mesure</div>
               <div className="space-y-0.5">
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-purple-500/10 text-purple-400 rounded font-mono">MOBILE</span><span className="text-slate-500">RF + Appels vocaux</span></div>
-                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-cyan-500/10 text-cyan-400 rounded font-mono">INTERNET</span><span className="text-slate-500">Débit + QoE web</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-purple-500/10 text-purple-400 rounded font-mono">MOBILE</span><span className="text-muted-foreground">RF + Appels vocaux</span></div>
+                <div className="flex items-center gap-2"><span className="px-1.5 py-0.5 bg-cyan-500/10 text-cyan-400 rounded font-mono">INTERNET</span><span className="text-muted-foreground">Débit + QoE web</span></div>
               </div>
-              <div className="text-slate-300 font-semibold mb-1 mt-3">Types d&apos;alerte</div>
+              <div className="text-foreground font-semibold mb-1 mt-3">Types d&apos;alerte</div>
               <div className="space-y-0.5">
                 <div><span className="font-mono text-red-400">DEGRADATION</span></div>
                 <div><span className="font-mono text-orange-400">SEUIL_DEPASSE</span></div>
@@ -861,8 +861,8 @@ export function DataImport() {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <button onClick={() => setActiveTab('overview')} className="text-slate-400 hover:text-slate-200 text-xs">&larr; Retour</button>
-          <h2 className="text-xl font-bold text-slate-50">Import CSV</h2>
+          <button onClick={() => setActiveTab('overview')} className="text-muted-foreground hover:text-foreground text-xs">&larr; Retour</button>
+          <h2 className="text-xl font-bold text-foreground">Import CSV</h2>
           <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Drive Test / QoS Internet</span>
         </div>
 
@@ -871,12 +871,12 @@ export function DataImport() {
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
-          className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${dragOver ? 'border-[#D4A843] bg-[#D4A843]/5' : 'border-white/10 bg-white/[0.02]'}`}
+          className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${dragOver ? 'border-[#D4A843] bg-[#D4A843]/5' : 'border-border bg-white/[0.02]'}`}
         >
-          <FileUp className="h-10 w-10 mx-auto text-slate-500 mb-3" />
-          <p className="text-sm text-slate-300 mb-2">Glissez-déposez votre fichier CSV ici</p>
-          <p className="text-[10px] text-slate-500 mb-4">ou cliquez pour sélectionner un fichier (max 1000 lignes)</p>
-          <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#D4A843]/10 text-[#D4A843] border border-[#D4A843]/20 text-xs font-medium cursor-pointer hover:bg-[#D4A843]/20 transition-colors">
+          <FileUp className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
+          <p className="text-sm text-foreground mb-2">Glissez-déposez votre fichier CSV ici</p>
+          <p className="text-[10px] text-muted-foreground mb-4">ou cliquez pour sélectionner un fichier (max 1000 lignes)</p>
+          <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 text-primary border border-[#D4A843]/20 text-xs font-medium cursor-pointer hover:bg-primary/20 transition-colors">
             <Upload className="h-4 w-4" /> Sélectionner un fichier CSV
             <input ref={fileInputRef} type="file" accept=".csv" className="hidden" onChange={(e) => { const file = e.target.files?.[0]; if (file) handleFileImport(file); }} />
           </label>
@@ -884,8 +884,8 @@ export function DataImport() {
 
         {loading && (
           <div className="flex items-center justify-center gap-2 py-4">
-            <Loader2 className="h-5 w-5 text-[#D4A843] animate-spin" />
-            <span className="text-xs text-slate-400">Import en cours...</span>
+            <Loader2 className="h-5 w-5 text-primary animate-spin" />
+            <span className="text-xs text-muted-foreground">Import en cours...</span>
           </div>
         )}
 
@@ -896,7 +896,7 @@ export function DataImport() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xs font-semibold text-blue-400 flex items-center gap-2"><Play className="h-3.5 w-3.5" /> Tester avec un exemple</h3>
-              <p className="text-[10px] text-slate-400 mt-1">Chargez directement les données d&apos;exemple Drive Test dans la base pour voir comment ça fonctionne</p>
+              <p className="text-[10px] text-muted-foreground mt-1">Chargez directement les données d&apos;exemple Drive Test dans la base pour voir comment ça fonctionne</p>
             </div>
             <div className="flex gap-2">
               <button onClick={() => loadExampleAndImport('drive-test')} disabled={loading} className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-medium hover:bg-blue-500/20 transition-colors disabled:opacity-50">
@@ -910,8 +910,8 @@ export function DataImport() {
         </div>
 
         {/* CSV Format Reference */}
-        <div className="bg-[#050810] rounded-xl border border-white/10 p-4">
-          <h3 className="text-xs font-semibold text-slate-300 mb-3">Format CSV attendu</h3>
+        <div className="bg-background rounded-xl border border-border p-4">
+          <h3 className="text-xs font-semibold text-foreground mb-3">Format CSV attendu</h3>
           <pre className="text-[10px] text-emerald-300 font-mono overflow-x-auto leading-relaxed">
 {`# Les lignes commençant par # sont des commentaires (ignorées)
 # Colonnes requises: operateur, region, latitude, longitude, typeMesure
@@ -921,14 +921,14 @@ ORANGE,CON,10.0666,-12.8569,MOBILE,2026-05-15T10:30:00Z,-65,-90,-12,8,...
 MTN,KIN,10.0500,-12.3000,INTERNET,2026-05-15T11:00:00Z,,,,,,...`}
           </pre>
           <div className="mt-3 grid grid-cols-2 gap-2 text-[10px]">
-            <div className="text-slate-400"><strong className="text-slate-300">Requis :</strong> operateur, region, latitude, longitude, typeMesure</div>
-            <div className="text-slate-400"><strong className="text-slate-300">Opérateurs :</strong> ORANGE, MTN, CELCOM</div>
-            <div className="text-slate-400"><strong className="text-slate-300">Régions :</strong> CON, KIN, BOK, LAB, MAM, FAR, KAN, NZE</div>
-            <div className="text-slate-400"><strong className="text-slate-300">Types :</strong> MOBILE, INTERNET</div>
+            <div className="text-muted-foreground"><strong className="text-foreground">Requis :</strong> operateur, region, latitude, longitude, typeMesure</div>
+            <div className="text-muted-foreground"><strong className="text-foreground">Opérateurs :</strong> ORANGE, MTN, CELCOM</div>
+            <div className="text-muted-foreground"><strong className="text-foreground">Régions :</strong> CON, KIN, BOK, LAB, MAM, FAR, KAN, NZE</div>
+            <div className="text-muted-foreground"><strong className="text-foreground">Types :</strong> MOBILE, INTERNET</div>
           </div>
           <div className="mt-3 flex gap-3">
-            <a href="/templates/exemple_drive_test_complet.csv" download className="flex items-center gap-1.5 text-[10px] text-[#D4A843] hover:underline"><Download className="h-3 w-3" /> Modèle Drive Test complet</a>
-            <a href="/templates/exemple_qos_internet_complet.csv" download className="flex items-center gap-1.5 text-[10px] text-[#D4A843] hover:underline"><Download className="h-3 w-3" /> Modèle QoS Internet complet</a>
+            <a href="/templates/exemple_drive_test_complet.csv" download className="flex items-center gap-1.5 text-[10px] text-primary hover:underline"><Download className="h-3 w-3" /> Modèle Drive Test complet</a>
+            <a href="/templates/exemple_qos_internet_complet.csv" download className="flex items-center gap-1.5 text-[10px] text-primary hover:underline"><Download className="h-3 w-3" /> Modèle QoS Internet complet</a>
           </div>
         </div>
       </div>
@@ -940,8 +940,8 @@ MTN,KIN,10.0500,-12.3000,INTERNET,2026-05-15T11:00:00Z,,,,,,...`}
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <button onClick={() => setActiveTab('overview')} className="text-slate-400 hover:text-slate-200 text-xs">&larr; Retour</button>
-          <h2 className="text-xl font-bold text-slate-50">Import JSON</h2>
+          <button onClick={() => setActiveTab('overview')} className="text-muted-foreground hover:text-foreground text-xs">&larr; Retour</button>
+          <h2 className="text-xl font-bold text-foreground">Import JSON</h2>
           <span className="px-2 py-0.5 rounded text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20">Signalement Citoyen</span>
         </div>
 
@@ -949,18 +949,18 @@ MTN,KIN,10.0500,-12.3000,INTERNET,2026-05-15T11:00:00Z,,,,,,...`}
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
-          className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${dragOver ? 'border-[#D4A843] bg-[#D4A843]/5' : 'border-white/10 bg-white/[0.02]'}`}
+          className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${dragOver ? 'border-[#D4A843] bg-[#D4A843]/5' : 'border-border bg-white/[0.02]'}`}
         >
-          <FileJson className="h-10 w-10 mx-auto text-slate-500 mb-3" />
-          <p className="text-sm text-slate-300 mb-2">Glissez-déposez votre fichier JSON ici</p>
-          <p className="text-[10px] text-slate-500 mb-4">Formats acceptés: tableau, objet avec clé "measurements" ou "data"</p>
-          <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#D4A843]/10 text-[#D4A843] border border-[#D4A843]/20 text-xs font-medium cursor-pointer hover:bg-[#D4A843]/20 transition-colors">
+          <FileJson className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
+          <p className="text-sm text-foreground mb-2">Glissez-déposez votre fichier JSON ici</p>
+          <p className="text-[10px] text-muted-foreground mb-4">Formats acceptés: tableau, objet avec clé "measurements" ou "data"</p>
+          <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 text-primary border border-[#D4A843]/20 text-xs font-medium cursor-pointer hover:bg-primary/20 transition-colors">
             <Upload className="h-4 w-4" /> Sélectionner un fichier JSON
             <input type="file" accept=".json" className="hidden" onChange={(e) => { const file = e.target.files?.[0]; if (file) handleFileImport(file); }} />
           </label>
         </div>
 
-        {loading && (<div className="flex items-center justify-center gap-2 py-4"><Loader2 className="h-5 w-5 text-[#D4A843] animate-spin" /><span className="text-xs text-slate-400">Import en cours...</span></div>)}
+        {loading && (<div className="flex items-center justify-center gap-2 py-4"><Loader2 className="h-5 w-5 text-primary animate-spin" /><span className="text-xs text-muted-foreground">Import en cours...</span></div>)}
         {renderImportResult()}
 
         {/* Quick test */}
@@ -968,7 +968,7 @@ MTN,KIN,10.0500,-12.3000,INTERNET,2026-05-15T11:00:00Z,,,,,,...`}
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xs font-semibold text-amber-400 flex items-center gap-2"><Play className="h-3.5 w-3.5" /> Tester avec un exemple</h3>
-              <p className="text-[10px] text-slate-400 mt-1">Chargez les données d&apos;exemple de signalement citoyen</p>
+              <p className="text-[10px] text-muted-foreground mt-1">Chargez les données d&apos;exemple de signalement citoyen</p>
             </div>
             <button onClick={() => loadExampleAndImport('signalement-citoyen')} disabled={loading} className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-medium hover:bg-amber-500/20 transition-colors disabled:opacity-50">
               {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Play className="h-3.5 w-3.5" />} Charger Signalement Citoyen
@@ -977,8 +977,8 @@ MTN,KIN,10.0500,-12.3000,INTERNET,2026-05-15T11:00:00Z,,,,,,...`}
         </div>
 
         {/* JSON Format Reference */}
-        <div className="bg-[#050810] rounded-xl border border-white/10 p-4">
-          <h3 className="text-xs font-semibold text-slate-300 mb-3">Format JSON attendu</h3>
+        <div className="bg-background rounded-xl border border-border p-4">
+          <h3 className="text-xs font-semibold text-foreground mb-3">Format JSON attendu</h3>
           <pre className="text-[10px] text-emerald-300 font-mono overflow-x-auto leading-relaxed">
 {`{
   "measurements": [
@@ -997,14 +997,14 @@ MTN,KIN,10.0500,-12.3000,INTERNET,2026-05-15T11:00:00Z,,,,,,...`}
 }`}
           </pre>
           <div className="mt-3 flex gap-3">
-            <a href="/templates/exemple_signalement_citoyen_complet.json" download className="flex items-center gap-1.5 text-[10px] text-[#D4A843] hover:underline"><Download className="h-3 w-3" /> Modèle signalement complet</a>
-            <a href="/templates/modele_signalement_citoyen.json" download className="flex items-center gap-1.5 text-[10px] text-[#D4A843] hover:underline"><Download className="h-3 w-3" /> Modèle simple</a>
+            <a href="/templates/exemple_signalement_citoyen_complet.json" download className="flex items-center gap-1.5 text-[10px] text-primary hover:underline"><Download className="h-3 w-3" /> Modèle signalement complet</a>
+            <a href="/templates/modele_signalement_citoyen.json" download className="flex items-center gap-1.5 text-[10px] text-primary hover:underline"><Download className="h-3 w-3" /> Modèle simple</a>
           </div>
         </div>
 
         {/* API Integration */}
-        <div className="bg-[#050810] rounded-xl border border-white/10 p-4">
-          <h3 className="text-xs font-semibold text-slate-300 mb-3">Intégration par API</h3>
+        <div className="bg-background rounded-xl border border-border p-4">
+          <h3 className="text-xs font-semibold text-foreground mb-3">Intégration par API</h3>
           <pre className="text-[10px] text-blue-300 font-mono overflow-x-auto leading-relaxed">
 {`# Signalement citoyen via API REST
 curl -X POST https://onit.arpt.gn/api/import \\
@@ -1033,8 +1033,8 @@ curl -X POST https://onit.arpt.gn/api/import \\
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <button onClick={() => setActiveTab('overview')} className="text-slate-400 hover:text-slate-200 text-xs">&larr; Retour</button>
-          <h2 className="text-xl font-bold text-slate-50">Import Scores Opérateurs</h2>
+          <button onClick={() => setActiveTab('overview')} className="text-muted-foreground hover:text-foreground text-xs">&larr; Retour</button>
+          <h2 className="text-xl font-bold text-foreground">Import Scores Opérateurs</h2>
           <span className="px-2 py-0.5 rounded text-[10px] bg-violet-500/10 text-violet-400 border border-violet-500/20">Scoring</span>
         </div>
 
@@ -1042,18 +1042,18 @@ curl -X POST https://onit.arpt.gn/api/import \\
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
-          className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${dragOver ? 'border-[#D4A843] bg-[#D4A843]/5' : 'border-white/10 bg-white/[0.02]'}`}
+          className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${dragOver ? 'border-[#D4A843] bg-[#D4A843]/5' : 'border-border bg-white/[0.02]'}`}
         >
           <BarChart3 className="h-10 w-10 mx-auto text-violet-500 mb-3" />
-          <p className="text-sm text-slate-300 mb-2">Glissez-déposez votre fichier JSON de scores</p>
-          <p className="text-[10px] text-slate-500 mb-4">Format: {`{ "scores": [...] }`} avec les 5 sous-scores par opérateur/période</p>
-          <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#D4A843]/10 text-[#D4A843] border border-[#D4A843]/20 text-xs font-medium cursor-pointer hover:bg-[#D4A843]/20 transition-colors">
+          <p className="text-sm text-foreground mb-2">Glissez-déposez votre fichier JSON de scores</p>
+          <p className="text-[10px] text-muted-foreground mb-4">Format: {`{ "scores": [...] }`} avec les 5 sous-scores par opérateur/période</p>
+          <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 text-primary border border-[#D4A843]/20 text-xs font-medium cursor-pointer hover:bg-primary/20 transition-colors">
             <Upload className="h-4 w-4" /> Sélectionner un fichier JSON
             <input type="file" accept=".json" className="hidden" onChange={(e) => { const file = e.target.files?.[0]; if (file) handleScoringImport(file); }} />
           </label>
         </div>
 
-        {loading && (<div className="flex items-center justify-center gap-2 py-4"><Loader2 className="h-5 w-5 text-[#D4A843] animate-spin" /><span className="text-xs text-slate-400">Import en cours...</span></div>)}
+        {loading && (<div className="flex items-center justify-center gap-2 py-4"><Loader2 className="h-5 w-5 text-primary animate-spin" /><span className="text-xs text-muted-foreground">Import en cours...</span></div>)}
         {renderImportResult()}
 
         {/* Quick test */}
@@ -1061,7 +1061,7 @@ curl -X POST https://onit.arpt.gn/api/import \\
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xs font-semibold text-violet-400 flex items-center gap-2"><Play className="h-3.5 w-3.5" /> Tester avec un exemple</h3>
-              <p className="text-[10px] text-slate-400 mt-1">Chargez les scores d&apos;exemple pour les 3 opérateurs (Q2 2026)</p>
+              <p className="text-[10px] text-muted-foreground mt-1">Chargez les scores d&apos;exemple pour les 3 opérateurs (Q2 2026)</p>
             </div>
             <button onClick={() => { const blob = new Blob([scoringExample], { type: 'application/json' }); handleScoringImport(new File([blob], 'exemple_scoring.json', { type: 'application/json' })); }} disabled={loading} className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-violet-500/10 text-violet-400 border border-violet-500/20 text-xs font-medium hover:bg-violet-500/20 transition-colors disabled:opacity-50">
               {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Play className="h-3.5 w-3.5" />} Charger les scores d&apos;exemple
@@ -1070,8 +1070,8 @@ curl -X POST https://onit.arpt.gn/api/import \\
         </div>
 
         {/* Scoring Format Reference */}
-        <div className="bg-[#050810] rounded-xl border border-white/10 p-4">
-          <h3 className="text-xs font-semibold text-slate-300 mb-3">Format JSON Scoring</h3>
+        <div className="bg-background rounded-xl border border-border p-4">
+          <h3 className="text-xs font-semibold text-foreground mb-3">Format JSON Scoring</h3>
           <pre className="text-[10px] text-emerald-300 font-mono overflow-x-auto leading-relaxed">
 {`{
   "scores": [
@@ -1089,8 +1089,8 @@ curl -X POST https://onit.arpt.gn/api/import \\
 }`}
           </pre>
           <div className="mt-3 flex gap-3">
-            <a href="/templates/exemple_scoring_operateur_complet.json" download className="flex items-center gap-1.5 text-[10px] text-[#D4A843] hover:underline"><Download className="h-3 w-3" /> Modèle scoring complet</a>
-            <a href="/templates/modele_scoring_operateur.json" download className="flex items-center gap-1.5 text-[10px] text-[#D4A843] hover:underline"><Download className="h-3 w-3" /> Modèle simple</a>
+            <a href="/templates/exemple_scoring_operateur_complet.json" download className="flex items-center gap-1.5 text-[10px] text-primary hover:underline"><Download className="h-3 w-3" /> Modèle scoring complet</a>
+            <a href="/templates/modele_scoring_operateur.json" download className="flex items-center gap-1.5 text-[10px] text-primary hover:underline"><Download className="h-3 w-3" /> Modèle simple</a>
           </div>
         </div>
       </div>
@@ -1102,8 +1102,8 @@ curl -X POST https://onit.arpt.gn/api/import \\
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <button onClick={() => setActiveTab('overview')} className="text-slate-400 hover:text-slate-200 text-xs">&larr; Retour</button>
-          <h2 className="text-xl font-bold text-slate-50">Rapports Réglementaires</h2>
+          <button onClick={() => setActiveTab('overview')} className="text-muted-foreground hover:text-foreground text-xs">&larr; Retour</button>
+          <h2 className="text-xl font-bold text-foreground">Rapports Réglementaires</h2>
           <span className="px-2 py-0.5 rounded text-[10px] bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">XML</span>
         </div>
 
@@ -1112,7 +1112,7 @@ curl -X POST https://onit.arpt.gn/api/import \\
             <Shield className="h-5 w-5 text-cyan-400 shrink-0 mt-0.5" />
             <div>
               <h3 className="text-xs font-semibold text-cyan-400">Format réglementaire</h3>
-              <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+              <p className="text-[10px] text-muted-foreground mt-1 leading-relaxed">
                 Les rapports réglementaires sont soumis par les opérateurs en format XML conforme aux spécifications de l&apos;ARPT.
                 Ce format contient les indicateurs de conformité avec comparaison aux seuils réglementaires, les mesures détaillées, et le taux de conformité global.
                 L&apos;import XML extrait automatiquement les mesures et les stocke dans ONIT-PNG.
@@ -1122,11 +1122,11 @@ curl -X POST https://onit.arpt.gn/api/import \\
         </div>
 
         {/* XML Example */}
-        <div className="bg-[#050810] rounded-xl border border-white/10 p-4">
+        <div className="bg-background rounded-xl border border-border p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-semibold text-slate-300">Exemple de rapport réglementaire XML</h3>
+            <h3 className="text-xs font-semibold text-foreground">Exemple de rapport réglementaire XML</h3>
             <div className="flex gap-2">
-              <button onClick={() => copyToClipboard(rapportReglementaireExample, 'xml')} className="flex items-center gap-1 px-2 py-1 rounded text-[9px] bg-white/5 text-slate-400 hover:text-slate-200 hover:bg-white/10 transition-colors">
+              <button onClick={() => copyToClipboard(rapportReglementaireExample, 'xml')} className="flex items-center gap-1 px-2 py-1 rounded text-[9px] bg-muted text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
                 <Copy className="h-3 w-3" /> {copied === 'xml' ? 'Copié !' : 'Copier'}
               </button>
             </div>
@@ -1137,28 +1137,28 @@ curl -X POST https://onit.arpt.gn/api/import \\
         </div>
 
         {/* Structure explanation */}
-        <div className="bg-[#050810] rounded-xl border border-white/10 p-4">
-          <h3 className="text-xs font-semibold text-slate-300 mb-3">Structure du fichier XML</h3>
+        <div className="bg-background rounded-xl border border-border p-4">
+          <h3 className="text-xs font-semibold text-foreground mb-3">Structure du fichier XML</h3>
           <div className="space-y-2 text-[10px]">
             <div className="flex items-start gap-2">
               <ArrowRight className="h-3 w-3 text-cyan-400 shrink-0 mt-0.5" />
-              <div><span className="text-cyan-300 font-mono">&lt;entete&gt;</span> <span className="text-slate-400">— Métadonnées du rapport (type, période, opérateur, région, responsable)</span></div>
+              <div><span className="text-cyan-300 font-mono">&lt;entete&gt;</span> <span className="text-muted-foreground">— Métadonnées du rapport (type, période, opérateur, région, responsable)</span></div>
             </div>
             <div className="flex items-start gap-2">
               <ArrowRight className="h-3 w-3 text-cyan-400 shrink-0 mt-0.5" />
-              <div><span className="text-cyan-300 font-mono">&lt;donnees&gt;</span> <span className="text-slate-400">— Indicateurs de conformité avec seuils réglementaires et statut</span></div>
+              <div><span className="text-cyan-300 font-mono">&lt;donnees&gt;</span> <span className="text-muted-foreground">— Indicateurs de conformité avec seuils réglementaires et statut</span></div>
             </div>
             <div className="flex items-start gap-2">
               <ArrowRight className="h-3 w-3 text-cyan-400 shrink-0 mt-0.5" />
-              <div><span className="text-cyan-300 font-mono">&lt;mesures&gt;</span> <span className="text-slate-400">— Mesures terrain détaillées avec coordonnées GPS et timestamps</span></div>
+              <div><span className="text-cyan-300 font-mono">&lt;mesures&gt;</span> <span className="text-muted-foreground">— Mesures terrain détaillées avec coordonnées GPS et timestamps</span></div>
             </div>
             <div className="flex items-start gap-2">
               <ArrowRight className="h-3 w-3 text-cyan-400 shrink-0 mt-0.5" />
-              <div><span className="text-cyan-300 font-mono">&lt;conformite&gt;</span> <span className="text-slate-400">— Bilan de conformité (taux, nombre d&apos;indicateurs conformes, observations)</span></div>
+              <div><span className="text-cyan-300 font-mono">&lt;conformite&gt;</span> <span className="text-muted-foreground">— Bilan de conformité (taux, nombre d&apos;indicateurs conformes, observations)</span></div>
             </div>
           </div>
           <div className="mt-3">
-            <a href="/templates/modele_rapport_reglementaire.xml" download className="flex items-center gap-1.5 text-[10px] text-[#D4A843] hover:underline"><Download className="h-3 w-3" /> Télécharger le modèle XML</a>
+            <a href="/templates/modele_rapport_reglementaire.xml" download className="flex items-center gap-1.5 text-[10px] text-primary hover:underline"><Download className="h-3 w-3" /> Télécharger le modèle XML</a>
           </div>
         </div>
       </div>
@@ -1170,15 +1170,15 @@ curl -X POST https://onit.arpt.gn/api/import \\
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <button onClick={() => setActiveTab('overview')} className="text-slate-400 hover:text-slate-200 text-xs">&larr; Retour</button>
-          <h2 className="text-xl font-bold text-slate-50">Saisie Manuelle</h2>
+          <button onClick={() => setActiveTab('overview')} className="text-muted-foreground hover:text-foreground text-xs">&larr; Retour</button>
+          <h2 className="text-xl font-bold text-foreground">Saisie Manuelle</h2>
           <span className="px-2 py-0.5 rounded text-[10px] bg-violet-500/10 text-violet-400 border border-violet-500/20">Mesure QoS</span>
         </div>
 
         <form onSubmit={handleManualSubmit} className="space-y-4">
           {/* Required Fields */}
-          <div className="bg-[#050810] rounded-xl border border-white/10 p-4">
-            <h3 className="text-xs font-semibold text-[#D4A843] mb-3">Informations requises</h3>
+          <div className="bg-background rounded-xl border border-border p-4">
+            <h3 className="text-xs font-semibold text-primary mb-3">Informations requises</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               <div>
                 <label className={labelClass}>Opérateur *</label>
@@ -1220,7 +1220,7 @@ curl -X POST https://onit.arpt.gn/api/import \\
           </div>
 
           {/* RF Signal Metrics */}
-          <div className="bg-[#050810] rounded-xl border border-white/10 p-4">
+          <div className="bg-background rounded-xl border border-border p-4">
             <h3 className="text-xs font-semibold text-blue-400 mb-3 flex items-center gap-2"><Smartphone className="h-3.5 w-3.5" /> Métriques Signal RF (Mobile)</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div><label className={labelClass}>RSSI (dBm)</label><input type="number" step="any" value={manualForm.rssi} onChange={(e) => setManualForm(p => ({ ...p, rssi: e.target.value }))} className={inputClass} placeholder="-50 à -100" /></div>
@@ -1237,7 +1237,7 @@ curl -X POST https://onit.arpt.gn/api/import \\
           </div>
 
           {/* Internet QoS Metrics */}
-          <div className="bg-[#050810] rounded-xl border border-white/10 p-4">
+          <div className="bg-background rounded-xl border border-border p-4">
             <h3 className="text-xs font-semibold text-emerald-400 mb-3 flex items-center gap-2"><Wifi className="h-3.5 w-3.5" /> Métriques QoS Internet</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div><label className={labelClass}>Débit download (Mbps)</label><input type="number" step="any" value={manualForm.debitDownload} onChange={(e) => setManualForm(p => ({ ...p, debitDownload: e.target.value }))} className={inputClass} placeholder="2 à 50+" /></div>
@@ -1267,12 +1267,12 @@ curl -X POST https://onit.arpt.gn/api/import \\
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <button onClick={() => setActiveTab('overview')} className="text-slate-400 hover:text-slate-200 text-xs">&larr; Retour</button>
-          <h2 className="text-xl font-bold text-slate-50">Créer une Campagne</h2>
+          <button onClick={() => setActiveTab('overview')} className="text-muted-foreground hover:text-foreground text-xs">&larr; Retour</button>
+          <h2 className="text-xl font-bold text-foreground">Créer une Campagne</h2>
         </div>
 
         <form onSubmit={handleCampaignSubmit} className="space-y-4">
-          <div className="bg-[#050810] rounded-xl border border-white/10 p-4">
+          <div className="bg-background rounded-xl border border-border p-4">
             <div className="grid grid-cols-2 gap-3">
               <div><label className={labelClass}>Nom *</label><input type="text" value={campaignForm.nom} onChange={(e) => setCampaignForm(p => ({ ...p, nom: e.target.value }))} className={inputClass} placeholder="Drive Test Conakry Q2 2026" required /></div>
               <div><label className={labelClass}>Type *</label>
@@ -1314,13 +1314,13 @@ curl -X POST https://onit.arpt.gn/api/import \\
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <button onClick={() => setActiveTab('overview')} className="text-slate-400 hover:text-slate-200 text-xs">&larr; Retour</button>
-          <h2 className="text-xl font-bold text-slate-50">Créer une Alerte</h2>
+          <button onClick={() => setActiveTab('overview')} className="text-muted-foreground hover:text-foreground text-xs">&larr; Retour</button>
+          <h2 className="text-xl font-bold text-foreground">Créer une Alerte</h2>
           <span className="px-2 py-0.5 rounded text-[10px] bg-red-500/10 text-red-400 border border-red-500/20">Alerte</span>
         </div>
 
         <form onSubmit={handleAlertSubmit} className="space-y-4">
-          <div className="bg-[#050810] rounded-xl border border-white/10 p-4">
+          <div className="bg-background rounded-xl border border-border p-4">
             <div className="grid grid-cols-2 gap-3">
               <div><label className={labelClass}>Type *</label>
                 <select value={alertForm.type} onChange={(e) => setAlertForm(p => ({ ...p, type: e.target.value }))} className={selectClass} required>

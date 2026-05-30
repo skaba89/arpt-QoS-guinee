@@ -37,7 +37,7 @@ export function DashboardSIG() {
   if (authLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -46,8 +46,8 @@ export function DashboardSIG() {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <Lock className="h-12 w-12 text-red-400" />
-        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
-        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+        <h3 className="text-lg font-semibold text-foreground">Accès non autorisé</h3>
+        <p className="text-muted-foreground text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
       </div>
     );
   }
@@ -111,26 +111,26 @@ export function DashboardSIG() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#D4A843] to-transparent" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#D4A843]/70">Analyse</span>
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-primary to-transparent" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-primary/70">Analyse</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 tracking-tight">Cartographie SIG</h1>
-          <p className="text-sm text-slate-400 mt-2">Système d&apos;Information Géographique - Visualisation spatiale des données télécom</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Cartographie SIG</h1>
+          <p className="text-sm text-muted-foreground mt-2">Système d&apos;Information Géographique - Visualisation spatiale des données télécom</p>
         </div>
 
         {/* Découpage Toggle */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 text-xs text-slate-500">
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <GitBranch className="h-3.5 w-3.5" />
             <span>Découpage:</span>
           </div>
-          <div className="flex rounded-lg border border-white/10 overflow-hidden">
+          <div className="flex rounded-lg border border-border overflow-hidden">
             <button
               onClick={() => { setUseCNTDecoupage(true); setSelectedRegion(null); }}
               className={`px-3 py-1.5 text-xs font-medium transition-all ${
                 useCNTDecoupage
-                  ? 'bg-[#D4A843]/20 text-[#D4A843] border-r border-white/10'
-                  : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                  ? 'bg-primary/20 text-primary border-r border-border'
+                  : 'bg-muted text-muted-foreground hover:bg-accent'
               }`}
             >
               Nouveau CNT (16)
@@ -139,8 +139,8 @@ export function DashboardSIG() {
               onClick={() => { setUseCNTDecoupage(false); setSelectedRegion(null); }}
               className={`px-3 py-1.5 text-xs font-medium transition-all ${
                 !useCNTDecoupage
-                  ? 'bg-[#D4A843]/20 text-[#D4A843]'
-                  : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                  ? 'bg-primary/20 text-primary'
+                  : 'bg-muted text-muted-foreground hover:bg-accent'
               }`}
             >
               Ancien (8)
@@ -148,7 +148,7 @@ export function DashboardSIG() {
           </div>
           <button
             onClick={() => setShowCNTInfo(!showCNTInfo)}
-            className="h-7 w-7 rounded-md border border-white/10 bg-white/5 flex items-center justify-center text-slate-400 hover:text-[#D4A843] hover:border-[#D4A843]/30 transition-all"
+            className="h-7 w-7 rounded-md border border-border bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all"
             title="Informations sur le découpage CNT"
           >
             <Info className="h-3.5 w-3.5" />
@@ -158,25 +158,25 @@ export function DashboardSIG() {
 
       {/* CNT Info Banner */}
       {showCNTInfo && useCNTDecoupage && (
-        <div className="institutional-card guinea-stripe-top p-4 border-[#D4A843]/20">
+        <div className="institutional-card guinea-stripe-top p-4 border-primary/20">
           <div className="flex items-start gap-3">
-            <div className="mt-0.5 h-5 w-5 rounded-full bg-[#D4A843]/20 flex items-center justify-center flex-shrink-0">
-              <GitBranch className="h-3 w-3 text-[#D4A843]" />
+            <div className="mt-0.5 h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+              <GitBranch className="h-3 w-3 text-primary" />
             </div>
             <div className="flex-1">
-              <h4 className="text-sm font-semibold text-[#D4A843] mb-1">Nouveau découpage administratif CNT</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <h4 className="text-sm font-semibold text-primary mb-1">Nouveau découpage administratif CNT</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 Le Conseil National de la Transition (CNT) a proposé le passage de 8 à 16 régions administratives.
-                Ce nouveau découpage crée 8 nouvelles régions : <span className="text-slate-300">Coyah, Koundara, Mali, Dalaba, Kissidougou, Siguiri, Guéckédou</span> et <span className="text-slate-300">Beyla</span>,
+                Ce nouveau découpage crée 8 nouvelles régions : <span className="text-foreground">Coyah, Koundara, Mali, Dalaba, Kissidougou, Siguiri, Guéckédou</span> et <span className="text-foreground">Beyla</span>,
                 issues de la subdivision des 7 régions existantes. Conakry reste inchangée en tant que Gouvernorat spécial.
                 Ce découpage reflète la réforme constitutionnelle de 2025 introduisant le système de Provinces.
               </p>
-              <div className="flex gap-4 mt-2 text-[10px] text-slate-500">
+              <div className="flex gap-4 mt-2 text-[10px] text-muted-foreground">
                 <span>Réf: D/2025/055/PRG/CNRD/SGG</span>
                 <span>Constitution du 26/09/2025</span>
               </div>
             </div>
-            <button onClick={() => setShowCNTInfo(false)} className="text-xs text-slate-500 hover:text-slate-300">✕</button>
+            <button onClick={() => setShowCNTInfo(false)} className="text-xs text-muted-foreground hover:text-foreground">✕</button>
           </div>
         </div>
       )}
@@ -185,10 +185,10 @@ export function DashboardSIG() {
         <div className="lg:col-span-3 space-y-4">
           {/* ── Operator Filter Buttons ── */}
           <div className="flex items-center gap-2 flex-wrap">
-            <Filter className="h-4 w-4 text-[#D4A843] mr-1" />
-            <span className="text-xs text-slate-500">Opérateur:</span>
+            <Filter className="h-4 w-4 text-primary mr-1" />
+            <span className="text-xs text-muted-foreground">Opérateur:</span>
             {operatorButtons.map((op) => (
-              <button key={op.id} onClick={() => setSelectedOperator(op.id)} className={`px-3 py-1.5 text-xs rounded-md border transition-all flex items-center gap-1.5 ${selectedOperator === op.id ? 'border-opacity-60 text-white' : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'}`} style={selectedOperator === op.id ? { backgroundColor: `${op.color}20`, borderColor: `${op.color}40` } : {}}>
+              <button key={op.id} onClick={() => setSelectedOperator(op.id)} className={`px-3 py-1.5 text-xs rounded-md border transition-all flex items-center gap-1.5 ${selectedOperator === op.id ? 'border-opacity-60 text-white' : 'bg-muted border-border text-muted-foreground hover:bg-accent'}`} style={selectedOperator === op.id ? { backgroundColor: `${op.color}20`, borderColor: `${op.color}40` } : {}}>
                 <span className="h-2 w-2 rounded-full" style={{ backgroundColor: op.color }} />{op.name}
               </button>
             ))}
@@ -197,22 +197,22 @@ export function DashboardSIG() {
           {/* ── Map Container ── */}
           <div className="institutional-card guinea-stripe-top p-5">
             <div className="absolute top-6 left-6 z-10 flex items-center gap-2 text-[10px]">
-              <div className="px-2 py-1 rounded bg-[#0A0F1E]/80 backdrop-blur-sm border border-white/10 flex items-center gap-1">
+              <div className="px-2 py-1 rounded bg-card/80 backdrop-blur-sm border border-border flex items-center gap-1">
                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-slate-300">Données en direct</span>
+                <span className="text-foreground">Données en direct</span>
               </div>
-              <div className="px-2 py-1 rounded bg-[#0A0F1E]/80 backdrop-blur-sm border border-white/10 text-slate-400">
+              <div className="px-2 py-1 rounded bg-card/80 backdrop-blur-sm border border-border text-muted-foreground">
                 {useCNTDecoupage ? '16 régions CNT' : '8 régions'} • {mapData?.measurementPoints.length || 0} points
               </div>
               {useCNTDecoupage && (
-                <div className="px-2 py-1 rounded bg-[#D4A843]/10 backdrop-blur-sm border border-[#D4A843]/20 text-[#D4A843]">
+                <div className="px-2 py-1 rounded bg-primary/10 backdrop-blur-sm border border-primary/20 text-primary">
                   Nouveau découpage
                 </div>
               )}
             </div>
 
             {loading ? (
-              <div className="h-[500px] flex items-center justify-center"><div className="text-xs text-slate-500 animate-pulse">Chargement de la carte...</div></div>
+              <div className="h-[500px] flex items-center justify-center"><div className="text-xs text-muted-foreground animate-pulse">Chargement de la carte...</div></div>
             ) : (
               <GuineaMapLeaflet
                 metric={layers.qosHeatmap ? 'qos' : 'coverage'}
@@ -234,16 +234,16 @@ export function DashboardSIG() {
             {displayRegions.map((region) => {
               const isSelected = selectedRegion === region.nom;
               return (
-                <button key={region.code} onClick={() => setSelectedRegion(isSelected ? null : region.nom)} className={`rounded-lg border p-3 text-left transition-all ${isSelected ? 'guinea-stripe-left bg-[#D4A843]/10 border-[#D4A843]/30' : 'bg-white/5 border-white/10 hover:bg-white/[0.08]'}`}>
+                <button key={region.code} onClick={() => setSelectedRegion(isSelected ? null : region.nom)} className={`rounded-lg border p-3 text-left transition-all ${isSelected ? 'guinea-stripe-left bg-primary/10 border-primary/30' : 'bg-muted border-border hover:bg-accent'}`}>
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-semibold text-slate-200">{region.nom}</p>
+                    <p className="text-xs font-semibold text-foreground">{region.nom}</p>
                     {useCNTDecoupage && region.code !== 'CON' && (
-                      <span className="text-[8px] px-1 py-0.5 rounded bg-[#D4A843]/10 text-[#D4A843]">CNT</span>
+                      <span className="text-[8px] px-1 py-0.5 rounded bg-primary/10 text-primary">CNT</span>
                     )}
                   </div>
                   <div className="mt-2 flex items-end justify-between">
-                    <div><p className="text-lg font-bold text-slate-50">{region.coverage}%</p><p className="text-[10px] text-slate-500">Couverture</p></div>
-                    <div className="text-right"><p className="text-sm font-semibold text-slate-300">{region.qos}/100</p><p className="text-[10px] text-slate-500">QoS</p></div>
+                    <div><p className="text-lg font-bold text-foreground">{region.coverage}%</p><p className="text-[10px] text-muted-foreground">Couverture</p></div>
+                    <div className="text-right"><p className="text-sm font-semibold text-foreground">{region.qos}/100</p><p className="text-[10px] text-muted-foreground">QoS</p></div>
                   </div>
                 </button>
               );
@@ -254,11 +254,11 @@ export function DashboardSIG() {
         <div className="space-y-4">
           {/* ── Layer Controls ── */}
           <div className="institutional-card guinea-stripe-top p-4">
-            <h3 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-3 flex items-center gap-2">
+            <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
-              <Layers className="h-4 w-4 text-[#D4A843]" />Couches
+              <Layers className="h-4 w-4 text-primary" />Couches
             </h3>
             <div className="space-y-2">
               {[
@@ -267,11 +267,11 @@ export function DashboardSIG() {
                 { key: 'whiteZones' as const, label: 'Zones Blanches', icon: MapPin, color: '#EF4444' },
                 { key: 'roads' as const, label: 'Axes Routiers', icon: Route, color: '#F59E0B' },
               ].map((layer) => (
-                <button key={layer.key} onClick={() => toggleLayer(layer.key)} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-all text-left ${layers[layer.key] ? 'bg-white/10 border-white/20' : 'bg-transparent border-white/5 opacity-50'}`}>
+                <button key={layer.key} onClick={() => toggleLayer(layer.key)} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-all text-left ${layers[layer.key] ? 'bg-accent border-border' : 'bg-transparent border-border opacity-50'}`}>
                   <layer.icon className="h-4 w-4" style={{ color: layer.color }} />
-                  <span className="text-xs text-slate-300 flex-1">{layer.label}</span>
-                  <div className={`h-4 w-7 rounded-full relative transition-colors ${layers[layer.key] ? 'bg-[#D4A843]/40' : 'bg-white/10'}`}>
-                    <div className={`absolute top-0.5 h-3 w-3 rounded-full transition-all ${layers[layer.key] ? 'right-0.5 bg-[#D4A843]' : 'left-0.5 bg-slate-500'}`} />
+                  <span className="text-xs text-foreground flex-1">{layer.label}</span>
+                  <div className={`h-4 w-7 rounded-full relative transition-colors ${layers[layer.key] ? 'bg-primary/40' : 'bg-accent'}`}>
+                    <div className={`absolute top-0.5 h-3 w-3 rounded-full transition-all ${layers[layer.key] ? 'right-0.5 bg-primary' : 'left-0.5 bg-muted-foreground'}`} />
                   </div>
                 </button>
               ))}
@@ -280,7 +280,7 @@ export function DashboardSIG() {
 
           {/* ── Legend ── */}
           <div className="institutional-card p-4">
-            <h3 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-3 flex items-center gap-2">
+            <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
@@ -288,14 +288,14 @@ export function DashboardSIG() {
             </h3>
             <div className="space-y-2">
               {[{ label: 'Excellente (≥80%)', color: '#10B981' }, { label: 'Bonne (65-79%)', color: '#3B82F6' }, { label: 'Moyenne (50-64%)', color: '#F59E0B' }, { label: 'Faible (<50%)', color: '#EF4444' }].map((item) => (
-                <div key={item.label} className="flex items-center gap-2"><span className="h-3 w-3 rounded-sm" style={{ backgroundColor: item.color }} /><span className="text-xs text-slate-400">{item.label}</span></div>
+                <div key={item.label} className="flex items-center gap-2"><span className="h-3 w-3 rounded-sm" style={{ backgroundColor: item.color }} /><span className="text-xs text-muted-foreground">{item.label}</span></div>
               ))}
-              <div className="pt-2 border-t border-white/10"><div className="flex items-center gap-2"><span className="h-3 w-3 rounded-sm border-2 border-dashed border-red-400/60 bg-transparent" /><span className="text-xs text-slate-400">Zone Blanche</span></div></div>
+              <div className="pt-2 border-t border-border"><div className="flex items-center gap-2"><span className="h-3 w-3 rounded-sm border-2 border-dashed border-red-400/60 bg-transparent" /><span className="text-xs text-muted-foreground">Zone Blanche</span></div></div>
               {useCNTDecoupage && (
-                <div className="pt-2 border-t border-white/10">
+                <div className="pt-2 border-t border-border">
                   <div className="flex items-center gap-2">
-                    <span className="h-3 w-3 rounded-sm bg-[#D4A843]/30 border border-[#D4A843]/50" />
-                    <span className="text-xs text-slate-400">Région sélectionnée (CNT)</span>
+                    <span className="h-3 w-3 rounded-sm bg-primary/30 border border-primary/50" />
+                    <span className="text-xs text-muted-foreground">Région sélectionnée (CNT)</span>
                   </div>
                 </div>
               )}
@@ -304,38 +304,38 @@ export function DashboardSIG() {
 
           {/* ── Region Detail Card ── */}
           {regionData && (
-            <div className="institutional-card guinea-stripe-left p-4 border-[#D4A843]/30">
+            <div className="institutional-card guinea-stripe-left p-4 border-primary/30">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold text-[#D4A843]">{regionData.nom}</h3>
-                <button onClick={() => setSelectedRegion(null)} className="text-xs text-slate-500 hover:text-slate-300">✕</button>
+                <h3 className="text-sm font-semibold text-primary">{regionData.nom}</h3>
+                <button onClick={() => setSelectedRegion(null)} className="text-xs text-muted-foreground hover:text-foreground">✕</button>
               </div>
               <div className="space-y-3">
                 <div>
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-slate-400">Couverture</span>
-                    <span className="text-slate-200 font-mono">{regionData.coverage}%</span>
+                    <span className="text-muted-foreground">Couverture</span>
+                    <span className="text-foreground font-mono">{regionData.coverage}%</span>
                   </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-2 bg-accent rounded-full overflow-hidden">
                     <div className="h-full rounded-full" style={{ width: `${regionData.coverage}%`, backgroundColor: regionData.color }} />
                   </div>
                 </div>
                 <div>
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-slate-400">Score QoS</span>
-                    <span className="text-slate-200 font-mono">{regionData.qos}/100</span>
+                    <span className="text-muted-foreground">Score QoS</span>
+                    <span className="text-foreground font-mono">{regionData.qos}/100</span>
                   </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full rounded-full" style={{ width: `${regionData.qos}%`, backgroundColor: '#3B82F6' }} />
+                  <div className="h-2 bg-accent rounded-full overflow-hidden">
+                    <div className="h-full rounded-full" style={{ width: `${regionData.qos}%`, backgroundColor: 'var(--chart-2)' }} />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/10">
-                  <div className="p-2 rounded bg-white/5 text-center">
-                    <p className="text-sm font-bold text-slate-200">{(regionData.population / 1000000).toFixed(1)}M</p>
-                    <p className="text-[10px] text-slate-500">Population</p>
+                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border">
+                  <div className="p-2 rounded bg-muted text-center">
+                    <p className="text-sm font-bold text-foreground">{(regionData.population / 1000000).toFixed(1)}M</p>
+                    <p className="text-[10px] text-muted-foreground">Population</p>
                   </div>
-                  <div className="p-2 rounded bg-white/5 text-center">
-                    <p className="text-sm font-bold text-slate-200">{regionData.whiteZones}</p>
-                    <p className="text-[10px] text-slate-500">Z. Blanches</p>
+                  <div className="p-2 rounded bg-muted text-center">
+                    <p className="text-sm font-bold text-foreground">{regionData.whiteZones}</p>
+                    <p className="text-[10px] text-muted-foreground">Z. Blanches</p>
                   </div>
                 </div>
               </div>
@@ -344,34 +344,34 @@ export function DashboardSIG() {
 
           {/* CNT region selected - show extra info */}
           {useCNTDecoupage && selectedRegion && !regionData && (
-            <div className="institutional-card guinea-stripe-left p-4 border-[#D4A843]/30">
+            <div className="institutional-card guinea-stripe-left p-4 border-primary/30">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold text-[#D4A843]">{selectedRegion}</h3>
-                <button onClick={() => setSelectedRegion(null)} className="text-xs text-slate-500 hover:text-slate-300">✕</button>
+                <h3 className="text-sm font-semibold text-primary">{selectedRegion}</h3>
+                <button onClick={() => setSelectedRegion(null)} className="text-xs text-muted-foreground hover:text-foreground">✕</button>
               </div>
               <div className="space-y-2 text-xs">
                 {(() => {
                   const cntRegion = cntRegions.find(r => r.nom === selectedRegion);
-                  if (!cntRegion) return <p className="text-slate-400">Région non trouvée</p>;
+                  if (!cntRegion) return <p className="text-muted-foreground">Région non trouvée</p>;
                   return (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-slate-400">Code</span>
-                        <span className="text-slate-200 font-mono">{cntRegion.code}</span>
+                        <span className="text-muted-foreground">Code</span>
+                        <span className="text-foreground font-mono">{cntRegion.code}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-400">Ancienne région</span>
-                        <span className="text-slate-200">{cntRegion.ancienneRegion}</span>
+                        <span className="text-muted-foreground">Ancienne région</span>
+                        <span className="text-foreground">{cntRegion.ancienneRegion}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-400">Population</span>
-                        <span className="text-slate-200 font-mono">{(cntRegion.population / 1000000).toFixed(1)}M</span>
+                        <span className="text-muted-foreground">Population</span>
+                        <span className="text-foreground font-mono">{(cntRegion.population / 1000000).toFixed(1)}M</span>
                       </div>
-                      <div className="pt-2 border-t border-white/10">
-                        <p className="text-slate-400 mb-1">Préfectures:</p>
+                      <div className="pt-2 border-t border-border">
+                        <p className="text-muted-foreground mb-1">Préfectures:</p>
                         <div className="flex flex-wrap gap-1">
                           {cntRegion.prefectures.map(p => (
-                            <span key={p} className="px-2 py-0.5 rounded bg-white/5 text-slate-300 text-[10px]">{p}</span>
+                            <span key={p} className="px-2 py-0.5 rounded bg-muted text-foreground text-[10px]">{p}</span>
                           ))}
                         </div>
                       </div>
@@ -384,7 +384,7 @@ export function DashboardSIG() {
 
           {/* ── Quick Stats ── */}
           <div className="institutional-card p-4">
-            <h3 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-3 flex items-center gap-2">
+            <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
@@ -392,28 +392,28 @@ export function DashboardSIG() {
             </h3>
             <div className="space-y-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-slate-400">Régions supervisées</span>
-                <span className="text-slate-200 font-mono">{useCNTDecoupage ? '16' : mapData?.regions.length || 0}/{useCNTDecoupage ? '16' : '8'}</span>
+                <span className="text-muted-foreground">Régions supervisées</span>
+                <span className="text-foreground font-mono">{useCNTDecoupage ? '16' : mapData?.regions.length || 0}/{useCNTDecoupage ? '16' : '8'}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Préfectures</span>
-                <span className="text-slate-200 font-mono">{useCNTDecoupage ? '34' : '-'}</span>
+                <span className="text-muted-foreground">Préfectures</span>
+                <span className="text-foreground font-mono">{useCNTDecoupage ? '34' : '-'}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Points de mesure</span>
-                <span className="text-slate-200 font-mono">{mapData?.measurementPoints.length || 0}</span>
+                <span className="text-muted-foreground">Points de mesure</span>
+                <span className="text-foreground font-mono">{mapData?.measurementPoints.length || 0}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Découpage</span>
-                <span className="text-slate-200 font-mono">{useCNTDecoupage ? 'CNT 2025' : 'Classique'}</span>
+                <span className="text-muted-foreground">Découpage</span>
+                <span className="text-foreground font-mono">{useCNTDecoupage ? 'CNT 2025' : 'Classique'}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Dernière mise à jour</span>
-                <span className="text-slate-200 font-mono">Il y a 5 min</span>
+                <span className="text-muted-foreground">Dernière mise à jour</span>
+                <span className="text-foreground font-mono">Il y a 5 min</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Source données</span>
-                <span className="text-slate-200 font-mono">Temps réel</span>
+                <span className="text-muted-foreground">Source données</span>
+                <span className="text-foreground font-mono">Temps réel</span>
               </div>
             </div>
           </div>

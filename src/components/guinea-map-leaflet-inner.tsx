@@ -221,31 +221,31 @@ export function GuineaMapLeafletInner({
             style: {
               fillColor,
               fillOpacity: isSelected ? 0.65 : 0.4,
-              color: isSelected ? '#D4A843' : 'rgba(255,255,255,0.3)',
+              color: isSelected ? '#D4A843' : 'var(--border)',
               weight: isSelected ? 3 : 1.5,
             },
             onEachFeature: (_feature, layer) => {
               const regionInfo = regionDataByCode[cntCode];
               const popupContent = `
-                <div style="font-family: system-ui; color: #F1F5F9; min-width: 220px;">
-                  <h3 style="margin:0 0 8px; color: #D4A843; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;">
+                <div style="font-family: system-ui; color: var(--card-foreground); min-width: 220px;">
+                  <h3 style="margin:0 0 8px; color: #D4A843; font-size: 14px; border-bottom: 1px solid var(--border); padding-bottom: 6px;">
                     ${sanitizeForHtml(cntNom)}
-                    <span style="font-size:10px; color:#94A3B8; margin-left:6px;">(CNT)</span>
+                    <span style="font-size:10px; color:var(--muted-foreground); margin-left:6px;">(CNT)</span>
                   </h3>
-                  <div style="font-size:11px; color:#94A3B8; margin-bottom:8px;">
+                  <div style="font-size:11px; color:var(--muted-foreground); margin-bottom:8px;">
                     Préfecture: ${sanitizeForHtml(prefecture.properties.name)}
                   </div>
                   <div style="font-size: 12px; line-height: 2;">
                     <div style="display:flex;justify-content:space-between;">
-                      <span style="color:#94A3B8">Couverture</span>
+                      <span style="color:var(--muted-foreground)">Couverture</span>
                       <span style="font-weight:600;color:${fillColor}">${metricData.coverage}%</span>
                     </div>
                     <div style="display:flex;justify-content:space-between;">
-                      <span style="color:#94A3B8">Score QoS</span>
+                      <span style="color:var(--muted-foreground)">Score QoS</span>
                       <span style="font-weight:600">${metricData.qos}/100</span>
                     </div>
                     <div style="display:flex;justify-content:space-between;">
-                      <span style="color:#94A3B8">Ancienne région</span>
+                      <span style="color:var(--muted-foreground)">Ancienne région</span>
                       <span style="font-weight:600;color:#D4A843">${sanitizeForHtml(prefecture.properties.ancienneRegion)}</span>
                     </div>
                   </div>
@@ -261,7 +261,7 @@ export function GuineaMapLeafletInner({
               });
 
               layer.on('mouseover', () => {
-                (layer as L.Path).setStyle({ fillOpacity: 0.7, weight: 2.5, color: '#F1F5F9' });
+                (layer as L.Path).setStyle({ fillOpacity: 0.7, weight: 2.5, color: 'var(--foreground)' });
               });
 
               layer.on('mouseout', () => {
@@ -269,7 +269,7 @@ export function GuineaMapLeafletInner({
                 (layer as L.Path).setStyle({
                   fillOpacity: isStillSelected ? 0.65 : 0.4,
                   weight: isStillSelected ? 3 : 1.5,
-                  color: isStillSelected ? '#D4A843' : 'rgba(255,255,255,0.3)',
+                  color: isStillSelected ? '#D4A843' : 'var(--border)',
                 });
               });
             },
@@ -286,7 +286,7 @@ export function GuineaMapLeafletInner({
         const labelMarker = L.marker(center, {
           icon: L.divIcon({
             className: 'region-label',
-            html: `<span style="color:rgba(255,255,255,0.9);font-size:10px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,0.9),0 0 8px rgba(0,0,0,0.5);white-space:nowrap;letter-spacing:0.3px;background:rgba(10,15,30,0.6);padding:2px 5px;border-radius:3px;border:1px solid rgba(212,168,67,0.3);">${sanitizeForHtml(region.nom)}</span>`,
+            html: `<span style="color:var(--foreground);font-size:10px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,0.9),0 0 8px rgba(0,0,0,0.5);white-space:nowrap;letter-spacing:0.3px;background:color-mix(in srgb, var(--background) 60%, transparent);padding:2px 5px;border-radius:3px;border:1px solid rgba(212,168,67,0.3);">${sanitizeForHtml(region.nom)}</span>`,
             iconSize: [120, 24],
             iconAnchor: [60, 12],
           }),
@@ -337,21 +337,21 @@ export function GuineaMapLeafletInner({
           style: {
             fillColor,
             fillOpacity: isSelected ? 0.65 : 0.4,
-            color: isSelected ? '#D4A843' : 'rgba(255,255,255,0.3)',
+            color: isSelected ? '#D4A843' : 'var(--border)',
             weight: isSelected ? 3 : 1.5,
           },
           onEachFeature: (_feature, layer) => {
             const popupContent = regionInfo
-              ? `<div style="font-family: system-ui; color: #F1F5F9; min-width: 200px;">
-                  <h3 style="margin:0 0 10px; color: #D4A843; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;">${sanitizeForHtml(regionInfo.nom)}</h3>
+              ? `<div style="font-family: system-ui; color: var(--card-foreground); min-width: 200px;">
+                  <h3 style="margin:0 0 10px; color: #D4A843; font-size: 14px; border-bottom: 1px solid var(--border); padding-bottom: 6px;">${sanitizeForHtml(regionInfo.nom)}</h3>
                   <div style="font-size: 12px; line-height: 2;">
-                    <div style="display:flex;justify-content:space-between;"><span style="color:#94A3B8">Couverture</span><span style="font-weight:600;color:${regionInfo.coverage >= 80 ? '#10B981' : regionInfo.coverage >= 65 ? '#3B82F6' : regionInfo.coverage >= 50 ? '#F59E0B' : '#EF4444'}">${regionInfo.coverage}%</span></div>
-                    <div style="display:flex;justify-content:space-between;"><span style="color:#94A3B8">Score QoS</span><span style="font-weight:600">${regionInfo.qos}/100</span></div>
-                    <div style="display:flex;justify-content:space-between;"><span style="color:#94A3B8">Population</span><span style="font-weight:600">${(regionInfo.population / 1000000).toFixed(1)}M</span></div>
-                    <div style="display:flex;justify-content:space-between;"><span style="color:#94A3B8">Zones Blanches</span><span style="font-weight:600;color:${regionInfo.whiteZones > 30 ? '#EF4444' : '#F59E0B'}">${regionInfo.whiteZones}</span></div>
+                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted-foreground)">Couverture</span><span style="font-weight:600;color:${regionInfo.coverage >= 80 ? '#10B981' : regionInfo.coverage >= 65 ? '#3B82F6' : regionInfo.coverage >= 50 ? '#F59E0B' : '#EF4444'}">${regionInfo.coverage}%</span></div>
+                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted-foreground)">Score QoS</span><span style="font-weight:600">${regionInfo.qos}/100</span></div>
+                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted-foreground)">Population</span><span style="font-weight:600">${(regionInfo.population / 1000000).toFixed(1)}M</span></div>
+                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted-foreground)">Zones Blanches</span><span style="font-weight:600;color:${regionInfo.whiteZones > 30 ? '#EF4444' : '#F59E0B'}">${regionInfo.whiteZones}</span></div>
                   </div>
                 </div>`
-              : `<div style="color: #F1F5F9; font-family: system-ui;">${sanitizeForHtml(feature.properties.nom)}</div>`;
+              : `<div style="color: var(--card-foreground); font-family: system-ui;">${sanitizeForHtml(feature.properties.nom)}</div>`;
 
             layer.bindPopup(popupContent, {
               className: 'dark-popup',
@@ -363,7 +363,7 @@ export function GuineaMapLeafletInner({
             });
 
             layer.on('mouseover', () => {
-              (layer as L.Path).setStyle({ fillOpacity: 0.7, weight: 2.5, color: '#F1F5F9' });
+              (layer as L.Path).setStyle({ fillOpacity: 0.7, weight: 2.5, color: 'var(--foreground)' });
             });
 
             layer.on('mouseout', () => {
@@ -371,7 +371,7 @@ export function GuineaMapLeafletInner({
               (layer as L.Path).setStyle({
                 fillOpacity: isStillSelected ? 0.65 : 0.4,
                 weight: isStillSelected ? 3 : 1.5,
-                color: isStillSelected ? '#D4A843' : 'rgba(255,255,255,0.3)',
+                color: isStillSelected ? '#D4A843' : 'var(--border)',
               });
             });
           },
@@ -383,7 +383,7 @@ export function GuineaMapLeafletInner({
         const labelMarker = L.marker(center, {
           icon: L.divIcon({
             className: 'region-label',
-            html: `<span style="color:rgba(255,255,255,0.85);font-size:11px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,0.9),0 0 8px rgba(0,0,0,0.5);white-space:nowrap;letter-spacing:0.5px;">${sanitizeForHtml(feature.properties.nom)}</span>`,
+            html: `<span style="color:var(--foreground);font-size:11px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,0.9),0 0 8px rgba(0,0,0,0.5);white-space:nowrap;letter-spacing:0.5px;">${sanitizeForHtml(feature.properties.nom)}</span>`,
             iconSize: [100, 24],
             iconAnchor: [50, 12],
           }),
@@ -423,11 +423,11 @@ export function GuineaMapLeafletInner({
         radius: 5,
         fillColor: point.operatorColor,
         fillOpacity: 0.8,
-        color: 'rgba(255,255,255,0.4)',
+        color: 'var(--border)',
         weight: 1,
       });
       circleMarker.bindPopup(
-        `<div style="font-family:system-ui;color:#F1F5F9;font-size:12px;">
+        `<div style="font-family:system-ui;color:var(--card-foreground);font-size:12px;">
           <div style="font-weight:600;color:#D4A843;margin-bottom:4px;">${sanitizeForHtml(point.operator)}</div>
           ${point.rssi !== null ? `<div>RSSI: <b>${point.rssi} dBm</b></div>` : ''}
           ${point.scoreQoE !== null ? `<div>QoE: <b>${point.scoreQoE}/100</b></div>` : ''}
@@ -445,7 +445,7 @@ export function GuineaMapLeafletInner({
     <div
       ref={mapRef}
       className="w-full rounded-lg overflow-hidden"
-      style={{ background: '#0A0F1E', minHeight: '500px', height: '500px', position: 'relative' }}
+      style={{ background: 'var(--background)', minHeight: '500px', height: '500px', position: 'relative' }}
     />
   );
 }

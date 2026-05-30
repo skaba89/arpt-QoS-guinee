@@ -35,6 +35,7 @@ import { DashboardCyber } from './dashboard-cyber';
 import { DashboardAdmin } from './dashboard-admin';
 import { ErrorBoundary } from './error-boundary';
 import { UserMenu } from './user-menu';
+import { ThemeToggle } from './theme-toggle';
 import { useSession } from 'next-auth/react';
 import { cn } from '@/lib/utils';
 
@@ -252,7 +253,7 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen bg-[#080C1A] flex">
+    <div className="min-h-screen bg-background flex">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -267,8 +268,7 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
       <aside
         className={cn(
           'fixed inset-y-0 left-0 z-50 w-[280px] guinea-stripe-top',
-          'bg-gradient-to-b from-[#080C1A] via-[#0B1120] to-[#0D1425]',
-          'border-r border-white/[0.05]',
+          'bg-background border-r border-border',
           'transform transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]',
           'lg:relative lg:translate-x-0 flex flex-col',
           sidebarOpen
@@ -277,33 +277,33 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
         )}
       >
         {/* ─── LOGO SECTION ─── */}
-        <div className="px-6 pt-8 pb-6 border-b border-white/[0.05]">
+        <div className="px-6 pt-8 pb-6 border-b border-border">
           {/* ARPT Crest */}
           <div className="flex flex-col items-center text-center">
-            <div className="h-20 w-20 rounded-full border-2 border-[#D4A843]/35 p-1 mb-4 shadow-lg shadow-[#D4A843]/8 bg-gradient-to-br from-[#D4A843]/8 to-transparent">
+            <div className="h-20 w-20 rounded-full border-2 border-primary/35 p-1 mb-4 shadow-lg shadow-primary/8 bg-gradient-to-br from-primary/8 to-transparent">
               <img
                 src="/arpt-crest.png"
                 alt="Armoiries de la République de Guinée"
                 className="h-full w-full rounded-full object-cover"
               />
             </div>
-            <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-[#D4A843]/60 mb-1.5">
+            <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-primary/60 mb-1.5">
               République de Guinée
             </p>
-            <h1 className="text-xl font-bold text-slate-50 tracking-tight leading-none">
+            <h1 className="text-xl font-bold text-foreground tracking-tight leading-none">
               ONIT-PNG
             </h1>
-            <p className="text-[9px] text-slate-500 leading-snug mt-1.5 max-w-[200px]">
+            <p className="text-[9px] text-muted-foreground leading-snug mt-1.5 max-w-[200px]">
               Observatoire National Intelligent des Télécommunications
             </p>
 
             {/* Gold separator */}
-            <div className="mt-5 w-full h-px bg-gradient-to-r from-transparent via-[#D4A843]/40 to-transparent" />
+            <div className="mt-5 w-full h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
             {/* Role badge */}
             {session && userRole && (
               <div className="mt-4 animate-slide-in-left">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-medium bg-[#D4A843]/8 text-[#D4A843] border border-[#D4A843]/15">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-medium bg-primary/8 text-primary border border-primary/15">
                   <Key className="h-2.5 w-2.5" />
                   {userRole.replace(/_/g, ' ')}
                 </span>
@@ -318,11 +318,11 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
             <div key={group.section}>
               {/* Section header */}
               <div className="flex items-center gap-2 mb-3 px-2">
-                <span className="h-1 w-5 rounded-full bg-gradient-to-r from-[#D4A843]/60 to-transparent" />
-                <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                <span className="h-1 w-5 rounded-full bg-gradient-to-r from-primary/60 to-transparent" />
+                <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                   {group.section}
                 </span>
-                <span className="text-[9px] text-slate-600 hidden lg:inline">
+                <span className="text-[9px] text-muted-foreground/60 hidden lg:inline">
                   — {sectionDescriptions[group.section]}
                 </span>
               </div>
@@ -341,8 +341,8 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
                       className={cn(
                         'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-300 group',
                         isActive
-                          ? 'bg-[#D4A843]/8 text-[#D4A843] shadow-sm shadow-[#D4A843]/3'
-                          : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200'
+                          ? 'bg-primary/8 text-primary shadow-sm shadow-primary/3'
+                          : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                       )}
                       style={isActive ? {
                         borderLeft: '2px solid rgba(212,168,67,0.6)',
@@ -356,26 +356,26 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
                           className={cn(
                             'p-1.5 rounded-md transition-all duration-300',
                             isActive
-                              ? 'bg-[#D4A843]/12'
-                              : 'group-hover:bg-white/[0.04]'
+                              ? 'bg-primary/12'
+                              : 'group-hover:bg-muted'
                           )}
                         >
                           <Icon
                             className={cn(
                               'h-4 w-4 transition-colors duration-300',
                               isActive
-                                ? 'text-[#D4A843]'
-                                : 'text-slate-500 group-hover:text-slate-300'
+                                ? 'text-primary'
+                                : 'text-muted-foreground group-hover:text-foreground'
                             )}
                           />
                         </div>
                       )}
                       <span className={cn(
                         "font-medium text-[13px] tracking-wide",
-                        isActive ? 'text-[#D4A843]' : ''
+                        isActive ? 'text-primary' : ''
                       )}>{tab.label}</span>
                       {isActive && (
-                        <ChevronRight className="h-3.5 w-3.5 ml-auto text-[#D4A843]/50" />
+                        <ChevronRight className="h-3.5 w-3.5 ml-auto text-primary/50" />
                       )}
                     </button>
                   );
@@ -386,20 +386,20 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
         </nav>
 
         {/* ─── BOTTOM: User Menu + Institutional Footer ─── */}
-        <div className="border-t border-white/[0.05] bg-[#080C1A]/90 backdrop-blur-sm">
+        <div className="border-t border-border bg-background/90 backdrop-blur-sm">
           {/* User menu */}
           <div className="p-4">
             {session ? (
               <UserMenu />
             ) : (
-              <div className="p-3 rounded-xl bg-white/[0.03] text-center border border-white/[0.04]">
-                <p className="text-xs text-slate-400">Non connecté</p>
+              <div className="p-3 rounded-xl bg-muted text-center border border-border">
+                <p className="text-xs text-muted-foreground">Non connecté</p>
               </div>
             )}
           </div>
           {/* Institutional footer */}
-          <div className="px-5 pb-4 pt-1 border-t border-white/[0.04]">
-            <p className="text-[9px] text-slate-600 text-center tracking-wider">
+          <div className="px-5 pb-4 pt-1 border-t border-border/50">
+            <p className="text-[9px] text-muted-foreground/60 text-center tracking-wider">
               ARPT Guinée &copy; 2026
             </p>
           </div>
@@ -411,19 +411,19 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
           ═══════════════════════════════════════════════════════════ */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* ─── HEADER (h-16) ─── */}
-        <header className="h-16 bg-[#080C1A]/85 backdrop-blur-2xl border-b border-white/[0.05] flex items-center justify-between px-5 lg:px-8 sticky top-0 z-30">
+        <header className="h-16 bg-background/85 backdrop-blur-2xl border-b border-border flex items-center justify-between px-5 lg:px-8 sticky top-0 z-30">
           {/* LEFT: Hamburger + Breadcrumb */}
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-white/[0.06] text-slate-400 transition-colors"
+              className="lg:hidden p-2 rounded-lg hover:bg-muted text-muted-foreground transition-colors"
             >
               {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
             <div className="hidden sm:flex items-center gap-2.5">
-              <span className="text-[11px] font-bold text-[#D4A843]/70 tracking-[0.08em] uppercase">ONIT-PNG</span>
-              <ChevronRight className="h-3 w-3 text-slate-600" />
-              <span className="text-[13px] text-slate-300 font-medium">
+              <span className="text-[11px] font-bold text-primary/70 tracking-[0.08em] uppercase">ONIT-PNG</span>
+              <ChevronRight className="h-3 w-3 text-muted-foreground/40" />
+              <span className="text-[13px] text-foreground font-medium">
                 {navTabs.find((t) => t.id === activeTab)?.label}
               </span>
             </div>
@@ -431,26 +431,29 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
 
           {/* CENTER: French Date */}
           <div className="hidden md:flex items-center gap-2">
-            <span className="text-[11px] text-slate-500 font-medium capitalize tracking-wide">
+            <span className="text-[11px] text-muted-foreground font-medium capitalize tracking-wide">
               {currentDate}
             </span>
           </div>
 
-          {/* RIGHT: Search + Notifications + Live */}
-          <div className="flex items-center gap-4">
+          {/* RIGHT: Theme Toggle + Search + Notifications + Live */}
+          <div className="flex items-center gap-3">
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
             {/* Search */}
             <div
               className={cn(
                 'hidden md:flex items-center gap-2.5 px-4 py-2 rounded-xl border transition-all duration-300',
                 searchFocused
-                  ? 'bg-white/[0.06] border-[#D4A843]/25 ring-1 ring-[#D4A843]/8'
-                  : 'bg-white/[0.03] border-white/[0.05]'
+                  ? 'bg-card border-primary/25 ring-1 ring-primary/8'
+                  : 'bg-muted/50 border-border'
               )}
             >
               <Search
                 className={cn(
                   'h-3.5 w-3.5 transition-colors duration-300',
-                  searchFocused ? 'text-[#D4A843]' : 'text-slate-500'
+                  searchFocused ? 'text-primary' : 'text-muted-foreground'
                 )}
               />
               <input
@@ -458,14 +461,14 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
                 placeholder="Rechercher..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-transparent text-xs text-slate-300 placeholder-slate-600 focus:outline-none w-48 transition-all"
+                className="bg-transparent text-xs text-foreground placeholder-muted-foreground focus:outline-none w-48 transition-all"
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="text-slate-500 hover:text-slate-300 transition-colors"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -477,10 +480,10 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
               <button
                 onClick={() => setNotifOpen(!notifOpen)}
                 className={cn(
-                  'relative p-2 rounded-xl hover:bg-white/[0.06] transition-all duration-300',
+                  'relative p-2 rounded-xl hover:bg-muted transition-all duration-300',
                   notifOpen
-                    ? 'bg-white/[0.06] text-slate-200'
-                    : 'text-slate-400 hover:text-slate-300'
+                    ? 'bg-muted text-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
                 )}
               >
                 <Bell className="h-4.5 w-4.5" />
@@ -492,10 +495,10 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
               </button>
 
               {notifOpen && (
-                <div className="absolute right-0 top-full mt-2.5 w-84 rounded-xl bg-[#131B30]/95 backdrop-blur-2xl border border-white/[0.08] shadow-2xl shadow-black/50 z-50 overflow-hidden animate-scale-in">
-                  <div className="p-4 border-b border-white/[0.08] flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-                      <Bell className="h-4 w-4 text-[#D4A843]" />
+                <div className="absolute right-0 top-full mt-2.5 w-84 rounded-xl bg-popover/95 backdrop-blur-2xl border border-border shadow-2xl shadow-black/20 dark:shadow-black/50 z-50 overflow-hidden animate-scale-in">
+                  <div className="p-4 border-b border-border flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                      <Bell className="h-4 w-4 text-primary" />
                       Alertes
                       {unreadCount > 0 && (
                         <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/15 text-red-400">
@@ -506,7 +509,7 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
                     {unreadCount > 0 && (
                       <button
                         onClick={handleMarkAllRead}
-                        className="flex items-center gap-1 text-[10px] text-[#D4A843] hover:text-[#D4A843]/80 transition-colors"
+                        className="flex items-center gap-1 text-[10px] text-primary hover:text-primary/80 transition-colors"
                       >
                         <CheckCheck className="h-3 w-3" />
                         Tout marquer lu
@@ -516,9 +519,9 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
                   <div className="max-h-80 overflow-y-auto custom-scrollbar">
                     {alerts.length === 0 ? (
                       <div className="p-10 text-center">
-                        <Bell className="h-8 w-8 text-slate-600 mx-auto mb-2" />
-                        <p className="text-xs text-slate-500">Aucune alerte</p>
-                        <p className="text-[10px] text-slate-600 mt-1">
+                        <Bell className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                        <p className="text-xs text-muted-foreground">Aucune alerte</p>
+                        <p className="text-[10px] text-muted-foreground/60 mt-1">
                           Les alertes apparaîtront ici
                         </p>
                       </div>
@@ -527,8 +530,8 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
                         <div
                           key={alert.id}
                           className={cn(
-                            'p-3.5 border-b border-white/[0.04] transition-colors hover:bg-white/[0.03]',
-                            !alert.isResolved && 'bg-white/[0.015]'
+                            'p-3.5 border-b border-border transition-colors hover:bg-muted/50',
+                            !alert.isResolved && 'bg-muted/30'
                           )}
                           style={{ animationDelay: `${i * 30}ms` }}
                         >
@@ -539,22 +542,22 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
                               {getAlertIcon(alert.severity)}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-xs font-medium text-slate-200 truncate">
+                              <p className="text-xs font-medium text-foreground truncate">
                                 {alert.message}
                               </p>
                               <div className="flex items-center gap-2 mt-0.5">
                                 {alert.operator && (
-                                  <span className="text-[10px] text-slate-500">
+                                  <span className="text-[10px] text-muted-foreground">
                                     {alert.operator}
                                   </span>
                                 )}
                                 {alert.region && (
-                                  <span className="text-[10px] text-slate-500">
+                                  <span className="text-[10px] text-muted-foreground">
                                     &bull; {alert.region}
                                   </span>
                                 )}
                               </div>
-                              <p className="text-[10px] text-slate-600 mt-0.5">
+                              <p className="text-[10px] text-muted-foreground/60 mt-0.5">
                                 {formatAlertTime(alert.createdAt)}
                               </p>
                             </div>

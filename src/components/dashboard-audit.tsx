@@ -118,7 +118,7 @@ export function DashboardAudit() {
   if (authLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -127,13 +127,13 @@ export function DashboardAudit() {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <Lock className="h-12 w-12 text-red-400" />
-        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
-        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+        <h3 className="text-lg font-semibold text-foreground">Accès non autorisé</h3>
+        <p className="text-muted-foreground text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
       </div>
     );
   }
 
-  if (loading) return <div className="flex items-center justify-center h-64"><div className="text-xs text-slate-500 animate-pulse">Chargement des campagnes...</div></div>;
+  if (loading) return <div className="flex items-center justify-center h-64"><div className="text-xs text-muted-foreground animate-pulse">Chargement des campagnes...</div></div>;
 
   return (
     <div className="space-y-6">
@@ -141,11 +141,11 @@ export function DashboardAudit() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#D4A843] to-transparent" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#D4A843]/70">Analyse</span>
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-primary to-transparent" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-primary/70">Analyse</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 tracking-tight">Audit Terrain</h1>
-          <p className="text-sm text-slate-400 mt-2">Gestion des campagnes d&apos;audit et tests terrain</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Audit Terrain</h1>
+          <p className="text-sm text-muted-foreground mt-2">Gestion des campagnes d&apos;audit et tests terrain</p>
         </div>
       </div>
 
@@ -154,19 +154,19 @@ export function DashboardAudit() {
         <div className="institutional-card guinea-stripe-top p-5">
           <div className="flex items-center gap-3">
             <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20"><Clock className="h-5 w-5 text-blue-400" /></div>
-            <div><p className="text-3xl font-bold text-slate-50">{activeCampaigns}</p><p className="text-xs text-slate-400">En cours</p></div>
+            <div><p className="text-3xl font-bold text-foreground">{activeCampaigns}</p><p className="text-xs text-muted-foreground">En cours</p></div>
           </div>
         </div>
         <div className="institutional-card guinea-stripe-top p-5">
           <div className="flex items-center gap-3">
             <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20"><CheckCircle2 className="h-5 w-5 text-emerald-400" /></div>
-            <div><p className="text-3xl font-bold text-slate-50">{completedCampaigns}</p><p className="text-xs text-slate-400">Complétées</p></div>
+            <div><p className="text-3xl font-bold text-foreground">{completedCampaigns}</p><p className="text-xs text-muted-foreground">Complétées</p></div>
           </div>
         </div>
         <div className="institutional-card guinea-stripe-top p-5">
           <div className="flex items-center gap-3">
             <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20"><ClipboardCheck className="h-5 w-5 text-amber-400" /></div>
-            <div><p className="text-3xl font-bold text-slate-50">{plannedCampaigns}</p><p className="text-xs text-slate-400">Planifiées</p></div>
+            <div><p className="text-3xl font-bold text-foreground">{plannedCampaigns}</p><p className="text-xs text-muted-foreground">Planifiées</p></div>
           </div>
         </div>
       </div>
@@ -174,7 +174,7 @@ export function DashboardAudit() {
       {/* ── Campaign Table + Drive Test ── */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div className="lg:col-span-3 institutional-card guinea-stripe-top">
-          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+          <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
@@ -183,24 +183,24 @@ export function DashboardAudit() {
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
-                <tr className="border-b border-white/10">
-                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Campagne</th>
-                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Type</th>
-                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Opérateur</th>
-                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Région</th>
-                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Date</th>
-                  <th className="text-left py-2.5 px-2 text-[#D4A843]/80 font-semibold">Statut</th>
+                <tr className="border-b border-border">
+                  <th className="text-left py-2.5 px-2 text-primary/80 font-semibold">Campagne</th>
+                  <th className="text-left py-2.5 px-2 text-primary/80 font-semibold">Type</th>
+                  <th className="text-left py-2.5 px-2 text-primary/80 font-semibold">Opérateur</th>
+                  <th className="text-left py-2.5 px-2 text-primary/80 font-semibold">Région</th>
+                  <th className="text-left py-2.5 px-2 text-primary/80 font-semibold">Date</th>
+                  <th className="text-left py-2.5 px-2 text-primary/80 font-semibold">Statut</th>
                 </tr>
               </thead>
               <tbody>
                 {campaigns.map((campaign) => (
-                  <tr key={campaign.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                    <td className="py-2.5 px-2 text-slate-200 font-medium">{campaign.name}</td>
-                    <td className="py-2.5 px-2 text-slate-400">{campaign.type}</td>
-                    <td className="py-2.5 px-2"><span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: campaign.operatorColor }} /><span className="text-slate-300">{campaign.operator}</span></span></td>
-                    <td className="py-2.5 px-2 text-slate-400">{campaign.region}</td>
-                    <td className="py-2.5 px-2 text-slate-400 font-mono">{campaign.date}</td>
-                    <td className="py-2.5 px-2"><span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border ${statusStyles[campaign.statut] || 'bg-slate-500/10 text-slate-400 border-slate-500/20'}`}>{statusLabels[campaign.statut] || campaign.statut}</span></td>
+                  <tr key={campaign.id} className="border-b border-border hover:bg-muted transition-colors">
+                    <td className="py-2.5 px-2 text-foreground font-medium">{campaign.name}</td>
+                    <td className="py-2.5 px-2 text-muted-foreground">{campaign.type}</td>
+                    <td className="py-2.5 px-2"><span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: campaign.operatorColor }} /><span className="text-foreground">{campaign.operator}</span></span></td>
+                    <td className="py-2.5 px-2 text-muted-foreground">{campaign.region}</td>
+                    <td className="py-2.5 px-2 text-muted-foreground font-mono">{campaign.date}</td>
+                    <td className="py-2.5 px-2"><span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border ${statusStyles[campaign.statut] || 'bg-slate-500/10 text-muted-foreground border-slate-500/20'}`}>{statusLabels[campaign.statut] || campaign.statut}</span></td>
                   </tr>
                 ))}
               </tbody>
@@ -209,30 +209,30 @@ export function DashboardAudit() {
         </div>
 
         <div className="lg:col-span-2 institutional-card guinea-stripe-top">
-          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+          <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
-            <Car className="h-4 w-4 text-[#D4A843]" />Drive Test - Conakry
+            <Car className="h-4 w-4 text-primary" />Drive Test - Conakry
           </h2>
-          <div className="relative h-64 rounded-lg bg-[#0A0F1E] border border-white/5 overflow-hidden flex items-center justify-center">
-            <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+          <div className="relative h-64 rounded-lg bg-card border border-border overflow-hidden flex items-center justify-center">
+            <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(hsl(var(--border)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 300 250">
               <path d="M 40 200 L 80 180 L 120 160 L 150 120 L 180 100 L 200 80 L 240 60 L 260 80" fill="none" stroke="#3B82F6" strokeWidth="2" strokeDasharray="6 3" opacity="0.6" />
               <path d="M 60 220 L 100 190 L 140 170 L 160 140 L 190 110 L 220 90" fill="none" stroke="#FF7900" strokeWidth="2" strokeDasharray="6 3" opacity="0.6" />
               {[{ x: 80, y: 180, color: '#3B82F6' }, { x: 150, y: 120, color: '#3B82F6' }, { x: 240, y: 60, color: '#3B82F6' }, { x: 100, y: 190, color: '#FF7900' }, { x: 190, y: 110, color: '#FF7900' }].map((pt, i) => (<circle key={i} cx={pt.x} cy={pt.y} r="4" fill={pt.color} opacity="0.8" />))}
-              <circle cx="40" cy="200" r="6" fill="#10B981" stroke="#0A0F1E" strokeWidth="2" />
-              <circle cx="260" cy="80" r="6" fill="#EF4444" stroke="#0A0F1E" strokeWidth="2" />
+              <circle cx="40" cy="200" r="6" fill="#10B981" stroke="var(--card)" strokeWidth="2" />
+              <circle cx="260" cy="80" r="6" fill="#EF4444" stroke="var(--card)" strokeWidth="2" />
             </svg>
           </div>
-          <div className="mt-3 flex items-center gap-2 text-xs text-slate-400"><MapPin className="h-3 w-3" /><span>Conakry - Kaloum • Points de mesure</span></div>
+          <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground"><MapPin className="h-3 w-3" /><span>Conakry - Kaloum • Points de mesure</span></div>
         </div>
       </div>
 
       {/* ── Compliance + Benchmark ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="institutional-card guinea-stripe-top">
-          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+          <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
@@ -240,22 +240,22 @@ export function DashboardAudit() {
           </h2>
           <div className="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
             {auditResults.map((result) => (
-              <div key={result.id} className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+              <div key={result.id} className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
                 <div className="flex items-center gap-3">
                   {result.status === 'pass' ? <CheckCircle2 className="h-4 w-4 text-emerald-400" /> : <XCircle className="h-4 w-4 text-red-400" />}
-                  <div><p className="text-xs font-medium text-slate-200">{result.metric} - {result.operator}</p><p className="text-[10px] text-slate-500">Seuil ARPT: {result.threshold}</p></div>
+                  <div><p className="text-xs font-medium text-foreground">{result.metric} - {result.operator}</p><p className="text-[10px] text-muted-foreground">Seuil ARPT: {result.threshold}</p></div>
                 </div>
                 <div className="text-right"><p className={`text-xs font-mono ${result.status === 'pass' ? 'text-emerald-400' : 'text-red-400'}`}>{result.value}</p><p className={`text-[10px] font-medium ${result.status === 'pass' ? 'text-emerald-400' : 'text-red-400'}`}>{result.status === 'pass' ? 'CONFORME' : 'NON CONFORME'}</p></div>
               </div>
             ))}
             {auditResults.length === 0 && (
-              <div className="p-4 text-center text-xs text-slate-500">Aucun résultat d&apos;audit disponible</div>
+              <div className="p-4 text-center text-xs text-muted-foreground">Aucun résultat d&apos;audit disponible</div>
             )}
           </div>
         </div>
 
         <div className="institutional-card guinea-stripe-top">
-          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+          <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
@@ -269,10 +269,10 @@ export function DashboardAudit() {
                 color: d.color,
               }));
               const maxVal = Math.max(...opData.map((d) => d.value), 1);
-              return (<div key={metric}><p className="text-xs text-slate-400 mb-2">{metric}</p><div className="space-y-1">{opData.map((d) => (<div key={d.name} className="flex items-center gap-2"><span className="text-[10px] text-slate-500 w-12">{d.name}</span><div className="flex-1 h-2.5 bg-white/5 rounded-full overflow-hidden"><div className="h-full rounded-full" style={{ width: `${(d.value / maxVal) * 100}%`, backgroundColor: d.color, opacity: 0.8 }} /></div><span className="text-[10px] text-slate-300 font-mono w-12 text-right">{d.value}{metric === 'Taux Appel' || metric === 'Disponibilité' ? '%' : metric === 'Débit' ? 'Mb' : 'ms'}</span></div>))}</div></div>);
+              return (<div key={metric}><p className="text-xs text-muted-foreground mb-2">{metric}</p><div className="space-y-1">{opData.map((d) => (<div key={d.name} className="flex items-center gap-2"><span className="text-[10px] text-muted-foreground w-12">{d.name}</span><div className="flex-1 h-2.5 bg-muted rounded-full overflow-hidden"><div className="h-full rounded-full" style={{ width: `${(d.value / maxVal) * 100}%`, backgroundColor: d.color, opacity: 0.8 }} /></div><span className="text-[10px] text-foreground font-mono w-12 text-right">{d.value}{metric === 'Taux Appel' || metric === 'Disponibilité' ? '%' : metric === 'Débit' ? 'Mb' : 'ms'}</span></div>))}</div></div>);
             })}
             {benchmarkData.length === 0 && (
-              <div className="p-4 text-center text-xs text-slate-500">Aucune donnée de benchmark disponible</div>
+              <div className="p-4 text-center text-xs text-muted-foreground">Aucune donnée de benchmark disponible</div>
             )}
           </div>
         </div>

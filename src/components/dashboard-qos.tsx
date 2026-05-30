@@ -56,7 +56,7 @@ export function DashboardQoS() {
   if (authLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -65,14 +65,14 @@ export function DashboardQoS() {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <Lock className="h-12 w-12 text-red-400" />
-        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
-        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+        <h3 className="text-lg font-semibold text-foreground">Accès non autorisé</h3>
+        <p className="text-muted-foreground text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
       </div>
     );
   }
 
   if (loading) {
-    return <div className="flex items-center justify-center h-64"><div className="text-xs text-slate-500 animate-pulse">Chargement QoS...</div></div>;
+    return <div className="flex items-center justify-center h-64"><div className="text-xs text-muted-foreground animate-pulse">Chargement QoS...</div></div>;
   }
 
   const metrics = data?.metrics || {
@@ -106,11 +106,11 @@ export function DashboardQoS() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#D4A843] to-transparent" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#D4A843]/70">Supervision</span>
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-primary to-transparent" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-primary/70">Supervision</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 tracking-tight">Monitoring QoS</h1>
-          <p className="text-sm text-slate-400 mt-2">Supervision technique de la qualité de service en temps réel</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Monitoring QoS</h1>
+          <p className="text-sm text-muted-foreground mt-2">Supervision technique de la qualité de service en temps réel</p>
         </div>
         <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/[0.08] border border-emerald-500/15">
           <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -121,28 +121,28 @@ export function DashboardQoS() {
       {/* ── Filter Bar ── */}
       <div className="institutional-card guinea-stripe-top p-4">
         <div className="flex items-center gap-2 flex-wrap">
-          <Filter className="h-4 w-4 text-[#D4A843] mr-1" />
+          <Filter className="h-4 w-4 text-primary mr-1" />
           <div className="flex items-center gap-1">
-            <span className="text-xs text-slate-500 mr-1">Opérateur:</span>
+            <span className="text-xs text-muted-foreground mr-1">Opérateur:</span>
             {['all', 'orange', 'mtn', 'celcom', 'intercel'].map((op) => (
-              <button key={op} onClick={() => setSelectedOperator(op)} className={`px-3 py-1 text-xs rounded-md border transition-all ${selectedOperator === op ? 'bg-[#D4A843]/20 border-[#D4A843]/40 text-[#D4A843]' : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'}`}>
+              <button key={op} onClick={() => setSelectedOperator(op)} className={`px-3 py-1 text-xs rounded-md border transition-all ${selectedOperator === op ? 'bg-primary/20 border-primary/40 text-primary' : 'bg-muted border-border text-muted-foreground hover:bg-accent'}`}>
                 {op === 'all' ? 'Tous' : op.charAt(0).toUpperCase() + op.slice(1)}
               </button>
             ))}
           </div>
-          <div className="h-6 w-px bg-white/10 mx-2" />
+          <div className="h-6 w-px bg-accent mx-2" />
           <div className="flex items-center gap-1">
-            <span className="text-xs text-slate-500 mr-1">Région:</span>
-            <select value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)} className="px-2 py-1 text-xs rounded-md bg-white/5 border border-white/10 text-slate-300 focus:outline-none focus:border-[#D4A843]/40">
+            <span className="text-xs text-muted-foreground mr-1">Région:</span>
+            <select value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)} className="px-2 py-1 text-xs rounded-md bg-muted border border-border text-foreground focus:outline-none focus:border-primary/40">
               <option value="all">Toutes</option>
               {regions.map((r) => (<option key={r.code} value={r.code}>{r.name}</option>))}
             </select>
           </div>
-          <div className="h-6 w-px bg-white/10 mx-2" />
+          <div className="h-6 w-px bg-accent mx-2" />
           <div className="flex items-center gap-1">
-            <span className="text-xs text-slate-500 mr-1">Période:</span>
+            <span className="text-xs text-muted-foreground mr-1">Période:</span>
             {['1m', '3m', '6m', '1y'].map((p) => (
-              <button key={p} onClick={() => setSelectedPeriod(p)} className={`px-3 py-1 text-xs rounded-md border transition-all ${selectedPeriod === p ? 'bg-[#D4A843]/20 border-[#D4A843]/40 text-[#D4A843]' : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'}`}>
+              <button key={p} onClick={() => setSelectedPeriod(p)} className={`px-3 py-1 text-xs rounded-md border transition-all ${selectedPeriod === p ? 'bg-primary/20 border-primary/40 text-primary' : 'bg-muted border-border text-muted-foreground hover:bg-accent'}`}>
                 {p}
               </button>
             ))}
@@ -162,7 +162,7 @@ export function DashboardQoS() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="institutional-card guinea-stripe-top">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest flex items-center gap-2">
+            <h2 className="text-xs font-semibold text-primary uppercase tracking-widest flex items-center gap-2">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
@@ -178,7 +178,7 @@ export function DashboardQoS() {
         </div>
 
         <div className="institutional-card guinea-stripe-top">
-          <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+          <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
@@ -188,16 +188,16 @@ export function DashboardQoS() {
             {benchmark.map((item, i) => (
               <div key={i}>
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs text-slate-400">{item.metric}</span>
-                  <span className="text-[10px] text-slate-500">Seuil: {item.threshold}</span>
+                  <span className="text-xs text-muted-foreground">{item.metric}</span>
+                  <span className="text-[10px] text-muted-foreground">Seuil: {item.threshold}</span>
                 </div>
                 <div className="flex items-center gap-1 h-4">
                   {[{ val: item.orange, color: '#FF7900' }, { val: item.mtn, color: '#FFCC00' }, { val: item.celcom, color: '#00B4D8' }, { val: ((item as unknown) as Record<string, number>).intercel || 0, color: '#8B5CF6' }].map((bar, bi) => {
                     const maxVal = Math.max(item.orange, item.mtn, item.celcom, ((item as unknown) as Record<string, number>).intercel || 0, item.threshold);
-                    return (<div key={bi} className="flex-1 flex items-center gap-1"><div className="flex-1 h-3 bg-white/5 rounded-full overflow-hidden relative"><div className="h-full rounded-full" style={{ width: `${(bar.val / maxVal) * 100}%`, backgroundColor: bar.color, opacity: 0.8 }} /></div><span className="text-[10px] text-slate-400 font-mono w-10 text-right">{bar.val}</span></div>);
+                    return (<div key={bi} className="flex-1 flex items-center gap-1"><div className="flex-1 h-3 bg-muted rounded-full overflow-hidden relative"><div className="h-full rounded-full" style={{ width: `${(bar.val / maxVal) * 100}%`, backgroundColor: bar.color, opacity: 0.8 }} /></div><span className="text-[10px] text-muted-foreground font-mono w-10 text-right">{bar.val}</span></div>);
                   })}
                 </div>
-                <div className="mt-0.5 h-px bg-[#D4A843]/40" />
+                <div className="mt-0.5 h-px bg-primary/40" />
               </div>
             ))}
           </div>
@@ -206,7 +206,7 @@ export function DashboardQoS() {
 
       {/* ── Heatmap ── */}
       <div className="institutional-card guinea-stripe-top">
-        <h2 className="text-xs font-semibold text-[#D4A843] uppercase tracking-widest mb-4 flex items-center gap-2">
+        <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
@@ -223,10 +223,10 @@ export function DashboardQoS() {
       {/* ── Per-Operator Cards ── */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {perOperator.map((op) => (
-          <div key={op.id} className="institutional-card guinea-stripe-left transition-all duration-300 hover:bg-white/[0.06]">
+          <div key={op.id} className="institutional-card guinea-stripe-left transition-all duration-300 hover:bg-accent">
             <div className="flex items-center gap-2 mb-4">
               <div className="h-8 w-8 rounded-lg flex items-center justify-center font-bold text-xs" style={{ backgroundColor: `${operatorColors[op.code] || op.color}20`, color: operatorColors[op.code] || op.color }}>{op.name.charAt(0)}</div>
-              <div><p className="text-sm font-semibold text-slate-100">{op.name}</p><p className="text-[10px] text-slate-500">Score Global: {op.score}/100</p></div>
+              <div><p className="text-sm font-semibold text-foreground">{op.name}</p><p className="text-[10px] text-muted-foreground">Score Global: {op.score}/100</p></div>
             </div>
             <div className="space-y-2">
               {[
@@ -237,8 +237,8 @@ export function DashboardQoS() {
                 { label: 'Disponibilité', value: `${op.disponibilite}%`, good: true },
               ].map((metric) => (
                 <div key={metric.label} className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">{metric.label}</span>
-                  <div className="flex items-center gap-1.5"><span className="text-xs text-slate-200 font-mono">{metric.value}</span><span className={`h-1.5 w-1.5 rounded-full ${metric.good ? 'bg-emerald-400' : 'bg-red-400'}`} /></div>
+                  <span className="text-xs text-muted-foreground">{metric.label}</span>
+                  <div className="flex items-center gap-1.5"><span className="text-xs text-foreground font-mono">{metric.value}</span><span className={`h-1.5 w-1.5 rounded-full ${metric.good ? 'bg-emerald-400' : 'bg-red-400'}`} /></div>
                 </div>
               ))}
             </div>

@@ -62,7 +62,7 @@ export function DashboardDG() {
   if (authLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -71,8 +71,8 @@ export function DashboardDG() {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <Lock className="h-12 w-12 text-red-400" />
-        <h3 className="text-lg font-semibold text-slate-50">Accès non autorisé</h3>
-        <p className="text-slate-400 text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
+        <h3 className="text-lg font-semibold text-foreground">Accès non autorisé</h3>
+        <p className="text-muted-foreground text-sm">Vous n'avez pas les permissions nécessaires pour accéder à cette section.</p>
       </div>
     );
   }
@@ -80,8 +80,8 @@ export function DashboardDG() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-3">
-        <Loader2 className="h-8 w-8 animate-spin text-[#D4A843]" />
-        <div className="text-xs text-slate-400">Chargement du tableau de bord...</div>
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="text-xs text-muted-foreground">Chargement du tableau de bord...</div>
       </div>
     );
   }
@@ -117,22 +117,22 @@ export function DashboardDG() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 mb-2">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#D4A843] to-transparent" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#D4A843]/70">
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-primary to-transparent" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-primary/70">
               Supervision
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
             Tableau de Bord Directeur
           </h1>
-          <p className="text-sm text-slate-400 mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             Vue stratégique de la supervision nationale des télécommunications
           </p>
         </div>
         <div className="flex items-center gap-3 flex-shrink-0">
           {isRestricted && (
             <div className="government-badge">
-              <Shield className="h-3 w-3 text-[#D4A843]" />
+              <Shield className="h-3 w-3 text-primary" />
               <span>Accès restreint</span>
             </div>
           )}
@@ -208,7 +208,7 @@ export function DashboardDG() {
                       {op.name.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-slate-100">{op.name}</p>
+                      <p className="text-sm font-semibold text-foreground">{op.name}</p>
                       <div className="flex items-center gap-1 mt-0.5">
                         {op.trend > 0 ? (
                           <TrendingUp className="h-3 w-3 text-emerald-400" />
@@ -224,8 +224,8 @@ export function DashboardDG() {
                   <div className="flex items-center gap-3">
                     <Sparkline data={op.historicalScores} color={op.color} width={60} height={24} />
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-slate-50">{op.score}</p>
-                      <p className="text-[10px] text-slate-500">/100</p>
+                      <p className="text-2xl font-bold text-foreground">{op.score}</p>
+                      <p className="text-[10px] text-muted-foreground">/100</p>
                     </div>
                   </div>
                 </div>
@@ -242,10 +242,10 @@ export function DashboardDG() {
                   ].map((sub) => (
                     <div key={sub.label} className="space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-[9px] text-slate-500 uppercase tracking-wide">{sub.label}</span>
-                        <span className="text-[9px] font-mono text-slate-400">{sub.val}</span>
+                        <span className="text-[9px] text-muted-foreground uppercase tracking-wide">{sub.label}</span>
+                        <span className="text-[9px] font-mono text-muted-foreground">{sub.val}</span>
                       </div>
-                      <div className="h-1.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
+                      <div className="h-1.5 w-full bg-accent rounded-full overflow-hidden">
                         <div
                           className="h-full rounded-full transition-all duration-700"
                           style={{
@@ -295,14 +295,14 @@ export function DashboardDG() {
               </div>
               <div className="mt-3 grid grid-cols-2 gap-2 text-center text-xs">
                 {operators.map((op) => (
-                  <div key={op.id} className="p-2 rounded-lg bg-white/[0.04] border border-white/[0.05] transition-colors hover:bg-white/[0.06]">
+                  <div key={op.id} className="p-2 rounded-lg bg-muted border border-border transition-colors hover:bg-accent">
                     <p className="font-semibold" style={{ color: op.color }}>{slaCompliance.operators[op.code] || 0}%</p>
-                    <p className="text-slate-500">{op.name.split(' ')[0]}</p>
+                    <p className="text-muted-foreground">{op.name.split(' ')[0]}</p>
                   </div>
                 ))}
-                <div className="p-2 rounded-lg bg-white/[0.04] border border-white/[0.05]">
-                  <p className="text-slate-300 font-semibold">{slaCompliance.global}%</p>
-                  <p className="text-slate-500">Moyenne</p>
+                <div className="p-2 rounded-lg bg-muted border border-border">
+                  <p className="text-card-foreground font-semibold">{slaCompliance.global}%</p>
+                  <p className="text-muted-foreground">Moyenne</p>
                 </div>
               </div>
             </div>
@@ -314,10 +314,10 @@ export function DashboardDG() {
                 {regions.map((r) => (
                   <div key={r.name} className="group">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs text-slate-400 truncate group-hover:text-slate-300 transition-colors">{r.name}</span>
-                      <span className="text-xs text-slate-300 font-mono font-medium w-10 text-right">{r.coverage}%</span>
+                      <span className="text-xs text-muted-foreground truncate group-hover:text-foreground transition-colors">{r.name}</span>
+                      <span className="text-xs text-card-foreground font-mono font-medium w-10 text-right">{r.coverage}%</span>
                     </div>
-                    <div className="h-2 bg-white/[0.06] rounded-full overflow-hidden">
+                    <div className="h-2 bg-accent rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all duration-700 relative overflow-hidden"
                         style={{ width: `${r.coverage}%`, backgroundColor: r.color }}
@@ -342,7 +342,7 @@ export function DashboardDG() {
             <AlertTriangle className="h-4 w-4 text-amber-400" />
             Alertes Récentes
           </h2>
-          <span className="text-xs text-slate-500">{alerts.length} alertes actives</span>
+          <span className="text-xs text-muted-foreground">{alerts.length} alertes actives</span>
         </div>
         <div className="space-y-2 max-h-56 overflow-y-auto custom-scrollbar">
           {alerts.map((alert) => {
@@ -369,11 +369,11 @@ export function DashboardDG() {
                 hoverBg: 'hover:bg-blue-500/[0.08]',
               },
             }[alert.type] || {
-              bg: 'bg-white/5',
-              border: 'border-white/10',
+              bg: 'bg-muted',
+              border: 'border-border',
               dot: 'bg-slate-400',
-              icon: 'text-slate-400',
-              hoverBg: 'hover:bg-white/5',
+              icon: 'text-muted-foreground',
+              hoverBg: 'hover:bg-muted',
             };
 
             return (
@@ -384,13 +384,13 @@ export function DashboardDG() {
                 <div className={`mt-0.5 h-2.5 w-2.5 rounded-full flex-shrink-0 ${severityConfig.dot}`} style={{ boxShadow: alert.type === 'critical' ? '0 0 0 2px rgba(239,68,68,0.3)' : alert.type === 'warning' ? '0 0 0 2px rgba(245,158,11,0.3)' : '0 0 0 2px rgba(59,130,246,0.3)' }} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-xs font-semibold text-slate-200">{alert.operator}</span>
-                    <span className="text-[10px] text-slate-500">•</span>
-                    <span className="text-xs text-slate-400">{alert.region}</span>
-                    <span className="text-[10px] text-slate-500">•</span>
-                    <span className="text-[10px] text-slate-500">{alert.time}</span>
+                    <span className="text-xs font-semibold text-foreground">{alert.operator}</span>
+                    <span className="text-[10px] text-muted-foreground">•</span>
+                    <span className="text-xs text-muted-foreground">{alert.region}</span>
+                    <span className="text-[10px] text-muted-foreground">•</span>
+                    <span className="text-[10px] text-muted-foreground">{alert.time}</span>
                   </div>
-                  <p className="text-xs text-slate-300 mt-0.5">{alert.message}</p>
+                  <p className="text-xs text-card-foreground mt-0.5">{alert.message}</p>
                 </div>
                 <Shield className={`h-4 w-4 flex-shrink-0 ${severityConfig.icon}`} />
               </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTheme } from 'next-themes';
 
 // Sparkline - tiny line chart with animated draw
 interface SparklineProps {
@@ -14,7 +15,7 @@ interface SparklineProps {
 
 export function Sparkline({
   data,
-  color = '#D4A843',
+  color = 'var(--primary)',
   width = 80,
   height = 32,
   strokeWidth = 2,
@@ -35,17 +36,17 @@ export function Sparkline({
     .join(' ');
 
   const areaPoints = `${padding},${height - padding} ${points} ${width - padding},${height - padding}`;
-  const gradId = `spark-${color.replace('#', '')}-${Math.random().toString(36).slice(2, 6)}`;
+  const gradId = `spark-${Math.random().toString(36).slice(2, 6)}`;
 
   return (
     <svg width={width} height={height} className="overflow-visible">
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.18" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0.18" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
         </linearGradient>
       </defs>
-      <polygon points={areaPoints} fill={`url(#${gradId})`} />
+      <polygon points={areaPoints} fill={`url(#${gradId})`} style={{ color }} />
       <polyline
         points={points}
         fill="none"
@@ -98,10 +99,10 @@ export function HBarChart({ data, maxValue, height = 24, showValue = true }: HBa
     <div className="space-y-3">
       {data.map((item, i) => (
         <div key={i} className="flex items-center gap-3 group">
-          <span className="text-[11px] text-slate-400 w-24 text-right truncate transition-colors group-hover:text-slate-300">
+          <span className="text-[11px] text-muted-foreground w-24 text-right truncate transition-colors group-hover:text-foreground">
             {item.label}
           </span>
-          <div className="flex-1 h-5 bg-white/[0.03] rounded-full overflow-hidden relative">
+          <div className="flex-1 h-5 bg-muted rounded-full overflow-hidden relative">
             <div
               className="h-full rounded-full transition-all duration-1000 ease-out relative overflow-hidden"
               style={{
@@ -112,7 +113,7 @@ export function HBarChart({ data, maxValue, height = 24, showValue = true }: HBa
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
             </div>
           </div>
-          {showValue && <span className="text-xs text-slate-300 w-12 font-mono font-medium">{item.value}</span>}
+          {showValue && <span className="text-xs text-foreground w-12 font-mono font-medium">{item.value}</span>}
         </div>
       ))}
     </div>
@@ -135,10 +136,11 @@ export function CircularGauge({
   maxValue = 100,
   size = 80,
   strokeWidth = 6,
-  color = '#D4A843',
+  color,
   label,
   showValue = true,
 }: CircularGaugeProps) {
+  const { resolvedTheme } = useTheme();
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const progress = (value / maxValue) * circumference;
@@ -147,7 +149,9 @@ export function CircularGauge({
   // Determine quality level for color override
   const percentage = (value / maxValue) * 100;
   const qualityColor = percentage >= 80 ? '#10B981' : percentage >= 60 ? '#D4A843' : percentage >= 40 ? '#F59E0B' : '#EF4444';
-  const displayColor = color === '#D4A843' ? qualityColor : color;
+  const displayColor = color || qualityColor;
+
+  const bgStroke = resolvedTheme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
 
   return (
     <div className="relative inline-flex items-center justify-center">
@@ -158,7 +162,7 @@ export function CircularGauge({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(255,255,255,0.04)"
+          stroke={bgStroke}
           strokeWidth={strokeWidth}
         />
         {/* Progress circle */}
@@ -178,8 +182,8 @@ export function CircularGauge({
       </svg>
       {showValue && (
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-lg font-bold text-slate-50 animate-count-up">{value}</span>
-          {label && <span className="text-[10px] text-slate-400">{label}</span>}
+          <span className="text-lg font-bold text-foreground animate-count-up">{value}</span>
+          {label && <span className="text-[10px] text-muted-foreground">{label}</span>}
         </div>
       )}
     </div>
@@ -197,11 +201,17 @@ interface RadarChartProps {
 }
 
 export function RadarChart({ data, series, size = 200 }: RadarChartProps) {
+  const { resolvedTheme } = useTheme();
+
   if (data.length < 3) return null;
   const center = size / 2;
   const maxRadius = size / 2 - 30;
   const levels = 4;
   const angleStep = (2 * Math.PI) / data.length;
+
+  const gridStroke = resolvedTheme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
+  const axisStroke = resolvedTheme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.04)';
+  const dotStroke = resolvedTheme === 'dark' ? '#080C1A' : '#FFFFFF';
 
   const getPoint = (value: number, index: number) => {
     const angle = angleStep * index - Math.PI / 2;
@@ -225,7 +235,7 @@ export function RadarChart({ data, series, size = 200 }: RadarChartProps) {
             key={l}
             points={points}
             fill="none"
-            stroke="rgba(255,255,255,0.04)"
+            stroke={gridStroke}
             strokeWidth="1"
           />
         );
@@ -243,7 +253,7 @@ export function RadarChart({ data, series, size = 200 }: RadarChartProps) {
             y1={center}
             x2={x}
             y2={y}
-            stroke="rgba(255,255,255,0.03)"
+            stroke={axisStroke}
             strokeWidth="1"
           />
         );
@@ -271,7 +281,7 @@ export function RadarChart({ data, series, size = 200 }: RadarChartProps) {
               const px = center + r * Math.cos(angle);
               const py = center + r * Math.sin(angle);
               return (
-                <circle key={di} cx={px} cy={py} r="3" fill={s.color} stroke="#080C1A" strokeWidth="2" />
+                <circle key={di} cx={px} cy={py} r="3" fill={s.color} stroke={dotStroke} strokeWidth="2" />
               );
             })}
           </g>
@@ -291,7 +301,7 @@ export function RadarChart({ data, series, size = 200 }: RadarChartProps) {
             y={y}
             textAnchor="middle"
             dominantBaseline="middle"
-            className="text-[10px] fill-slate-400 font-medium"
+            className="text-[10px] fill-muted-foreground font-medium"
           >
             {d.label}
           </text>
@@ -315,6 +325,8 @@ export function LineChart({
   width = 400,
   height = 200,
 }: LineChartProps) {
+  const { resolvedTheme } = useTheme();
+
   if (!data.length) return null;
   const padding = { top: 24, right: 24, bottom: 32, left: 44 };
   const chartW = width - padding.left - padding.right;
@@ -326,6 +338,9 @@ export function LineChart({
   const range = maxVal - minVal || 1;
 
   const xStep = data.length > 1 ? chartW / (data.length - 1) : 0;
+
+  const gridStroke = resolvedTheme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
+  const dotStroke = resolvedTheme === 'dark' ? '#080C1A' : '#FFFFFF';
 
   return (
     <div className="chart-responsive">
@@ -341,7 +356,7 @@ export function LineChart({
                 y1={y}
                 x2={width - padding.right}
                 y2={y}
-                stroke="rgba(255,255,255,0.04)"
+                stroke={gridStroke}
                 strokeWidth="1"
                 strokeDasharray={i > 0 ? "3,6" : "none"}
               />
@@ -350,7 +365,7 @@ export function LineChart({
                 y={y}
                 textAnchor="end"
                 dominantBaseline="middle"
-                className="text-[10px] fill-slate-500"
+                className="text-[10px] fill-muted-foreground"
               >
                 {val}
               </text>
@@ -365,7 +380,7 @@ export function LineChart({
             x={padding.left + i * xStep}
             y={height - 8}
             textAnchor="middle"
-            className="text-[10px] fill-slate-500"
+            className="text-[10px] fill-muted-foreground"
           >
             {d.label}
           </text>
@@ -416,7 +431,7 @@ export function LineChart({
                 cy={y}
                 r="3.5"
                 fill={s.color}
-                stroke="#080C1A"
+                stroke={dotStroke}
                 strokeWidth="2"
                 className="transition-all hover:r-5"
               />
