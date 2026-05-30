@@ -207,9 +207,9 @@ export function DashboardReports() {
         <div className="lg:col-span-2 institutional-card guinea-stripe-top">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xs font-semibold text-primary uppercase tracking-widest flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
               Rapports Récents
             </h2>
             <span className="text-xs text-muted-foreground">{reports.length} rapports</span>
@@ -256,9 +256,9 @@ export function DashboardReports() {
           {/* ── Quick Generation ── */}
           <div className="institutional-card guinea-stripe-top p-5">
             <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
               <FileText className="h-4 w-4 text-primary" />Génération Rapide
             </h3>
             <div className="space-y-2">
@@ -274,9 +274,9 @@ export function DashboardReports() {
           {/* ── Scheduling ── */}
           <div className="institutional-card guinea-stripe-top p-5">
             <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
               <Calendar className="h-4 w-4 text-primary" />Planification
             </h3>
             <div className="space-y-3 text-xs">

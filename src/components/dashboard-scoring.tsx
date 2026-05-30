@@ -143,9 +143,9 @@ export function DashboardScoring() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="institutional-card guinea-stripe-top">
           <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
             <Award className="h-4 w-4 text-primary" />Comparaison Radar
           </h2>
           <div className="flex justify-center"><RadarChart data={radarData} series={operators.map((op) => ({ name: op.name, color: op.color }))} size={240} /></div>
@@ -156,9 +156,9 @@ export function DashboardScoring() {
 
         <div className="institutional-card guinea-stripe-top">
           <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
             <BarChart3 className="h-4 w-4 text-primary" />Évolution Historique
           </h2>
           <div className="space-y-4">
@@ -176,9 +176,9 @@ export function DashboardScoring() {
 
         <div className="institutional-card guinea-stripe-top">
           <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
             <Lightbulb className="h-4 w-4 text-primary" />Recommandations IA
           </h2>
           <div className="space-y-3">
@@ -205,9 +205,9 @@ export function DashboardScoring() {
       {periodScores && comparisonPeriods.length >= 2 && (
         <div className="institutional-card guinea-stripe-top">
           <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
             <BarChart3 className="h-4 w-4 text-primary" />
             Comparaison Multi-Périodes
             <span className="text-[10px] text-muted-foreground font-normal normal-case">
@@ -267,9 +267,9 @@ export function DashboardScoring() {
       {/* ── Detailed Comparison Table ── */}
       <div className="institutional-card guinea-stripe-top">
         <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
           Tableau Comparatif Détaillé
         </h2>
         <div className="overflow-x-auto">

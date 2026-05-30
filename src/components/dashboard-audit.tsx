@@ -175,9 +175,9 @@ export function DashboardAudit() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div className="lg:col-span-3 institutional-card guinea-stripe-top">
           <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
             Liste des Campagnes
           </h2>
           <div className="overflow-x-auto">
@@ -210,9 +210,9 @@ export function DashboardAudit() {
 
         <div className="lg:col-span-2 institutional-card guinea-stripe-top">
           <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
             <Car className="h-4 w-4 text-primary" />Drive Test - Conakry
           </h2>
           <div className="relative h-64 rounded-lg bg-card border border-border overflow-hidden flex items-center justify-center">
@@ -233,9 +233,9 @@ export function DashboardAudit() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="institutional-card guinea-stripe-top">
           <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
             Résultats de Conformité ARPT
           </h2>
           <div className="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
@@ -256,9 +256,9 @@ export function DashboardAudit() {
 
         <div className="institutional-card guinea-stripe-top">
           <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
             Résumé Benchmark — Dernier Audit
           </h2>
           <div className="space-y-4">

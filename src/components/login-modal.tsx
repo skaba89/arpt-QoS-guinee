@@ -129,9 +129,9 @@ export function LoginModal({ isOpen }: LoginModalProps) {
 
           {/* ═══ TRICOLOR STRIPE ═══ */}
           <div className="flex h-[3px] w-full">
-            <div className="h-full flex-1 bg-[#CE1126]" />
-            <div className="h-full flex-1 bg-[#FCD116]" />
-            <div className="h-full flex-1 bg-[#009460]" />
+            <div className="h-full flex-1 bg-[#E32119]" />
+            <div className="h-full flex-1 bg-[#FFD100]" />
+            <div className="h-full flex-1 bg-[#00853F]" />
           </div>
 
           {/* ═══ INSTITUTIONAL HEADER ═══ */}
@@ -240,7 +240,7 @@ export function LoginModal({ isOpen }: LoginModalProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#009460] to-[#007A4D] text-sm font-bold text-white hover:brightness-110 active:brightness-95 transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 disabled:hover:brightness-100 shadow-lg shadow-[#009460]/12 mt-2"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#00853F] to-[#007A4D] text-sm font-bold text-white hover:brightness-110 active:brightness-95 transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 disabled:hover:brightness-100 shadow-lg shadow-[#00853F]/12 mt-2"
             >
               {loading ? (
                 <>
@@ -305,9 +305,9 @@ export function LoginModal({ isOpen }: LoginModalProps) {
 
             {/* Guinea tricolor dots */}
             <div className="flex items-center justify-center gap-2 mt-4">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#CE1126]" />
-              <span className="h-1.5 w-1.5 rounded-full bg-[#FCD116]" />
-              <span className="h-1.5 w-1.5 rounded-full bg-[#009460]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#E32119]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#FFD100]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#00853F]" />
             </div>
           </div>
         </div>

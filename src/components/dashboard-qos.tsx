@@ -163,9 +163,9 @@ export function DashboardQoS() {
         <div className="institutional-card guinea-stripe-top">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xs font-semibold text-primary uppercase tracking-widest flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
               Tendance QoS
             </h2>
             <div className="flex items-center gap-3 text-[10px]">
@@ -179,9 +179,9 @@ export function DashboardQoS() {
 
         <div className="institutional-card guinea-stripe-top">
           <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
             Benchmark Opérateurs
           </h2>
           <div className="space-y-4">
@@ -207,9 +207,9 @@ export function DashboardQoS() {
       {/* ── Heatmap ── */}
       <div className="institutional-card guinea-stripe-top">
         <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
           Heatmap QoS Régional
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

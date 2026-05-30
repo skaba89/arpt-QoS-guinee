@@ -112,13 +112,13 @@ export function DashboardPublic() {
           ═══════════════════════════════════════════════ */}
       <div className="relative overflow-hidden rounded-2xl border border-border">
         {/* Guinea tricolor stripe at top */}
-        <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl overflow-hidden z-10" style={{ background: 'linear-gradient(to right, #CE1126 0%, #CE1126 33.333%, #FCD116 33.333%, #FCD116 66.666%, #009460 66.666%, #009460 100%)' }} />
+        <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl overflow-hidden z-10" style={{ background: 'linear-gradient(to right, #E32119 0%, #E32119 33.333%, #FFD100 33.333%, #FFD100 66.666%, #00853F 66.666%, #00853F 100%)' }} />
 
         {/* Decorative blurs — more dramatic */}
         <div className="absolute top-0 right-0 h-80 w-80 rounded-full bg-primary/[0.04] blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-60 w-60 rounded-full bg-[#009460]/[0.04] blur-3xl" />
-        <div className="absolute top-1/2 left-1/4 h-48 w-48 rounded-full bg-[#CE1126]/[0.02] blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 h-40 w-40 rounded-full bg-[#FCD116]/[0.03] blur-3xl" />
+        <div className="absolute bottom-0 left-0 h-60 w-60 rounded-full bg-[#00853F]/[0.04] blur-3xl" />
+        <div className="absolute top-1/2 left-1/4 h-48 w-48 rounded-full bg-[#E32119]/[0.02] blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 h-40 w-40 rounded-full bg-[#FFD100]/[0.03] blur-3xl" />
 
         {/* Subtle pattern overlay */}
         <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,1) 40px, rgba(255,255,255,1) 41px)' }} />
@@ -155,9 +155,9 @@ export function DashboardPublic() {
 
           {/* Three Guinea flag color dots */}
           <div className="flex items-center justify-center gap-2.5 mb-6">
-            <span className="h-2 w-2 rounded-full bg-[#CE1126]" />
-            <span className="h-2 w-2 rounded-full bg-[#FCD116]" />
-            <span className="h-2 w-2 rounded-full bg-[#009460]" />
+            <span className="h-2 w-2 rounded-full bg-[#E32119]" />
+            <span className="h-2 w-2 rounded-full bg-[#FFD100]" />
+            <span className="h-2 w-2 rounded-full bg-[#00853F]" />
           </div>
 
           {/* Government badge */}
@@ -191,10 +191,10 @@ export function DashboardPublic() {
           ═══════════════════════════════════════════════ */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
         {[
-          { label: 'Couverture Nationale', value: `${kpis.coverage}%`, icon: Signal, color: '#009460', accent: 'bg-[#009460]/8 border-[#009460]/15' },
+          { label: 'Couverture Nationale', value: `${kpis.coverage}%`, icon: Signal, color: '#00853F', accent: 'bg-[#00853F]/8 border-[#00853F]/15' },
           { label: 'Score Qualité Global', value: `${kpis.qos}/100`, icon: Activity, color: '#D4A843', accent: 'bg-primary/8 border-primary/15' },
           { label: 'Population Couverte', value: `${kpis.pop}M`, icon: Users, color: '#D4A843', accent: 'bg-primary/8 border-primary/15' },
-          { label: 'Zones Blanches', value: `${kpis.zones}`, icon: Wifi, color: '#CE1126', accent: 'bg-[#CE1126]/8 border-[#CE1126]/15' },
+          { label: 'Zones Blanches', value: `${kpis.zones}`, icon: Wifi, color: '#E32119', accent: 'bg-[#E32119]/8 border-[#E32119]/15' },
         ].map((kpi) => (
           <div
             key={kpi.label}
@@ -257,10 +257,10 @@ export function DashboardPublic() {
                 </div>
                 <div className="grid grid-cols-4 gap-2">
                   {[
-                    { label: 'Couv.', val: op.subscores.couverture, color: '#009460' },
+                    { label: 'Couv.', val: op.subscores.couverture, color: '#00853F' },
                     { label: 'QoS', val: op.subscores.qos, color: '#D4A843' },
                     { label: 'QoE', val: op.subscores.qoe, color: '#3B82F6' },
-                    { label: 'Conf.', val: op.subscores.conformite, color: '#CE1126' },
+                    { label: 'Conf.', val: op.subscores.conformite, color: '#E32119' },
                   ].map((sub) => (
                     <div key={sub.label} className="text-center">
                       <div className="relative h-1.5 bg-accent rounded-full overflow-hidden mb-2">
@@ -300,8 +300,8 @@ export function DashboardPublic() {
               className="p-5 rounded-xl bg-muted/50 border border-border hover:bg-muted hover:border-primary/15 transition-all duration-400 cursor-pointer group"
             >
               <div className="flex items-start gap-3">
-                <div className="p-3 rounded-xl bg-[#CE1126]/8 border border-[#CE1126]/15 flex-shrink-0">
-                  <FileText className="h-4 w-4 text-[#CE1126]" />
+                <div className="p-3 rounded-xl bg-[#E32119]/8 border border-[#E32119]/15 flex-shrink-0">
+                  <FileText className="h-4 w-4 text-[#E32119]" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors truncate">
@@ -520,9 +520,9 @@ export function DashboardPublic() {
             {/* Right: Republic + motto */}
             <div className="flex flex-col items-start md:items-end gap-3">
               <div className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#CE1126]" />
-                <span className="h-1.5 w-1.5 rounded-full bg-[#FCD116]" />
-                <span className="h-1.5 w-1.5 rounded-full bg-[#009460]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#E32119]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#FFD100]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#00853F]" />
               </div>
               <p className="text-sm font-semibold text-foreground">République de Guinée</p>
               <p className="text-xs text-primary/70 italic tracking-wide">
@@ -546,7 +546,7 @@ export function DashboardPublic() {
         </div>
 
         {/* Guinea tricolor bottom line */}
-        <div className="h-[3px]" style={{ background: 'linear-gradient(to right, #CE1126 0%, #CE1126 33.333%, #FCD116 33.333%, #FCD116 66.666%, #009460 66.666%, #009460 100%)' }} />
+        <div className="h-[3px]" style={{ background: 'linear-gradient(to right, #E32119 0%, #E32119 33.333%, #FFD100 33.333%, #FFD100 66.666%, #00853F 66.666%, #00853F 100%)' }} />
       </footer>
     </div>
   );

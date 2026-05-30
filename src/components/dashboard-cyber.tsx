@@ -165,7 +165,7 @@ export function DashboardCyber() {
         {/* Compliance Section — green stripe accent */}
         <div className="institutional-card relative overflow-hidden">
           {/* Green stripe accent instead of tricolor for compliance */}
-          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#009460]" style={{ zIndex: 1 }} />
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#00853F]" style={{ zIndex: 1 }} />
           <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-3 flex items-center gap-2"><Shield className="h-4 w-4 text-[#F59E0B]" />Conformité</h3>
           <div className="flex items-center justify-center mb-3"><CircularGauge value={securityStats.complianceScore} color="#F59E0B" size={80} strokeWidth={6} label="/100" /></div>
           <div className="space-y-2">

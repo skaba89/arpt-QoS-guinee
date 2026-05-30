@@ -255,9 +255,9 @@ export function DashboardSIG() {
           {/* ── Layer Controls ── */}
           <div className="institutional-card guinea-stripe-top p-4">
             <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
               <Layers className="h-4 w-4 text-primary" />Couches
             </h3>
             <div className="space-y-2">
@@ -281,9 +281,9 @@ export function DashboardSIG() {
           {/* ── Legend ── */}
           <div className="institutional-card p-4">
             <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
               Légende
             </h3>
             <div className="space-y-2">
@@ -385,9 +385,9 @@ export function DashboardSIG() {
           {/* ── Quick Stats ── */}
           <div className="institutional-card p-4">
             <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#009460]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E32119]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FFD100]" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00853F]" />
               Statistiques Rapides
             </h3>
             <div className="space-y-2 text-xs">

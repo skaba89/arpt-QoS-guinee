@@ -82,9 +82,9 @@ interface SystemStats {
 function TricolorDot() {
   return (
     <span className="inline-flex h-2.5 w-2.5 flex-shrink-0 overflow-hidden rounded-full">
-      <span className="h-full w-1/3 bg-[#CE1126]" />
-      <span className="h-full w-1/3 bg-[#FCD116]" />
-      <span className="h-full w-1/3 bg-[#009460]" />
+      <span className="h-full w-1/3 bg-[#E32119]" />
+      <span className="h-full w-1/3 bg-[#FFD100]" />
+      <span className="h-full w-1/3 bg-[#00853F]" />
     </span>
   );
 }
@@ -283,35 +283,35 @@ export function DashboardAdmin() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Red accent — Total Users */}
         <div className="institutional-card relative overflow-hidden !p-5">
-          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#CE1126]" style={{ zIndex: 1 }} />
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#E32119]" style={{ zIndex: 1 }} />
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wider">Total Utilisateurs</p>
               <p className="text-3xl font-bold text-foreground mt-1">{totalUsers}</p>
             </div>
-            <div className="p-3 rounded-lg bg-[#CE1126]/10"><Users className="h-5 w-5 text-[#CE1126]" /></div>
+            <div className="p-3 rounded-lg bg-[#E32119]/10"><Users className="h-5 w-5 text-[#E32119]" /></div>
           </div>
         </div>
         {/* Gold accent — Active Users */}
         <div className="institutional-card relative overflow-hidden !p-5">
-          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#FCD116]" style={{ zIndex: 1 }} />
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#FFD100]" style={{ zIndex: 1 }} />
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wider">Utilisateurs Actifs</p>
               <p className="text-3xl font-bold text-foreground mt-1">{activeUsers}</p>
             </div>
-            <div className="p-3 rounded-lg bg-[#FCD116]/10"><CheckCircle2 className="h-5 w-5 text-[#FCD116]" /></div>
+            <div className="p-3 rounded-lg bg-[#FFD100]/10"><CheckCircle2 className="h-5 w-5 text-[#FFD100]" /></div>
           </div>
         </div>
         {/* Green accent — Roles */}
         <div className="institutional-card relative overflow-hidden !p-5">
-          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#009460]" style={{ zIndex: 1 }} />
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#00853F]" style={{ zIndex: 1 }} />
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wider">Rôles Définis</p>
               <p className="text-3xl font-bold text-foreground mt-1">{roles.length}</p>
             </div>
-            <div className="p-3 rounded-lg bg-[#009460]/10"><Shield className="h-5 w-5 text-[#009460]" /></div>
+            <div className="p-3 rounded-lg bg-[#00853F]/10"><Shield className="h-5 w-5 text-[#00853F]" /></div>
           </div>
         </div>
         {/* Blue accent — Audit Entries */}

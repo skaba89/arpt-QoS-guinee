@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <defs>
     <linearGradient id="guinea" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#CE1126"/>
-      <stop offset="33%" stop-color="#CE1126"/>
-      <stop offset="33.5%" stop-color="#FCD116"/>
-      <stop offset="66%" stop-color="#FCD116"/>
-      <stop offset="66.5%" stop-color="#009460"/>
-      <stop offset="100%" stop-color="#009460"/>
+      <stop offset="0%" stop-color="#E32119"/>
+      <stop offset="33%" stop-color="#E32119"/>
+      <stop offset="33.5%" stop-color="#FFD100"/>
+      <stop offset="66%" stop-color="#FFD100"/>
+      <stop offset="66.5%" stop-color="#00853F"/>
+      <stop offset="100%" stop-color="#00853F"/>
     </linearGradient>
   </defs>
   <rect width="32" height="32" rx="6" fill="url(#guinea)"/>
