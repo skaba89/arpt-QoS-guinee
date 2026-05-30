@@ -41,7 +41,7 @@ export async function GET() {
     ]);
 
     return NextResponse.json({
-      name: "ONIT-PNG API",
+      name: "ARPT-QoS-Guinée API",
       version: "1.0.0",
       description: "Observatoire National de l'Infrastructure des Télécommunications - Plateforme Nationale de Supervision",
       status: "operational",
@@ -101,7 +101,7 @@ export async function GET() {
   } catch (error) {
     console.error("API root error:", error);
     return NextResponse.json({
-      name: "ONIT-PNG API",
+      name: "ARPT-QoS-Guinée API",
       version: "1.0.0",
       status: "degraded",
       timestamp: new Date().toISOString(),

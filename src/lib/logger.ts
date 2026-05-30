@@ -64,5 +64,5 @@ class Logger {
   }
 }
 
-export const logger = new Logger('onit-png');
+export const logger = new Logger('arpt-qos-guinee');
 export { Logger };

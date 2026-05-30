@@ -1,10 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#D4A843"/>
-      <stop offset="100%" stop-color="#B8922E"/>
+    <linearGradient id="guinea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#CE1126"/>
+      <stop offset="33%" stop-color="#CE1126"/>
+      <stop offset="33.5%" stop-color="#FCD116"/>
+      <stop offset="66%" stop-color="#FCD116"/>
+      <stop offset="66.5%" stop-color="#009460"/>
+      <stop offset="100%" stop-color="#009460"/>
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="6" fill="url(#g)"/>
-  <text x="16" y="22" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="bold" font-size="14" fill="#0A0F1E">ON</text>
+  <rect width="32" height="32" rx="6" fill="url(#guinea)"/>
+  <text x="16" y="22" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="bold" font-size="10" fill="#FFFFFF">ARPT</text>
 </svg>

@@ -235,7 +235,7 @@ const dataSources = [
     collectSteps: [
       { step: 1, title: 'Sur le terrain', desc: 'Les ingénieurs RF utilisent des logiciels professionnels (TEMS Investigation, Nemo Handy, SwissQual DivOS) installés sur des smartphones ou tablettes dédiés, montés dans un véhicule équipé.' },
       { step: 2, title: 'Pendant le parcours', desc: 'L\'outil enregistre en continu les métriques RF et QoS avec les coordonnées GPS à intervalles réguliers (toutes les 1-5 secondes). Un parcours typique couvre 50-100 points de mesure.' },
-      { step: 3, title: 'Après la campagne', desc: 'Les données sont exportées au format CSV depuis l\'outil TEMS/Nemo/SwissQual, puis le fichier est importé dans ONIT-PNG via ce module d\'import.' },
+      { step: 3, title: 'Après la campagne', desc: 'Les données sont exportées au format CSV depuis l\'outil TEMS/Nemo/SwissQual, puis le fichier est importé dans ARPT-QoS-Guinée via ce module d\'import.' },
       { step: 4, title: 'Fréquence', desc: 'Campagnes trimestrielles par région, ou sur demande lors de plaintes citoyennes ou d\'audits réglementaires. Chaque campagne dure 3-5 jours par région.' },
     ],
   },
@@ -266,7 +266,7 @@ const dataSources = [
       { step: 1, title: 'Automatiquement', desc: 'Des sondes déployées dans les 8 régions exécutent des tests Speedtest/Ookla à intervalles réguliers (toutes les 15-30 min). Les résultats sont collectés automatiquement.' },
       { step: 2, title: 'Manuellement', desc: 'Les analystes QoS peuvent lancer des tests ponctuels via l\'application NetMetric ou l\'interface web Ookla sur le terrain ou au bureau.' },
       { step: 3, title: 'Par les citoyens', desc: 'L\'application mobile ONIT Citizen permet aux usagers de lancer un test de débit et de soumettre le résultat comme signalement citoyen.' },
-      { step: 4, title: 'Export & Import', desc: 'Les résultats sont exportés en CSV avec les métadonnées de localisation et d\'opérateur, puis importés dans ONIT-PNG via ce module.' },
+      { step: 4, title: 'Export & Import', desc: 'Les résultats sont exportés en CSV avec les métadonnées de localisation et d\'opérateur, puis importés dans ARPT-QoS-Guinée via ce module.' },
     ],
   },
   {
@@ -291,7 +291,7 @@ const dataSources = [
     ],
     collectSteps: [
       { step: 1, title: 'Via l\'application mobile', desc: 'Les citoyens téléchargent l\'appli ONIT Citizen sur Android/iOS, sélectionnent leur opérateur, décrivent le problème rencontré, et soumettent le signalement.' },
-      { step: 2, title: 'Via le portail web', desc: 'Le formulaire public sur le portail ONIT-PNG (onglet "Portail Public") permet de signaler un problème sans créer de compte.' },
+      { step: 2, title: 'Via le portail web', desc: 'Le formulaire public sur le portail ARPT-QoS-Guinée (onglet "Portail Public") permet de signaler un problème sans créer de compte.' },
       { step: 3, title: 'Géolocalisation', desc: 'Le GPS du téléphone ou la saisie manuelle permet de localiser précisément le problème. Les coordonnées sont incluses automatiquement.' },
       { step: 4, title: 'Intégration API', desc: 'Les signalements sont envoyés en JSON via l\'API REST et créent automatiquement des alertes si les seuils sont dépassés (ex: débit < 2 Mbps).' },
     ],
@@ -379,7 +379,7 @@ const dataSources = [
       { step: 1, title: 'Soumission par l\'opérateur', desc: 'Chaque trimestre, les opérateurs doivent soumettre un rapport réglementaire à l\'ARPT conformément aux spécifications de leur licence. Le format XML est requis.' },
       { step: 2, title: 'Contenu du rapport', desc: 'Le rapport doit inclure: les indicateurs de QoS avec comparaison aux seuils réglementaires, les mesures terrain détaillées, et le taux de conformité global.' },
       { step: 3, title: 'Validation ARPT', desc: 'L\'ARPT vérifie la conformité des données soumises avec les mesures indépendantes (drive tests, sondes). En cas de divergence, un audit est déclenché.' },
-      { step: 4, title: 'Intégration ONIT-PNG', desc: 'Le fichier XML est importé dans ONIT-PNG. Les mesures qu\'il contient sont extraites et stockées. Les indicateurs alimentent le scoring de conformité.' },
+      { step: 4, title: 'Intégration ARPT-QoS-Guinée', desc: 'Le fichier XML est importé dans ARPT-QoS-Guinée. Les mesures qu\'il contient sont extraites et stockées. Les indicateurs alimentent le scoring de conformité.' },
     ],
   },
 ];
@@ -1115,7 +1115,7 @@ curl -X POST https://onit.arpt.gn/api/import \\
               <p className="text-[10px] text-muted-foreground mt-1 leading-relaxed">
                 Les rapports réglementaires sont soumis par les opérateurs en format XML conforme aux spécifications de l&apos;ARPT.
                 Ce format contient les indicateurs de conformité avec comparaison aux seuils réglementaires, les mesures détaillées, et le taux de conformité global.
-                L&apos;import XML extrait automatiquement les mesures et les stocke dans ONIT-PNG.
+                L&apos;import XML extrait automatiquement les mesures et les stocke dans ARPT-QoS-Guinée.
               </p>
             </div>
           </div>

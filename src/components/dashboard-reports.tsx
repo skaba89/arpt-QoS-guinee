@@ -89,7 +89,7 @@ export function DashboardReports() {
         `Type: ${report.type}`,
         `Date: ${report.date}`,
         `Format: ${report.format}`,
-        `Généré par: ONIT-PNG — Observatoire National Intelligent des Télécommunications`,
+        `Généré par: ARPT-QoS-Guinée — Autorité de Régulation des Postes et Télécommunications`,
         `République de Guinée — ARPT`,
         '',
         '=== INDICATEURS CLÉS ===',

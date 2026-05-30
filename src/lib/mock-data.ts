@@ -1,4 +1,4 @@
-// ONIT-PNG Mock Data - All data for the national telecom supervision platform
+// ARPT-QoS-Guinée Mock Data - All data for the national telecom supervision platform
 
 export type OperatorId = 'orange' | 'mtn' | 'celcom' | 'intercel';
 

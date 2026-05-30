@@ -73,7 +73,7 @@ export async function GET() {
   };
 
   return NextResponse.json({
-    service: "ONIT-PNG Prestataire API",
+    service: "ARPT-QoS-Guinée Prestataire API",
     version: "1.0",
     description:
       "External provider API for submitting QoS measurements and operator scores. Authentication is via API key (not session-based).",

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// ONIT-PNG Production Proxy (Next.js 16 middleware)
+// ARPT-QoS-Guinée Production Proxy (Next.js 16 middleware)
 // Rate limiting, security headers, CORS, logging
 //
 // NOTE: Auth is handled by each API route via getServerSession().

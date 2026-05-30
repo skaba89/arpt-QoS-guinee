@@ -16,7 +16,7 @@ async function safeAuditLog(action: string, resource: string, details?: string, 
           resourceId,
           details,
           ipAddress: 'prestataire-api',
-          userAgent: 'ONIT-PNG-Prestataire-API/1.0',
+          userAgent: 'ARPT-QoS-Guinee-Prestataire-API/1.0',
         },
       });
     }

@@ -277,32 +277,33 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
         )}
       >
         {/* ─── LOGO SECTION ─── */}
-        <div className="px-6 pt-8 pb-6 border-b border-border">
-          {/* ARPT Crest */}
+        <div className="px-5 pt-7 pb-5 border-b border-border">
+          {/* ARPT Official Logo */}
           <div className="flex flex-col items-center text-center">
-            <div className="h-20 w-20 rounded-full border-2 border-primary/35 p-1 mb-4 shadow-lg shadow-primary/8 bg-gradient-to-br from-primary/8 to-transparent">
+            {/* Guinea Coat of Arms (circular) */}
+            <div className="h-16 w-16 rounded-full border-2 border-primary/30 p-0.5 mb-3 shadow-lg shadow-primary/8 bg-gradient-to-br from-primary/8 to-transparent">
               <img
-                src="/arpt-logo.png"
-                alt="ARPT Guinée — Autorité de Régulation des Postes et Télécommunications"
+                src="/arpt-crest.png"
+                alt="Armoiries de la République de Guinée"
                 className="h-full w-full rounded-full object-cover"
               />
             </div>
-            <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-primary/60 mb-1.5">
-              République de Guinée
-            </p>
-            <h1 className="text-xl font-bold text-foreground tracking-tight leading-none">
-              ARPT
-            </h1>
-            <p className="text-[9px] text-muted-foreground leading-snug mt-1.5 max-w-[200px]">
+            {/* ARPT Logo (wide, horizontal) */}
+            <img
+              src="/arpt-logo.png"
+              alt="ARPT Guinée — Autorité de Régulation des Postes et Télécommunications"
+              className="w-full max-w-[220px] h-auto object-contain mb-3"
+            />
+            <p className="text-[8px] text-muted-foreground leading-snug max-w-[200px]">
               Autorité de Régulation des Postes et Télécommunications
             </p>
 
-            {/* Gold separator */}
-            <div className="mt-5 w-full h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+            {/* Green separator */}
+            <div className="mt-4 w-full h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
             {/* Role badge */}
             {session && userRole && (
-              <div className="mt-4 animate-slide-in-left">
+              <div className="mt-3 animate-slide-in-left">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-medium bg-primary/8 text-primary border border-primary/15">
                   <Key className="h-2.5 w-2.5" />
                   {userRole.replace(/_/g, ' ')}

@@ -35,7 +35,8 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "ARPT Guinée" }],
   icons: {
-    icon: "/arpt-logo.png",
+    icon: "/favicon.svg",
+    apple: "/apple-touch-icon.png",
   },
 };
 

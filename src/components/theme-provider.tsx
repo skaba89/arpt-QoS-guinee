@@ -14,7 +14,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       defaultTheme="dark"
       enableSystem
       disableTransitionOnChange={false}
-      storageKey="onit-png-theme"
+      storageKey="arpt-qos-theme"
     >
       {children}
     </NextThemesProvider>
