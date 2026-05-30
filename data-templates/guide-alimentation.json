@@ -1,0 +1,93 @@
+{
+  "documentation": "ARPT-QoS-Guinée — Guide d'alimentation des données",
+  "version": "1.0",
+  "date": "2026-05-30",
+
+  "operateurs": {
+    "ORANGE": {
+      "nom": "Orange Guinée",
+      "apiKey": "onit-ORANGE-k8Xp2mQvR9wLjN4sT7yZ",
+      "profil": "Leader marché — Meilleure couverture et qualité réseau"
+    },
+    "MTN": {
+      "nom": "MTN Guinée",
+      "apiKey": "onit-MTN-f3Hb7nKcP5dAqW1xY8uE",
+      "profil": "Second opérateur — Bonne couverture urbaine, progression rurale"
+    },
+    "CELCOM": {
+      "nom": "Celcom Guinée",
+      "apiKey": "onit-CELCOM-j6Rs4tGvB2mXeN9wK5pH",
+      "profil": "Opérateur moyen — Couverture insuffisante en zone rurale"
+    },
+    "INTERCEL": {
+      "nom": "Intercel Guinée",
+      "apiKey": "onit-INTERCEL-q7Ld3oFwC8nYaP6xM2kJ",
+      "profil": "Opérateur déficitaire — Réseau obsolète, plan de redressement requis"
+    }
+  },
+
+  "endpoints": {
+    "mesures_prestataire": {
+      "method": "POST",
+      "url": "/api/prestataires/mesures",
+      "auth": "X-API-Key header",
+      "max_par_appel": 5000,
+      "description": "Import de mesures QoS via clé API opérateur"
+    },
+    "scores_prestataire": {
+      "method": "POST",
+      "url": "/api/prestataires/scores",
+      "auth": "X-API-Key header",
+      "max_par_appel": 100,
+      "description": "Import de scores trimestriels via clé API opérateur"
+    },
+    "import_interne": {
+      "method": "POST",
+      "url": "/api/import",
+      "auth": "Session NextAuth (rôle analyste minimum)",
+      "max_par_appel": 1000,
+      "formats": ["JSON", "CSV"],
+      "description": "Import interne ARPT — session authentifiée requise"
+    },
+    "import_scoring_interne": {
+      "method": "POST",
+      "url": "/api/import-scoring",
+      "auth": "Session NextAuth (rôle scoring)",
+      "max_par_appel": 1000,
+      "description": "Import de scores en masse — session authentifiée requise"
+    }
+  },
+
+  "regions": [
+    {"code": "CON", "nom": "Conakry", "type": "urbain"},
+    {"code": "CYA", "nom": "Coyah", "type": "semi-urbain"},
+    {"code": "KIN", "nom": "Kindia", "type": "semi-urbain"},
+    {"code": "BKE", "nom": "Boké", "type": "semi-rural"},
+    {"code": "KDR", "nom": "Koundara", "type": "rural"},
+    {"code": "LBE", "nom": "Labé", "type": "semi-urbain"},
+    {"code": "MLI", "nom": "Mali", "type": "rural"},
+    {"code": "DLB", "nom": "Dalaba", "type": "rural"},
+    {"code": "MMU", "nom": "Mamou", "type": "semi-urbain"},
+    {"code": "FRN", "nom": "Faranah", "type": "semi-rural"},
+    {"code": "KKA", "nom": "Kankan", "type": "semi-urbain"},
+    {"code": "KDG", "nom": "Kérouané", "type": "rural"},
+    {"code": "SGR", "nom": "Siguiri", "type": "semi-rural"},
+    {"code": "GKD", "nom": "Guéckédou", "type": "rural"},
+    {"code": "BLA", "nom": "Beyla", "type": "rural"},
+    {"code": "ZKR", "nom": "Nzérékoré", "type": "semi-urbain"}
+  ],
+
+  "types_mesure": ["MOBILE", "INTERNET"],
+
+  "periodes_scores": ["2025-Q1", "2025-Q2", "2025-Q3", "2025-Q4", "2026-Q1"],
+
+  "scripts": {
+    "import_production": "npx tsx scripts/import-production.ts",
+    "import_api": "bash scripts/import-via-api.sh",
+    "csv_orange": "data-templates/mesures-orange-2026-Q1.csv",
+    "csv_mtn": "data-templates/mesures-mtn-2026-Q1.csv",
+    "csv_celcom": "data-templates/mesures-celcom-2026-Q1.csv",
+    "csv_intercel": "data-templates/mesures-intercel-2026-Q1.csv",
+    "csv_scores": "data-templates/scores-modele.csv"
+  }
+}
