@@ -102,24 +102,24 @@ export function UserMenu() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => { setIsOpen(!isOpen); setShowPasswordForm(false); }}
-        className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-all duration-200 w-full"
+        className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-white/[0.04] transition-all duration-300 w-full"
       >
-        <div className="h-7 w-7 rounded-full bg-gradient-to-br from-[#D4A843] to-[#B8922E] flex items-center justify-center text-[10px] font-bold text-[#0A0F1E]">
+        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#D4A843] to-[#B8922E] flex items-center justify-center text-[10px] font-bold text-[#080C1A] shadow-md shadow-[#D4A843]/15">
           {initials}
         </div>
         <div className="hidden md:block text-left flex-1 min-w-0">
           <p className="text-xs font-medium text-slate-200 truncate max-w-[100px]">{userName}</p>
           <p className="text-[9px] text-slate-500 truncate max-w-[100px]">{session.user.email}</p>
         </div>
-        <ChevronDown className={`h-3 w-3 text-slate-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`h-3 w-3 text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 bottom-full mb-2 w-72 rounded-xl bg-[#1E293B]/95 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/40 z-50 overflow-hidden animate-scale-in">
+        <div className="absolute left-0 bottom-full mb-2 w-72 rounded-xl bg-[#131B30]/95 backdrop-blur-2xl border border-white/[0.08] shadow-2xl shadow-black/50 z-50 overflow-hidden animate-scale-in">
           {/* User info header */}
-          <div className="p-4 border-b border-white/[0.06]" style={{ background: 'linear-gradient(135deg, rgba(212,168,67,0.08) 0%, transparent 60%)' }}>
+          <div className="p-5 border-b border-white/[0.06]" style={{ background: 'linear-gradient(135deg, rgba(212,168,67,0.06) 0%, transparent 60%)' }}>
             <div className="flex items-center gap-3">
-              <div className="h-11 w-11 rounded-full bg-gradient-to-br from-[#D4A843] to-[#B8922E] flex items-center justify-center text-sm font-bold text-[#0A0F1E] shadow-md shadow-[#D4A843]/20">
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-[#D4A843] to-[#B8922E] flex items-center justify-center text-sm font-bold text-[#080C1A] shadow-md shadow-[#D4A843]/15">
                 {initials}
               </div>
               <div className="flex-1 min-w-0">
@@ -128,12 +128,12 @@ export function UserMenu() {
               </div>
             </div>
             <div className="mt-3 flex items-center gap-2 flex-wrap">
-              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium border ${roleBadgeColors[userRole] || roleBadgeColors.PUBLIC}`}>
+              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${roleBadgeColors[userRole] || roleBadgeColors.PUBLIC}`}>
                 <Shield className="h-2.5 w-2.5" />
                 {roleLabels[userRole] || userRole}
               </span>
               {userOrg && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] text-slate-400 bg-white/5 border border-white/5">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] text-slate-400 bg-white/[0.04] border border-white/[0.04]">
                   <Building2 className="h-2.5 w-2.5" />
                   {userOrg}
                 </span>
@@ -143,26 +143,26 @@ export function UserMenu() {
 
           {/* Password change form (collapsible) */}
           {showPasswordForm ? (
-            <div className="p-3 border-b border-white/[0.06] animate-fade-in-up">
-              <div className="space-y-2">
+            <div className="p-4 border-b border-white/[0.06] animate-fade-in-up">
+              <div className="space-y-2.5">
                 <div className="relative">
-                  <Key className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
+                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
                   <input
                     type="password"
                     placeholder="Nouveau mot de passe"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#D4A843]/40 transition-all"
+                    className="institutional-input pl-9 !py-2 !text-xs"
                   />
                 </div>
                 <div className="relative">
-                  <Key className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
+                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
                   <input
                     type="password"
                     placeholder="Confirmer le mot de passe"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#D4A843]/40 transition-all"
+                    className="institutional-input pl-9 !py-2 !text-xs"
                     onKeyDown={(e) => e.key === 'Enter' && handleChangePassword()}
                   />
                 </div>
@@ -170,13 +170,13 @@ export function UserMenu() {
                   <button
                     onClick={handleChangePassword}
                     disabled={changingPassword}
-                    className="flex-1 py-1.5 rounded-lg bg-[#D4A843]/20 text-[#D4A843] text-xs font-medium hover:bg-[#D4A843]/30 transition-colors disabled:opacity-50"
+                    className="flex-1 py-2 rounded-lg bg-[#D4A843]/15 text-[#D4A843] text-xs font-medium hover:bg-[#D4A843]/25 transition-colors disabled:opacity-50"
                   >
                     {changingPassword ? 'Enregistrement...' : 'Enregistrer'}
                   </button>
                   <button
                     onClick={() => { setShowPasswordForm(false); setNewPassword(''); setConfirmPassword(''); }}
-                    className="px-3 py-1.5 rounded-lg bg-white/5 text-slate-400 text-xs hover:bg-white/10 transition-colors"
+                    className="px-4 py-2 rounded-lg bg-white/[0.04] text-slate-400 text-xs hover:bg-white/[0.08] transition-colors"
                   >
                     Annuler
                   </button>
@@ -195,9 +195,9 @@ export function UserMenu() {
                   const event = new CustomEvent('onit:navigate', { detail: 'admin' });
                   window.dispatchEvent(event);
                 }}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs text-slate-300 hover:bg-white/[0.06] transition-all duration-200 text-left group"
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs text-slate-300 hover:bg-white/[0.05] transition-all duration-300 text-left group"
               >
-                <div className="p-1 rounded-md bg-white/5 group-hover:bg-blue-500/10 transition-colors">
+                <div className="p-1.5 rounded-md bg-white/[0.04] group-hover:bg-blue-500/[0.08] transition-colors">
                   <FileText className="h-3.5 w-3.5 text-slate-500 group-hover:text-blue-400 transition-colors" />
                 </div>
                 Journal d&apos;audit
@@ -206,9 +206,9 @@ export function UserMenu() {
             {!showPasswordForm && (
               <button
                 onClick={() => setShowPasswordForm(true)}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs text-slate-300 hover:bg-white/[0.06] transition-all duration-200 text-left group"
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs text-slate-300 hover:bg-white/[0.05] transition-all duration-300 text-left group"
               >
-                <div className="p-1 rounded-md bg-white/5 group-hover:bg-[#D4A843]/10 transition-colors">
+                <div className="p-1.5 rounded-md bg-white/[0.04] group-hover:bg-[#D4A843]/[0.08] transition-colors">
                   <Clock className="h-3.5 w-3.5 text-slate-500 group-hover:text-[#D4A843] transition-colors" />
                 </div>
                 Changer le mot de passe
@@ -223,9 +223,9 @@ export function UserMenu() {
                 toast.success('Déconnexion', { description: 'Vous avez été déconnecté' });
                 signOut({ redirect: false });
               }}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs text-red-400 hover:bg-red-500/10 transition-all duration-200 text-left group"
+              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs text-red-400 hover:bg-red-500/[0.08] transition-all duration-300 text-left group"
             >
-              <div className="p-1 rounded-md bg-white/5 group-hover:bg-red-500/10 transition-colors">
+              <div className="p-1.5 rounded-md bg-white/[0.04] group-hover:bg-red-500/[0.08] transition-colors">
                 <LogOut className="h-3.5 w-3.5 group-hover:text-red-400 transition-colors" />
               </div>
               Déconnexion

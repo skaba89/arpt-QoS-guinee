@@ -67,6 +67,13 @@ const navTabs: NavTab[] = [
 
 const sectionOrder = ['SUPERVISION', 'ANALYSE', 'ADMINISTRATION', 'PUBLIC'];
 
+const sectionDescriptions: Record<string, string> = {
+  SUPERVISION: 'Temps réel',
+  ANALYSE: 'Données & insights',
+  ADMINISTRATION: 'Gestion & sécurité',
+  PUBLIC: 'Portail citoyen',
+};
+
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   LayoutDashboard, Activity, Map, Award, ClipboardCheck, FileText, Globe, Shield, Users,
 };
@@ -153,7 +160,7 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
       );
     };
     updateDate();
-    const interval = setInterval(updateDate, 60000); // update every minute
+    const interval = setInterval(updateDate, 60000);
     return () => clearInterval(interval);
   }, []);
 
@@ -245,11 +252,11 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen bg-[#0A0F1E] flex">
+    <div className="min-h-screen bg-[#080C1A] flex">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden animate-fade-in-up"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden animate-fade-in"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -259,44 +266,44 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
           ═══════════════════════════════════════════════════════════ */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 w-72 guinea-stripe-top',
-          'bg-gradient-to-b from-[#0A0F1E] to-[#0D1325]',
-          'border-r border-white/[0.06]',
-          'transform transition-all duration-300 ease-out',
+          'fixed inset-y-0 left-0 z-50 w-[280px] guinea-stripe-top',
+          'bg-gradient-to-b from-[#080C1A] via-[#0B1120] to-[#0D1425]',
+          'border-r border-white/[0.05]',
+          'transform transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]',
           'lg:relative lg:translate-x-0 flex flex-col',
           sidebarOpen
-            ? 'translate-x-0 shadow-2xl shadow-black/50'
+            ? 'translate-x-0 shadow-2xl shadow-black/60'
             : '-translate-x-full'
         )}
       >
         {/* ─── LOGO SECTION ─── */}
-        <div className="px-6 pt-8 pb-5 border-b border-white/[0.06]">
+        <div className="px-6 pt-8 pb-6 border-b border-white/[0.05]">
           {/* ARPT Crest */}
           <div className="flex flex-col items-center text-center">
-            <div className="h-20 w-20 rounded-full border-2 border-[#D4A843]/40 p-1 mb-3 shadow-lg shadow-[#D4A843]/10 bg-gradient-to-br from-[#D4A843]/10 to-transparent">
+            <div className="h-20 w-20 rounded-full border-2 border-[#D4A843]/35 p-1 mb-4 shadow-lg shadow-[#D4A843]/8 bg-gradient-to-br from-[#D4A843]/8 to-transparent">
               <img
                 src="/arpt-crest.png"
                 alt="Armoiries de la République de Guinée"
                 className="h-full w-full rounded-full object-cover"
               />
             </div>
-            <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#D4A843]/70 mb-1">
+            <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-[#D4A843]/60 mb-1.5">
               République de Guinée
             </p>
-            <h1 className="text-lg font-bold text-slate-50 tracking-tight leading-none">
+            <h1 className="text-xl font-bold text-slate-50 tracking-tight leading-none">
               ONIT-PNG
             </h1>
-            <p className="text-[9px] text-slate-500 leading-snug mt-1 max-w-[200px]">
+            <p className="text-[9px] text-slate-500 leading-snug mt-1.5 max-w-[200px]">
               Observatoire National Intelligent des Télécommunications
             </p>
 
             {/* Gold separator */}
-            <div className="mt-4 w-full h-px bg-gradient-to-r from-transparent via-[#D4A843]/50 to-transparent" />
+            <div className="mt-5 w-full h-px bg-gradient-to-r from-transparent via-[#D4A843]/40 to-transparent" />
 
             {/* Role badge */}
             {session && userRole && (
-              <div className="mt-3 animate-slide-in-left">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-medium bg-[#D4A843]/10 text-[#D4A843] border border-[#D4A843]/20">
+              <div className="mt-4 animate-slide-in-left">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-medium bg-[#D4A843]/8 text-[#D4A843] border border-[#D4A843]/15">
                   <Key className="h-2.5 w-2.5" />
                   {userRole.replace(/_/g, ' ')}
                 </span>
@@ -306,15 +313,21 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
         </div>
 
         {/* ─── NAVIGATION ─── */}
-        <nav className="flex-1 px-3 py-4 overflow-y-auto custom-scrollbar space-y-4">
+        <nav className="flex-1 px-4 py-5 overflow-y-auto custom-scrollbar space-y-6">
           {groupedTabs.map((group) => (
             <div key={group.section}>
               {/* Section header */}
-              <div className="section-title mb-1.5">
-                {group.section}
+              <div className="flex items-center gap-2 mb-3 px-2">
+                <span className="h-1 w-5 rounded-full bg-gradient-to-r from-[#D4A843]/60 to-transparent" />
+                <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                  {group.section}
+                </span>
+                <span className="text-[9px] text-slate-600 hidden lg:inline">
+                  — {sectionDescriptions[group.section]}
+                </span>
               </div>
               {/* Section nav items */}
-              <div className="space-y-0.5">
+              <div className="space-y-1">
                 {group.tabs.map((tab) => {
                   const Icon = iconMap[tab.icon];
                   const isActive = activeTab === tab.id;
@@ -326,34 +339,43 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
                         setSidebarOpen(false);
                       }}
                       className={cn(
-                        'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 group',
+                        'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-300 group',
                         isActive
-                          ? 'bg-[#D4A843]/10 text-[#D4A843] border-l-[3px] border-l-[#D4A843] border border-y-0 border-r-0 border-y-transparent border-r-transparent shadow-sm shadow-[#D4A843]/5'
-                          : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200 border-l-[3px] border-l-transparent border border-transparent'
+                          ? 'bg-[#D4A843]/8 text-[#D4A843] shadow-sm shadow-[#D4A843]/3'
+                          : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200'
                       )}
+                      style={isActive ? {
+                        borderLeft: '2px solid rgba(212,168,67,0.6)',
+                        paddingLeft: 'calc(0.75rem - 2px)',
+                      } : {
+                        borderLeft: '2px solid transparent',
+                      }}
                     >
                       {Icon && (
                         <div
                           className={cn(
-                            'p-1 rounded-md transition-colors',
+                            'p-1.5 rounded-md transition-all duration-300',
                             isActive
-                              ? 'bg-[#D4A843]/15'
-                              : 'group-hover:bg-white/5'
+                              ? 'bg-[#D4A843]/12'
+                              : 'group-hover:bg-white/[0.04]'
                           )}
                         >
                           <Icon
                             className={cn(
-                              'h-4 w-4 transition-colors',
+                              'h-4 w-4 transition-colors duration-300',
                               isActive
                                 ? 'text-[#D4A843]'
-                                : 'text-slate-500 group-hover:text-slate-400'
+                                : 'text-slate-500 group-hover:text-slate-300'
                             )}
                           />
                         </div>
                       )}
-                      <span className="font-medium text-xs">{tab.label}</span>
+                      <span className={cn(
+                        "font-medium text-[13px] tracking-wide",
+                        isActive ? 'text-[#D4A843]' : ''
+                      )}>{tab.label}</span>
                       {isActive && (
-                        <ChevronRight className="h-3 w-3 ml-auto text-[#D4A843]/60" />
+                        <ChevronRight className="h-3.5 w-3.5 ml-auto text-[#D4A843]/50" />
                       )}
                     </button>
                   );
@@ -364,20 +386,20 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
         </nav>
 
         {/* ─── BOTTOM: User Menu + Institutional Footer ─── */}
-        <div className="border-t border-white/[0.06] bg-[#0A0F1E]/90 backdrop-blur-sm">
+        <div className="border-t border-white/[0.05] bg-[#080C1A]/90 backdrop-blur-sm">
           {/* User menu */}
-          <div className="p-3">
+          <div className="p-4">
             {session ? (
               <UserMenu />
             ) : (
-              <div className="p-2.5 rounded-lg bg-white/[0.03] text-center">
+              <div className="p-3 rounded-xl bg-white/[0.03] text-center border border-white/[0.04]">
                 <p className="text-xs text-slate-400">Non connecté</p>
               </div>
             )}
           </div>
           {/* Institutional footer */}
-          <div className="px-4 pb-3 pt-1 border-t border-white/[0.04]">
-            <p className="text-[9px] text-slate-600 text-center tracking-wide">
+          <div className="px-5 pb-4 pt-1 border-t border-white/[0.04]">
+            <p className="text-[9px] text-slate-600 text-center tracking-wider">
               ARPT Guinée &copy; 2026
             </p>
           </div>
@@ -389,19 +411,19 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
           ═══════════════════════════════════════════════════════════ */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* ─── HEADER (h-16) ─── */}
-        <header className="h-16 bg-[#0A0F1E]/80 backdrop-blur-xl border-b border-white/[0.06] flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
+        <header className="h-16 bg-[#080C1A]/85 backdrop-blur-2xl border-b border-white/[0.05] flex items-center justify-between px-5 lg:px-8 sticky top-0 z-30">
           {/* LEFT: Hamburger + Breadcrumb */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-white/10 text-slate-400 transition-colors"
+              className="lg:hidden p-2 rounded-lg hover:bg-white/[0.06] text-slate-400 transition-colors"
             >
               {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
-            <div className="hidden sm:flex items-center gap-2">
-              <span className="text-xs font-semibold text-[#D4A843]/80 tracking-wide">ONIT-PNG</span>
+            <div className="hidden sm:flex items-center gap-2.5">
+              <span className="text-[11px] font-bold text-[#D4A843]/70 tracking-[0.08em] uppercase">ONIT-PNG</span>
               <ChevronRight className="h-3 w-3 text-slate-600" />
-              <span className="text-xs text-slate-300 font-medium">
+              <span className="text-[13px] text-slate-300 font-medium">
                 {navTabs.find((t) => t.id === activeTab)?.label}
               </span>
             </div>
@@ -409,25 +431,25 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
 
           {/* CENTER: French Date */}
           <div className="hidden md:flex items-center gap-2">
-            <span className="text-[11px] text-slate-500 font-medium capitalize">
+            <span className="text-[11px] text-slate-500 font-medium capitalize tracking-wide">
               {currentDate}
             </span>
           </div>
 
           {/* RIGHT: Search + Notifications + Live */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {/* Search */}
             <div
               className={cn(
-                'hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all duration-200',
+                'hidden md:flex items-center gap-2.5 px-4 py-2 rounded-xl border transition-all duration-300',
                 searchFocused
-                  ? 'bg-white/10 border-[#D4A843]/30 ring-1 ring-[#D4A843]/10'
-                  : 'bg-white/[0.03] border-white/[0.06]'
+                  ? 'bg-white/[0.06] border-[#D4A843]/25 ring-1 ring-[#D4A843]/8'
+                  : 'bg-white/[0.03] border-white/[0.05]'
               )}
             >
               <Search
                 className={cn(
-                  'h-3.5 w-3.5 transition-colors',
+                  'h-3.5 w-3.5 transition-colors duration-300',
                   searchFocused ? 'text-[#D4A843]' : 'text-slate-500'
                 )}
               />
@@ -436,7 +458,7 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
                 placeholder="Rechercher..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-transparent text-xs text-slate-300 placeholder-slate-600 focus:outline-none w-44 transition-all"
+                className="bg-transparent text-xs text-slate-300 placeholder-slate-600 focus:outline-none w-48 transition-all"
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
               />
@@ -455,28 +477,28 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
               <button
                 onClick={() => setNotifOpen(!notifOpen)}
                 className={cn(
-                  'relative p-2 rounded-lg hover:bg-white/10 transition-all duration-200',
+                  'relative p-2 rounded-xl hover:bg-white/[0.06] transition-all duration-300',
                   notifOpen
-                    ? 'bg-white/10 text-slate-200'
+                    ? 'bg-white/[0.06] text-slate-200'
                     : 'text-slate-400 hover:text-slate-300'
                 )}
               >
-                <Bell className="h-4 w-4" />
+                <Bell className="h-4.5 w-4.5" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-0.5 right-0.5 h-4 min-w-4 rounded-full bg-red-500 text-[9px] font-bold text-white flex items-center justify-center px-0.5 animate-scale-in shadow-sm shadow-red-500/50">
+                  <span className="absolute top-0.5 right-0.5 h-4 min-w-4 rounded-full bg-red-500 text-[9px] font-bold text-white flex items-center justify-center px-0.5 animate-scale-in shadow-sm shadow-red-500/40">
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}
               </button>
 
               {notifOpen && (
-                <div className="absolute right-0 top-full mt-2 w-80 rounded-xl bg-[#1E293B]/95 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/40 z-50 overflow-hidden animate-scale-in">
-                  <div className="p-3 border-b border-white/10 flex items-center justify-between">
+                <div className="absolute right-0 top-full mt-2.5 w-84 rounded-xl bg-[#131B30]/95 backdrop-blur-2xl border border-white/[0.08] shadow-2xl shadow-black/50 z-50 overflow-hidden animate-scale-in">
+                  <div className="p-4 border-b border-white/[0.08] flex items-center justify-between">
                     <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
                       <Bell className="h-4 w-4 text-[#D4A843]" />
                       Alertes
                       {unreadCount > 0 && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-400">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/15 text-red-400">
                           {unreadCount}
                         </span>
                       )}
@@ -493,7 +515,7 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
                   </div>
                   <div className="max-h-80 overflow-y-auto custom-scrollbar">
                     {alerts.length === 0 ? (
-                      <div className="p-8 text-center">
+                      <div className="p-10 text-center">
                         <Bell className="h-8 w-8 text-slate-600 mx-auto mb-2" />
                         <p className="text-xs text-slate-500">Aucune alerte</p>
                         <p className="text-[10px] text-slate-600 mt-1">
@@ -505,12 +527,12 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
                         <div
                           key={alert.id}
                           className={cn(
-                            'p-3 border-b border-white/5 transition-colors hover:bg-white/5',
-                            !alert.isResolved && 'bg-white/[0.02]'
+                            'p-3.5 border-b border-white/[0.04] transition-colors hover:bg-white/[0.03]',
+                            !alert.isResolved && 'bg-white/[0.015]'
                           )}
                           style={{ animationDelay: `${i * 30}ms` }}
                         >
-                          <div className="flex items-start gap-2">
+                          <div className="flex items-start gap-2.5">
                             <div
                               className={`mt-0.5 p-1 rounded-md ${getAlertBg(alert.severity)}`}
                             >
@@ -549,15 +571,15 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
             </div>
 
             {/* Live Indicator */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/[0.08] border border-emerald-500/15">
               <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-[10px] text-emerald-400 font-medium">Live</span>
+              <span className="text-[10px] text-emerald-400 font-semibold tracking-wide">Live</span>
             </div>
           </div>
         </header>
 
         {/* ─── MAIN CONTENT ─── */}
-        <main className="flex-1 p-4 lg:p-6 overflow-auto">
+        <main className="flex-1 p-5 lg:p-8 overflow-auto">
           <ErrorBoundary key={activeTab}>
             <ActiveDashboard />
           </ErrorBoundary>

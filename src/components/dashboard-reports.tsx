@@ -168,11 +168,15 @@ export function DashboardReports() {
 
   return (
     <div className="space-y-6">
-      {/* ── Page Header ── */}
-      <div className="flex items-center justify-between">
+      {/* ── Page Header — Institutional Pattern ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="section-title text-2xl">Rapports</h1>
-          <p className="text-sm text-slate-400 -mt-1">Génération, planification et gestion des rapports</p>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#D4A843] to-transparent" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#D4A843]/70">Analyse</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 tracking-tight">Rapports</h1>
+          <p className="text-sm text-slate-400 mt-2">Génération, planification et gestion des rapports</p>
         </div>
       </div>
 

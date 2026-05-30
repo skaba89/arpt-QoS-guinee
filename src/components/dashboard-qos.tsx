@@ -102,15 +102,19 @@ export function DashboardQoS() {
 
   return (
     <div className="space-y-6">
-      {/* ── Page Header ── */}
-      <div className="flex items-center justify-between">
+      {/* ── Page Header — Institutional Pattern ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="section-title text-2xl">Monitoring QoS</h1>
-          <p className="text-sm text-slate-400 -mt-1">Supervision technique de la qualité de service en temps réel</p>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#D4A843] to-transparent" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#D4A843]/70">Supervision</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 tracking-tight">Monitoring QoS</h1>
+          <p className="text-sm text-slate-400 mt-2">Supervision technique de la qualité de service en temps réel</p>
         </div>
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/[0.08] border border-emerald-500/15">
           <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-xs text-emerald-400 font-medium">Live</span>
+          <span className="text-xs text-emerald-400 font-semibold">Live</span>
         </div>
       </div>
 

@@ -41,7 +41,7 @@ export function Sparkline({
     <svg width={width} height={height} className="overflow-visible">
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.2" />
+          <stop offset="0%" stopColor={color} stopOpacity="0.18" />
           <stop offset="100%" stopColor={color} stopOpacity="0" />
         </linearGradient>
       </defs>
@@ -59,15 +59,24 @@ export function Sparkline({
           animation: 'drawLine 1.5s ease-out forwards',
         } : undefined}
       />
-      {/* End dot */}
+      {/* End dot with glow */}
       {data.length > 0 && (
-        <circle
-          cx={padding + ((data.length - 1) / (data.length - 1)) * (width - padding * 2)}
-          cy={height - padding - ((data[data.length - 1] - min) / range) * (height - padding * 2)}
-          r="2.5"
-          fill={color}
-          className="animate-pulse"
-        />
+        <>
+          <circle
+            cx={padding + ((data.length - 1) / (data.length - 1)) * (width - padding * 2)}
+            cy={height - padding - ((data[data.length - 1] - min) / range) * (height - padding * 2)}
+            r="4"
+            fill={color}
+            opacity="0.15"
+          />
+          <circle
+            cx={padding + ((data.length - 1) / (data.length - 1)) * (width - padding * 2)}
+            cy={height - padding - ((data[data.length - 1] - min) / range) * (height - padding * 2)}
+            r="2.5"
+            fill={color}
+            className="animate-pulse"
+          />
+        </>
       )}
       <style>{`@keyframes drawLine { to { stroke-dashoffset: 0; } }`}</style>
     </svg>
@@ -86,13 +95,13 @@ export function HBarChart({ data, maxValue, height = 24, showValue = true }: HBa
   const max = maxValue || Math.max(...data.map((d) => d.value)) || 1;
 
   return (
-    <div className="space-y-2.5">
+    <div className="space-y-3">
       {data.map((item, i) => (
         <div key={i} className="flex items-center gap-3 group">
           <span className="text-[11px] text-slate-400 w-24 text-right truncate transition-colors group-hover:text-slate-300">
             {item.label}
           </span>
-          <div className="flex-1 h-5 bg-white/[0.04] rounded-full overflow-hidden relative">
+          <div className="flex-1 h-5 bg-white/[0.03] rounded-full overflow-hidden relative">
             <div
               className="h-full rounded-full transition-all duration-1000 ease-out relative overflow-hidden"
               style={{
@@ -149,7 +158,7 @@ export function CircularGauge({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(255,255,255,0.06)"
+          stroke="rgba(255,255,255,0.04)"
           strokeWidth={strokeWidth}
         />
         {/* Progress circle */}
@@ -164,7 +173,7 @@ export function CircularGauge({
           strokeDashoffset={offset}
           strokeLinecap="round"
           className="transition-all duration-1000 ease-out"
-          style={{ filter: `drop-shadow(0 0 6px ${displayColor}40)` }}
+          style={{ filter: `drop-shadow(0 0 8px ${displayColor}30)` }}
         />
       </svg>
       {showValue && (
@@ -216,7 +225,7 @@ export function RadarChart({ data, series, size = 200 }: RadarChartProps) {
             key={l}
             points={points}
             fill="none"
-            stroke="rgba(255,255,255,0.06)"
+            stroke="rgba(255,255,255,0.04)"
             strokeWidth="1"
           />
         );
@@ -234,7 +243,7 @@ export function RadarChart({ data, series, size = 200 }: RadarChartProps) {
             y1={center}
             x2={x}
             y2={y}
-            stroke="rgba(255,255,255,0.04)"
+            stroke="rgba(255,255,255,0.03)"
             strokeWidth="1"
           />
         );
@@ -247,7 +256,7 @@ export function RadarChart({ data, series, size = 200 }: RadarChartProps) {
           <g key={si}>
             <polygon
               points={points}
-              fill={`${s.color}15`}
+              fill={`${s.color}12`}
               stroke={s.color}
               strokeWidth="2"
               style={{
@@ -262,7 +271,7 @@ export function RadarChart({ data, series, size = 200 }: RadarChartProps) {
               const px = center + r * Math.cos(angle);
               const py = center + r * Math.sin(angle);
               return (
-                <circle key={di} cx={px} cy={py} r="3" fill={s.color} stroke="#0A0F1E" strokeWidth="2" />
+                <circle key={di} cx={px} cy={py} r="3" fill={s.color} stroke="#080C1A" strokeWidth="2" />
               );
             })}
           </g>
@@ -307,7 +316,7 @@ export function LineChart({
   height = 200,
 }: LineChartProps) {
   if (!data.length) return null;
-  const padding = { top: 20, right: 20, bottom: 30, left: 40 };
+  const padding = { top: 24, right: 24, bottom: 32, left: 44 };
   const chartW = width - padding.left - padding.right;
   const chartH = height - padding.top - padding.bottom;
 
@@ -321,7 +330,7 @@ export function LineChart({
   return (
     <div className="chart-responsive">
       <svg viewBox={`0 0 ${width} ${height}`} className="overflow-visible w-full" preserveAspectRatio="xMidYMid meet">
-        {/* Grid lines */}
+        {/* Grid lines — more refined */}
         {Array.from({ length: 5 }).map((_, i) => {
           const y = padding.top + (i / 4) * chartH;
           const val = Math.round(maxVal - (i / 4) * range);
@@ -332,12 +341,12 @@ export function LineChart({
                 y1={y}
                 x2={width - padding.right}
                 y2={y}
-                stroke="rgba(255,255,255,0.05)"
+                stroke="rgba(255,255,255,0.04)"
                 strokeWidth="1"
-                strokeDasharray={i > 0 ? "4,4" : "none"}
+                strokeDasharray={i > 0 ? "3,6" : "none"}
               />
               <text
-                x={padding.left - 8}
+                x={padding.left - 10}
                 y={y}
                 textAnchor="end"
                 dominantBaseline="middle"
@@ -377,7 +386,7 @@ export function LineChart({
             <g key={si}>
               <defs>
                 <linearGradient id={`line-grad-${si}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={s.color} stopOpacity="0.15" />
+                  <stop offset="0%" stopColor={s.color} stopOpacity="0.12" />
                   <stop offset="100%" stopColor={s.color} stopOpacity="0" />
                 </linearGradient>
               </defs>
@@ -389,7 +398,7 @@ export function LineChart({
                 strokeWidth="2.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                style={{ filter: `drop-shadow(0 0 4px ${s.color}40)` }}
+                style={{ filter: `drop-shadow(0 0 4px ${s.color}30)` }}
               />
             </g>
           );
@@ -407,7 +416,7 @@ export function LineChart({
                 cy={y}
                 r="3.5"
                 fill={s.color}
-                stroke="#0A0F1E"
+                stroke="#080C1A"
                 strokeWidth="2"
                 className="transition-all hover:r-5"
               />

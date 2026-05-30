@@ -83,11 +83,15 @@ export function DashboardScoring() {
 
   return (
     <div className="space-y-6">
-      {/* ── Page Header ── */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      {/* ── Page Header — Institutional Pattern ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="section-title text-2xl">Scoring Opérateurs</h1>
-          <p className="text-sm text-slate-400 -mt-1">Évaluation multi-critères et classement des opérateurs de télécommunications</p>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#D4A843] to-transparent" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#D4A843]/70">Analyse</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 tracking-tight">Scoring Opérateurs</h1>
+          <p className="text-sm text-slate-400 mt-2">Évaluation multi-critères et classement des opérateurs de télécommunications</p>
         </div>
         {/* Multi-period selector */}
         {availablePeriods.length > 0 && (
@@ -96,7 +100,7 @@ export function DashboardScoring() {
             <select
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value)}
-              className="px-3 py-1.5 text-xs rounded-lg bg-white/5 border border-white/10 text-slate-300 focus:outline-none focus:border-[#D4A843]/40"
+              className="px-3 py-1.5 text-xs rounded-lg bg-white/[0.04] border border-white/[0.08] text-slate-300 focus:outline-none focus:border-[#D4A843]/40"
             >
               <option value="latest">Dernière période</option>
               {availablePeriods.map((p) => (

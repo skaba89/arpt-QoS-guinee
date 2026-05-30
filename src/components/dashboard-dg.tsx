@@ -112,31 +112,33 @@ export function DashboardDG() {
   return (
     <div className="space-y-8">
       {/* ═══════════════════════════════════════════
-          PAGE HEADER
+          PAGE HEADER — Institutional Pattern
           ═══════════════════════════════════════════ */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 mb-2">
         <div>
-          <h1 className="text-3xl font-bold text-slate-50 tracking-tight">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#D4A843] to-transparent" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#D4A843]/70">
+              Supervision
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 tracking-tight">
             Tableau de Bord Directeur
-            <span
-              className="block h-1 w-28 mt-2 rounded-full"
-              style={{ background: 'linear-gradient(to right, #D4A843, transparent)' }}
-            />
           </h1>
-          <p className="text-sm text-slate-400 mt-3">
+          <p className="text-sm text-slate-400 mt-2">
             Vue stratégique de la supervision nationale des télécommunications
           </p>
         </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-3 flex-shrink-0">
           {isRestricted && (
             <div className="government-badge">
               <Shield className="h-3 w-3 text-[#D4A843]" />
               <span>Accès restreint</span>
             </div>
           )}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/[0.08] border border-emerald-500/15">
             <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs text-emerald-400 font-medium">Temps réel</span>
+            <span className="text-xs text-emerald-400 font-semibold">Temps réel</span>
           </div>
         </div>
       </div>

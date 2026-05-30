@@ -107,11 +107,15 @@ export function DashboardSIG() {
 
   return (
     <div className="space-y-6">
-      {/* ── Page Header ── */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      {/* ── Page Header — Institutional Pattern ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="section-title text-2xl">Cartographie SIG</h1>
-          <p className="text-sm text-slate-400 -mt-1">Système d&apos;Information Géographique - Visualisation spatiale des données télécom</p>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#D4A843] to-transparent" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#D4A843]/70">Analyse</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 tracking-tight">Cartographie SIG</h1>
+          <p className="text-sm text-slate-400 mt-2">Système d&apos;Information Géographique - Visualisation spatiale des données télécom</p>
         </div>
 
         {/* Découpage Toggle */}

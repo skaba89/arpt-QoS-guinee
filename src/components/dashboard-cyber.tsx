@@ -100,17 +100,21 @@ export function DashboardCyber() {
 
   return (
     <div className="space-y-6">
-      {/* ─── Page Header with Section Title ─── */}
-      <div className="flex items-center justify-between">
+      {/* ─── Page Header — Institutional Pattern ─── */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="section-title mb-0 pb-0">CYBERSÉCURITÉ</h1>
-          <p className="text-sm text-slate-400 mt-1">Centre de sécurité et conformité réglementaire</p>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#D4A843] to-transparent" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#D4A843]/70">Administration</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 tracking-tight">Cybersécurité</h1>
+          <p className="text-sm text-slate-400 mt-2">Centre de sécurité et conformité réglementaire</p>
         </div>
         <div className="flex items-center gap-2">
           {securityStats.activeThreats > 0 ? (
-            <div className="government-badge border-amber-500/30 bg-amber-500/10 text-amber-400"><AlertTriangle className="h-3 w-3" /><span className="text-xs font-medium">{securityStats.activeThreats} alerte{securityStats.activeThreats > 1 ? 's' : ''}</span></div>
+            <div className="government-badge border-amber-500/25 bg-amber-500/[0.08] text-amber-400"><AlertTriangle className="h-3 w-3" /><span className="text-xs font-medium">{securityStats.activeThreats} alerte{securityStats.activeThreats > 1 ? 's' : ''}</span></div>
           ) : (
-            <div className="government-badge border-emerald-500/30 bg-emerald-500/10 text-emerald-400"><CheckCircle2 className="h-3 w-3" /><span className="text-xs font-medium">Sécurisé</span></div>
+            <div className="government-badge border-emerald-500/25 bg-emerald-500/[0.08] text-emerald-400"><CheckCircle2 className="h-3 w-3" /><span className="text-xs font-medium">Sécurisé</span></div>
           )}
         </div>
       </div>

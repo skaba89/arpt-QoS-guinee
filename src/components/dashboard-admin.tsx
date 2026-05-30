@@ -260,11 +260,15 @@ export function DashboardAdmin() {
 
   return (
     <div className="space-y-6">
-      {/* ─── Header with Section Title ─── */}
-      <div className="flex items-center justify-between">
+      {/* ─── Header — Institutional Pattern ─── */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="section-title mb-0 pb-0">ADMINISTRATION</h1>
-          <p className="text-sm text-slate-400 mt-1">Gestion des utilisateurs, rôles et sécurité</p>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#D4A843] to-transparent" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#D4A843]/70">Administration</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-50 tracking-tight">Administration</h1>
+          <p className="text-sm text-slate-400 mt-2">Gestion des utilisateurs, rôles et sécurité</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
