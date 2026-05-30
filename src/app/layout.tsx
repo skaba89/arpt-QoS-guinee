@@ -18,24 +18,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ONIT-PNG | Observatoire National Intelligent des Télécommunications",
+  title: "ARPT Guinée | Autorité de Régulation des Postes et Télécommunications",
   description:
     "Plateforme nationale de supervision des télécommunications — République de Guinée. Monitoring QoS, cartographie SIG, scoring opérateurs et rapports réglementaires. Autorité de Régulation des Postes et Télécommunications (ARPT).",
   keywords: [
-    "ONIT-PNG",
     "ARPT",
     "Guinée",
     "télécommunications",
     "QoS",
     "supervision",
-    "observatoire",
     "régulation",
     "couverture réseau",
     "opérateurs",
+    "postes",
+    "scoring",
   ],
   authors: [{ name: "ARPT Guinée" }],
   icons: {
-    icon: "/favicon.svg",
+    icon: "/arpt-logo.png",
   },
 };
 

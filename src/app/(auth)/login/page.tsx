@@ -4,8 +4,8 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
 
 export const metadata = {
-  title: 'Connexion — ONIT-PNG',
-  description: 'Accès sécurisé à l\'Observatoire National Intelligent des Télécommunications',
+  title: 'Connexion — ARPT Guinée',
+  description: 'Accès sécurisé à l\'Autorité de Régulation des Postes et Télécommunications de Guinée',
 };
 
 export default async function LoginPage() {
@@ -17,15 +17,15 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0F1E] flex items-center justify-center">
+    <div className="min-h-screen bg-[#071A14] flex items-center justify-center">
       {/* Background gradient */}
-      <div className="fixed inset-0 bg-gradient-to-br from-[#0A0F1E] via-[#0D1321] to-[#0A0F1E]" />
+      <div className="fixed inset-0 bg-gradient-to-br from-[#071A14] via-[#0D2219] to-[#071A14]" />
 
       {/* Subtle animated grid pattern */}
       <div
         className="fixed inset-0 opacity-[0.015]"
         style={{
-          backgroundImage: 'linear-gradient(rgba(212,168,67,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(212,168,67,0.3) 1px, transparent 1px)',
+          backgroundImage: 'linear-gradient(rgba(0,148,96,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0,148,96,0.3) 1px, transparent 1px)',
           backgroundSize: '60px 60px',
         }}
       />

@@ -54,7 +54,7 @@ export function LoginModal({ isOpen }: LoginModalProps) {
         toast.error('Échec de connexion', { description: 'Identifiants incorrects' });
         setLoading(false);
       } else if (result?.ok) {
-        toast.success('Connexion réussie', { description: 'Bienvenue sur ONIT-PNG' });
+        toast.success('Connexion réussie', { description: 'Bienvenue sur ARPT Guinée' });
         // Small delay then reload to ensure session cookie is set
         setTimeout(() => {
           window.location.href = '/';
@@ -142,8 +142,8 @@ export function LoginModal({ isOpen }: LoginModalProps) {
             {/* ARPT Crest */}
             <div className="relative mb-5">
               <img
-                src="/arpt-crest.png"
-                alt="Blason de la République de Guinée"
+                src="/arpt-logo.png"
+                alt="ARPT Guinée"
                 className="h-22 w-22 mx-auto rounded-full shadow-lg shadow-primary/15 border-2 border-primary/25 object-cover"
                 style={{ height: '5.5rem', width: '5.5rem' }}
               />
@@ -173,7 +173,7 @@ export function LoginModal({ isOpen }: LoginModalProps) {
                 <Lock className="h-3.5 w-3.5 text-primary/70" />
               </div>
               <p className="text-sm font-semibold text-foreground tracking-wide">
-                ONIT-PNG — Espace Sécurisé
+                ARPT — Espace Sécurisé
               </p>
             </div>
           </div>
@@ -240,7 +240,7 @@ export function LoginModal({ isOpen }: LoginModalProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary to-[#B8922E] text-sm font-bold text-white hover:brightness-110 active:brightness-95 transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 disabled:hover:brightness-100 shadow-lg shadow-primary/12 mt-2"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#009460] to-[#007A4D] text-sm font-bold text-white hover:brightness-110 active:brightness-95 transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 disabled:hover:brightness-100 shadow-lg shadow-[#009460]/12 mt-2"
             >
               {loading ? (
                 <>

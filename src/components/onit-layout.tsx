@@ -282,8 +282,8 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
           <div className="flex flex-col items-center text-center">
             <div className="h-20 w-20 rounded-full border-2 border-primary/35 p-1 mb-4 shadow-lg shadow-primary/8 bg-gradient-to-br from-primary/8 to-transparent">
               <img
-                src="/arpt-crest.png"
-                alt="Armoiries de la République de Guinée"
+                src="/arpt-logo.png"
+                alt="ARPT Guinée — Autorité de Régulation des Postes et Télécommunications"
                 className="h-full w-full rounded-full object-cover"
               />
             </div>
@@ -291,10 +291,10 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
               République de Guinée
             </p>
             <h1 className="text-xl font-bold text-foreground tracking-tight leading-none">
-              ONIT-PNG
+              ARPT
             </h1>
             <p className="text-[9px] text-muted-foreground leading-snug mt-1.5 max-w-[200px]">
-              Observatoire National Intelligent des Télécommunications
+              Autorité de Régulation des Postes et Télécommunications
             </p>
 
             {/* Gold separator */}
@@ -400,7 +400,7 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
           {/* Institutional footer */}
           <div className="px-5 pb-4 pt-1 border-t border-border/50">
             <p className="text-[9px] text-muted-foreground/60 text-center tracking-wider">
-              ARPT Guinée &copy; 2026
+              ARPT — République de Guinée &copy; 2026
             </p>
           </div>
         </div>
@@ -421,7 +421,7 @@ export function OnitLayout({ activeTab, onTabChange }: OnitLayoutProps) {
               {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
             <div className="hidden sm:flex items-center gap-2.5">
-              <span className="text-[11px] font-bold text-primary/70 tracking-[0.08em] uppercase">ONIT-PNG</span>
+              <span className="text-[11px] font-bold text-primary/70 tracking-[0.08em] uppercase">ARPT Guinée</span>
               <ChevronRight className="h-3 w-3 text-muted-foreground/40" />
               <span className="text-[13px] text-foreground font-medium">
                 {navTabs.find((t) => t.id === activeTab)?.label}
