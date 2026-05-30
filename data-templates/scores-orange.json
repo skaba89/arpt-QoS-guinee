@@ -1,0 +1,49 @@
+{
+  "scores": [
+    {
+      "periode": "2025-Q1",
+      "scoreGlobal": 72,
+      "scoreCouverture": 70,
+      "scoreQoS": 74,
+      "scoreQoE": 73,
+      "scoreConformite": 71,
+      "recommandation": "Poursuivre la politique tarifaire compétitive"
+    },
+    {
+      "periode": "2025-Q2",
+      "scoreGlobal": 75,
+      "scoreCouverture": 73,
+      "scoreQoS": 78,
+      "scoreQoE": 77,
+      "scoreConformite": 74,
+      "recommandation": "Déployer la 5G à Conakry en 2026"
+    },
+    {
+      "periode": "2025-Q3",
+      "scoreGlobal": 79,
+      "scoreCouverture": 77,
+      "scoreQoS": 82,
+      "scoreQoE": 81,
+      "scoreConformite": 79,
+      "recommandation": "Étendre la couverture en zone rurale (Faranah, Kissidougou, Beyla)"
+    },
+    {
+      "periode": "2025-Q4",
+      "scoreGlobal": 82,
+      "scoreCouverture": 80,
+      "scoreQoS": 85,
+      "scoreQoE": 84,
+      "scoreConformite": 82,
+      "recommandation": "Maintenir les investissements en infrastructure 4G+"
+    },
+    {
+      "periode": "2026-Q1",
+      "scoreGlobal": 84,
+      "scoreCouverture": 82,
+      "scoreQoS": 86,
+      "scoreQoE": 85,
+      "scoreConformite": 83,
+      "recommandation": "Consolider la position de leader par l'innovation"
+    }
+  ]
+}

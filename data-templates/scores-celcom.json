@@ -1,0 +1,49 @@
+{
+  "scores": [
+    {
+      "periode": "2025-Q1",
+      "scoreGlobal": 42,
+      "scoreCouverture": 38,
+      "scoreQoS": 48,
+      "scoreQoE": 44,
+      "scoreConformite": 40,
+      "recommandation": "Présenter un plan d'investissement crédible à l'ARPT sous 30 jours"
+    },
+    {
+      "periode": "2025-Q2",
+      "scoreGlobal": 45,
+      "scoreCouverture": 42,
+      "scoreQoS": 52,
+      "scoreQoE": 48,
+      "scoreConformite": 44,
+      "recommandation": "Résorber les zones blanches à Labé, Dalaba et Faranah"
+    },
+    {
+      "periode": "2025-Q3",
+      "scoreGlobal": 48,
+      "scoreCouverture": 45,
+      "scoreQoS": 56,
+      "scoreQoE": 52,
+      "scoreConformite": 48,
+      "recommandation": "Moderniser le réseau 3G vers 4G dans les 6 prochains mois"
+    },
+    {
+      "periode": "2025-Q4",
+      "scoreGlobal": 55,
+      "scoreCouverture": 50,
+      "scoreQoS": 60,
+      "scoreQoE": 57,
+      "scoreConformite": 52,
+      "recommandation": "Plan de déploiement URGENT en zone rurale"
+    },
+    {
+      "periode": "2026-Q1",
+      "scoreGlobal": 57,
+      "scoreCouverture": 52,
+      "scoreQoS": 62,
+      "scoreQoE": 58,
+      "scoreConformite": 54,
+      "recommandation": "Renforcer le plan CAPEX pour atteindre les seuils réglementaires"
+    }
+  ]
+}

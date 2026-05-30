@@ -1,0 +1,49 @@
+{
+  "scores": [
+    {
+      "periode": "2025-Q1",
+      "scoreGlobal": 62,
+      "scoreCouverture": 58,
+      "scoreQoS": 65,
+      "scoreQoE": 63,
+      "scoreConformite": 61,
+      "recommandation": "Renforcer la redondance du réseau à Conakry"
+    },
+    {
+      "periode": "2025-Q2",
+      "scoreGlobal": 65,
+      "scoreCouverture": 62,
+      "scoreQoS": 69,
+      "scoreQoE": 67,
+      "scoreConformite": 65,
+      "recommandation": "Accélérer le déploiement 4G en zone semi-urbaine"
+    },
+    {
+      "periode": "2025-Q3",
+      "scoreGlobal": 68,
+      "scoreCouverture": 66,
+      "scoreQoS": 73,
+      "scoreQoE": 71,
+      "scoreConformite": 68,
+      "recommandation": "Investir dans le backhaul fibre vers Labé et Kankan"
+    },
+    {
+      "periode": "2025-Q4",
+      "scoreGlobal": 72,
+      "scoreCouverture": 70,
+      "scoreQoS": 76,
+      "scoreQoE": 74,
+      "scoreConformite": 71,
+      "recommandation": "Améliorer la couverture en région forestière"
+    },
+    {
+      "periode": "2026-Q1",
+      "scoreGlobal": 74,
+      "scoreCouverture": 72,
+      "scoreQoS": 78,
+      "scoreQoE": 76,
+      "scoreConformite": 73,
+      "recommandation": "Plan de modernisation du backhaul national"
+    }
+  ]
+}

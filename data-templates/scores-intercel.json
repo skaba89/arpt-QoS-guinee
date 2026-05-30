@@ -1,0 +1,49 @@
+{
+  "scores": [
+    {
+      "periode": "2025-Q1",
+      "scoreGlobal": 28,
+      "scoreCouverture": 22,
+      "scoreQoS": 35,
+      "scoreQoE": 32,
+      "scoreConformite": 27,
+      "recommandation": "Plan de redressement à soumettre à l'ARPT — délai 60 jours"
+    },
+    {
+      "periode": "2025-Q2",
+      "scoreGlobal": 30,
+      "scoreCouverture": 25,
+      "scoreQoS": 38,
+      "scoreQoE": 35,
+      "scoreConformite": 30,
+      "recommandation": "Remplacement des équipements obsolètes (2G vers minimum 3G)"
+    },
+    {
+      "periode": "2025-Q3",
+      "scoreGlobal": 33,
+      "scoreCouverture": 28,
+      "scoreQoS": 42,
+      "scoreQoE": 38,
+      "scoreConformite": 33,
+      "recommandation": "Extension géographique PRIORITAIRE — 85% du territoire non couvert"
+    },
+    {
+      "periode": "2025-Q4",
+      "scoreGlobal": 38,
+      "scoreCouverture": 32,
+      "scoreQoS": 46,
+      "scoreQoE": 41,
+      "scoreConformite": 37,
+      "recommandation": "MISE EN DEMEURE : Restructuration complète du réseau requise"
+    },
+    {
+      "periode": "2026-Q1",
+      "scoreGlobal": 40,
+      "scoreCouverture": 34,
+      "scoreQoS": 48,
+      "scoreQoE": 43,
+      "scoreConformite": 39,
+      "recommandation": "Risque de retrait de licence si le plan n'est pas soumis"
+    }
+  ]
+}
