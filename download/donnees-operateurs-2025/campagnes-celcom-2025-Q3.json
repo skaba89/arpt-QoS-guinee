@@ -1,162 +1,92 @@
 [
   {
-    "nom": "Drive Test Conakry 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Celcom Guinée Conakry 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "CELCOM",
     "region": "CON",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-12",
+    "dateFin": "2025-07-29",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Conakry"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Coyah 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Celcom Guinée Coyah 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "CELCOM",
     "region": "CYA",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-10",
+    "dateFin": "2025-08-03",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Coyah"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Kindia 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Celcom Guinée Kindia 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "CELCOM",
     "region": "KIN",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-20",
+    "dateFin": "2025-07-24",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Kindia"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Boké 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "BKE",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-29",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Boké"
-  },
-  {
-    "nom": "Drive Test Koundara 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Celcom Guinée Koundara 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "CELCOM",
     "region": "KDR",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-02",
+    "dateFin": "2025-07-23",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Koundara"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Labé 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Celcom Guinée Mamou 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "CELCOM",
-    "region": "LBE",
+    "region": "MAM",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-18",
+    "dateFin": "2025-07-21",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Labé"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Mali 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Celcom Guinée Faranah 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "CELCOM",
-    "region": "MLI",
+    "region": "FAR",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-19",
+    "dateFin": "2025-07-25",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Mali"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Dalaba 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "DLB",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-05",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Dalaba"
-  },
-  {
-    "nom": "Drive Test Mamou 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "MMU",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-12",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Mamou"
-  },
-  {
-    "nom": "Drive Test Faranah 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "FRN",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-01",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Faranah"
-  },
-  {
-    "nom": "Drive Test Kissidougou 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Celcom Guinée Kissidougou 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "CELCOM",
     "region": "KDG",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-24",
+    "dateFin": "2025-08-02",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Kissidougou"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Kankan 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Celcom Guinée Kankan 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "CELCOM",
-    "region": "KKA",
+    "region": "KAN",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-23",
+    "dateFin": "2025-07-28",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Kankan"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Siguiri 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Celcom Guinée N'Zérékoré 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "CELCOM",
-    "region": "SGR",
+    "region": "NZE",
     "dateDebut": "2025-07-01",
     "dateFin": "2025-08-04",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Siguiri"
-  },
-  {
-    "nom": "Drive Test Guéckédou 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "GKD",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-09",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Guéckédou"
-  },
-  {
-    "nom": "Drive Test Beyla 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "BLA",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-23",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Beyla"
-  },
-  {
-    "nom": "Drive Test N'Zérékoré 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "ZKR",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-16",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM N'Zérékoré"
+    "responsable": "Equipe Celcom Guinée"
   }
 ]

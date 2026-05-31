@@ -1,0 +1,155 @@
+[
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "BASSE",
+    "message": "Couverture insuffisante détectée pour Orange Guinée dans la région de Conakry",
+    "details": "{\"kpi\":\"rsrp\",\"valeur\":117.49,\"seuil\":91.9,\"ecart\":21.34}",
+    "operatorCode": "ORANGE",
+    "regionCode": "CON",
+    "isResolved": true
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "MOYENNE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour MTN Guinée dans la région de Kindia",
+    "details": "{\"kpi\":\"latence\",\"valeur\":43.45,\"seuil\":79.69,\"ecart\":34.38}",
+    "operatorCode": "MTN",
+    "regionCode": "KIN",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "MOYENNE",
+    "message": "Indisponibilité prolongée du réseau MTN Guinée dans la région de Faranah",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":198.87,\"seuil\":87.49,\"ecart\":27.12}",
+    "operatorCode": "MTN",
+    "regionCode": "FAR",
+    "isResolved": true
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "HAUTE",
+    "message": "Dégradation significative de la qualité de service pour Celcom Guinée dans la région de Boké",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":158.86,\"seuil\":65.38,\"ecart\":16.11}",
+    "operatorCode": "CELCOM",
+    "regionCode": "BOK",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "HAUTE",
+    "message": "Indisponibilité prolongée du réseau Celcom Guinée dans la région de Koundara",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":107.43,\"seuil\":83.77,\"ecart\":46.79}",
+    "operatorCode": "CELCOM",
+    "regionCode": "KDR",
+    "isResolved": true
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "MOYENNE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Celcom Guinée dans la région de Labé",
+    "details": "{\"kpi\":\"latence\",\"valeur\":180.21,\"seuil\":59.85,\"ecart\":35.64}",
+    "operatorCode": "CELCOM",
+    "regionCode": "LAB",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "HAUTE",
+    "message": "Indisponibilité prolongée du réseau Celcom Guinée dans la région de Mali",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":72.12,\"seuil\":85.51,\"ecart\":44.02}",
+    "operatorCode": "CELCOM",
+    "regionCode": "MLI",
+    "isResolved": true
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "MOYENNE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Celcom Guinée dans la région de Dalaba",
+    "details": "{\"kpi\":\"latence\",\"valeur\":56.72,\"seuil\":94.13,\"ecart\":33.04}",
+    "operatorCode": "CELCOM",
+    "regionCode": "DLB",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "MOYENNE",
+    "message": "Indisponibilité prolongée du réseau Celcom Guinée dans la région de Mamou",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":47.4,\"seuil\":62.4,\"ecart\":29.89}",
+    "operatorCode": "CELCOM",
+    "regionCode": "MAM",
+    "isResolved": true
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "CRITIQUE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Intercel Guinée dans la région de Boké",
+    "details": "{\"kpi\":\"latence\",\"valeur\":111.37,\"seuil\":66.26,\"ecart\":35.72}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "BOK",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "CRITIQUE",
+    "message": "Indisponibilité prolongée du réseau Intercel Guinée dans la région de Koundara",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":106.16,\"seuil\":78.98,\"ecart\":29.41}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "KDR",
+    "isResolved": false
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "HAUTE",
+    "message": "Couverture insuffisante détectée pour Intercel Guinée dans la région de Labé",
+    "details": "{\"kpi\":\"rsrp\",\"valeur\":177.38,\"seuil\":57.44,\"ecart\":30.17}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "LAB",
+    "isResolved": true
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "HAUTE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Intercel Guinée dans la région de Mali",
+    "details": "{\"kpi\":\"latence\",\"valeur\":85.47,\"seuil\":83.94,\"ecart\":47.25}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "MLI",
+    "isResolved": true
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "message": "Couverture insuffisante détectée pour Intercel Guinée dans la région de Dalaba",
+    "details": "{\"kpi\":\"rsrp\",\"valeur\":153.8,\"seuil\":86.83,\"ecart\":38.97}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "DLB",
+    "isResolved": true
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "message": "Dégradation significative de la qualité de service pour Intercel Guinée dans la région de Mamou",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":99.45,\"seuil\":81.54,\"ecart\":23.24}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "MAM",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "CRITIQUE",
+    "message": "Indisponibilité prolongée du réseau Intercel Guinée dans la région de Faranah",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":157.62,\"seuil\":77.82,\"ecart\":37.64}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "FAR",
+    "isResolved": false
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "HAUTE",
+    "message": "Indisponibilité prolongée du réseau Intercel Guinée dans la région de Kissidougou",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":57.73,\"seuil\":69.17,\"ecart\":22.88}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "KDG",
+    "isResolved": false
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "BASSE",
+    "message": "Couverture insuffisante détectée pour Orange Guinée dans la région de Kindia",
+    "details": "{\"kpi\":\"rsrp\",\"valeur\":156.83,\"seuil\":85.4,\"ecart\":37.87}",
+    "operatorCode": "ORANGE",
+    "regionCode": "KIN",
+    "isResolved": false
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "MOYENNE",
+    "message": "Indisponibilité prolongée du réseau Orange Guinée dans la région de Labé",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":56.5,\"seuil\":87.66,\"ecart\":11.88}",
+    "operatorCode": "ORANGE",
+    "regionCode": "LAB",
+    "isResolved": true
+  }
+]

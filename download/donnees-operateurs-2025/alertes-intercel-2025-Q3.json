@@ -1,0 +1,56 @@
+[
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "CRITIQUE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Intercel Guinée dans la région de Conakry",
+    "details": "{\"kpi\":\"latence\",\"valeur\":191.32,\"seuil\":98.4,\"ecart\":14.64}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "CON",
+    "isResolved": true
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "message": "Couverture insuffisante détectée pour Intercel Guinée dans la région de Kindia",
+    "details": "{\"kpi\":\"rsrp\",\"valeur\":66.64,\"seuil\":99.46,\"ecart\":45.86}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "KIN",
+    "isResolved": true
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "HAUTE",
+    "message": "Dégradation significative de la qualité de service pour Intercel Guinée dans la région de Boké",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":130.27,\"seuil\":90.49,\"ecart\":21.88}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "BOK",
+    "isResolved": true
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "HAUTE",
+    "message": "Couverture insuffisante détectée pour Intercel Guinée dans la région de Koundara",
+    "details": "{\"kpi\":\"rsrp\",\"valeur\":117.88,\"seuil\":50.03,\"ecart\":12.68}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "KDR",
+    "isResolved": true
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "message": "Dégradation significative de la qualité de service pour Intercel Guinée dans la région de Labé",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":62.28,\"seuil\":50.27,\"ecart\":49.22}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "LAB",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "CRITIQUE",
+    "message": "Indisponibilité prolongée du réseau Intercel Guinée dans la région de Mali",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":186.22,\"seuil\":55.84,\"ecart\":21.9}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "MLI",
+    "isResolved": false
+  }
+]

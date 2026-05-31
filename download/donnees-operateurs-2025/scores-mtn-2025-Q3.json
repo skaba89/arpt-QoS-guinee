@@ -1,13 +1,13 @@
 {
-  "operateur": "MTN",
-  "operateurNom": "MTN Guinée",
-  "periode": "2025-Q3",
-  "dateDebut": "2025-07-01",
-  "dateFin": "2025-09-30",
-  "scoreGlobal": 68,
-  "scoreCouverture": 66,
-  "scoreQoS": 73,
-  "scoreQoE": 71,
-  "scoreConformite": 68,
-  "recommandation": "Investir dans le backhaul fibre vers Labé et Kankan"
+  "scores": [
+    {
+      "periode": "2025-Q3",
+      "scoreGlobal": 80.66,
+      "scoreCouverture": 91.66,
+      "scoreQoS": 83.36,
+      "scoreQoE": 68.06,
+      "scoreConformite": 78.6,
+      "recommandation": "Performances satisfaisantes. Maintenir le niveau de qualité de service."
+    }
+  ]
 }

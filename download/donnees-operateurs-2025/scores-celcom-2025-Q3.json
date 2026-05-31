@@ -1,13 +1,13 @@
 {
-  "operateur": "CELCOM",
-  "operateurNom": "Celcom Guinée",
-  "periode": "2025-Q3",
-  "dateDebut": "2025-07-01",
-  "dateFin": "2025-09-30",
-  "scoreGlobal": 48,
-  "scoreCouverture": 45,
-  "scoreQoS": 56,
-  "scoreQoE": 52,
-  "scoreConformite": 48,
-  "recommandation": "Moderniser le réseau 3G vers 4G dans les 6 prochains mois"
+  "scores": [
+    {
+      "periode": "2025-Q3",
+      "scoreGlobal": 63.29,
+      "scoreCouverture": 57.67,
+      "scoreQoS": 75.09,
+      "scoreQoE": 52.09,
+      "scoreConformite": 66.62,
+      "recommandation": "Performances acceptables. Des améliorations sont recommandées sur la couverture rurale."
+    }
+  ]
 }

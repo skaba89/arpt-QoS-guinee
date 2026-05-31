@@ -1,162 +1,102 @@
 [
   {
-    "nom": "Drive Test Conakry 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Orange Guinée Conakry 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "ORANGE",
     "region": "CON",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-16",
+    "dateFin": "2025-07-19",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Conakry"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Coyah 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Orange Guinée Coyah 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "ORANGE",
     "region": "CYA",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-22",
+    "dateFin": "2025-07-20",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Coyah"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Kindia 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Orange Guinée Kindia 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "ORANGE",
     "region": "KIN",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-10",
+    "dateFin": "2025-07-26",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Kindia"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Boké 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "ORANGE",
-    "region": "BKE",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-27",
-    "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Boké"
-  },
-  {
-    "nom": "Drive Test Koundara 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "ORANGE",
-    "region": "KDR",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-29",
-    "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Koundara"
-  },
-  {
-    "nom": "Drive Test Labé 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "ORANGE",
-    "region": "LBE",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-14",
-    "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Labé"
-  },
-  {
-    "nom": "Drive Test Mali 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Orange Guinée Mali 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "ORANGE",
     "region": "MLI",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-29",
+    "dateFin": "2025-07-17",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Mali"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Dalaba 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Orange Guinée Mamou 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "ORANGE",
-    "region": "DLB",
+    "region": "MAM",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-15",
+    "dateFin": "2025-07-17",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Dalaba"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Mamou 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Orange Guinée Faranah 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "ORANGE",
-    "region": "MMU",
+    "region": "FAR",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-27",
+    "dateFin": "2025-08-03",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Mamou"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Faranah 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "ORANGE",
-    "region": "FRN",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-23",
-    "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Faranah"
-  },
-  {
-    "nom": "Drive Test Kissidougou 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Orange Guinée Kissidougou 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "ORANGE",
     "region": "KDG",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-27",
+    "dateFin": "2025-07-24",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Kissidougou"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Kankan 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Orange Guinée Kankan 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "ORANGE",
-    "region": "KKA",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-11",
-    "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Kankan"
-  },
-  {
-    "nom": "Drive Test Siguiri 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "ORANGE",
-    "region": "SGR",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-06",
-    "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Siguiri"
-  },
-  {
-    "nom": "Drive Test Guéckédou 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "ORANGE",
-    "region": "GKD",
+    "region": "KAN",
     "dateDebut": "2025-07-01",
     "dateFin": "2025-07-25",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Guéckédou"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Beyla 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Orange Guinée Siguiri 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "ORANGE",
-    "region": "BLA",
+    "region": "SGR",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-08",
+    "dateFin": "2025-07-22",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Beyla"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test N'Zérékoré 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet Orange Guinée N'Zérékoré 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "ORANGE",
-    "region": "ZKR",
+    "region": "NZE",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-15",
+    "dateFin": "2025-08-03",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE N'Zérékoré"
+    "responsable": "Equipe Orange Guinée"
   }
 ]

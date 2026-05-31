@@ -1,0 +1,11 @@
+[
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "BASSE",
+    "message": "Couverture insuffisante détectée pour Orange Guinée dans la région de Conakry",
+    "details": "{\"kpi\":\"rsrp\",\"valeur\":117.49,\"seuil\":91.9,\"ecart\":21.34}",
+    "operatorCode": "ORANGE",
+    "regionCode": "CON",
+    "isResolved": true
+  }
+]

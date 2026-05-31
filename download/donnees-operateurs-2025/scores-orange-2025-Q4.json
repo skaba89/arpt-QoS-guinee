@@ -1,13 +1,13 @@
 {
-  "operateur": "ORANGE",
-  "operateurNom": "Orange Guinée",
-  "periode": "2025-Q4",
-  "dateDebut": "2025-10-01",
-  "dateFin": "2025-12-31",
-  "scoreGlobal": 82,
-  "scoreCouverture": 80,
-  "scoreQoS": 85,
-  "scoreQoE": 84,
-  "scoreConformite": 82,
-  "recommandation": "Maintenir les investissements en infrastructure 4G+"
+  "scores": [
+    {
+      "periode": "2025-Q4",
+      "scoreGlobal": 90.35,
+      "scoreCouverture": 99.84,
+      "scoreQoS": 100,
+      "scoreQoE": 83.41,
+      "scoreConformite": 72.71,
+      "recommandation": "Performances satisfaisantes. Maintenir le niveau de qualité de service."
+    }
+  ]
 }

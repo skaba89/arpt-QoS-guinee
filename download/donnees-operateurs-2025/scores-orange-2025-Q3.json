@@ -1,13 +1,13 @@
 {
-  "operateur": "ORANGE",
-  "operateurNom": "Orange Guinée",
-  "periode": "2025-Q3",
-  "dateDebut": "2025-07-01",
-  "dateFin": "2025-09-30",
-  "scoreGlobal": 79,
-  "scoreCouverture": 77,
-  "scoreQoS": 82,
-  "scoreQoE": 81,
-  "scoreConformite": 79,
-  "recommandation": "Étendre la couverture en zone rurale (Faranah, Kissidougou, Beyla)"
+  "scores": [
+    {
+      "periode": "2025-Q3",
+      "scoreGlobal": 91.48,
+      "scoreCouverture": 100,
+      "scoreQoS": 97.52,
+      "scoreQoE": 83.81,
+      "scoreConformite": 81.37,
+      "recommandation": "Performances satisfaisantes. Maintenir le niveau de qualité de service."
+    }
+  ]
 }

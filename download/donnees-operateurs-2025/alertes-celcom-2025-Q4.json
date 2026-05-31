@@ -1,0 +1,56 @@
+[
+  {
+    "type": "DEGRADATION",
+    "severity": "HAUTE",
+    "message": "Dégradation significative de la qualité de service pour Celcom Guinée dans la région de Conakry",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":105.88,\"seuil\":55.38,\"ecart\":22.9}",
+    "operatorCode": "CELCOM",
+    "regionCode": "CON",
+    "isResolved": true
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "MOYENNE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Celcom Guinée dans la région de Boké",
+    "details": "{\"kpi\":\"latence\",\"valeur\":103.42,\"seuil\":88.37,\"ecart\":34.76}",
+    "operatorCode": "CELCOM",
+    "regionCode": "BOK",
+    "isResolved": false
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "MOYENNE",
+    "message": "Indisponibilité prolongée du réseau Celcom Guinée dans la région de Koundara",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":114.93,\"seuil\":54.13,\"ecart\":25.49}",
+    "operatorCode": "CELCOM",
+    "regionCode": "KDR",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "HAUTE",
+    "message": "Indisponibilité prolongée du réseau Celcom Guinée dans la région de Labé",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":26.96,\"seuil\":60.24,\"ecart\":22.08}",
+    "operatorCode": "CELCOM",
+    "regionCode": "LAB",
+    "isResolved": false
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "MOYENNE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Celcom Guinée dans la région de Mali",
+    "details": "{\"kpi\":\"latence\",\"valeur\":85.1,\"seuil\":54.43,\"ecart\":24.06}",
+    "operatorCode": "CELCOM",
+    "regionCode": "MLI",
+    "isResolved": false
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "HAUTE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Celcom Guinée dans la région de Dalaba",
+    "details": "{\"kpi\":\"latence\",\"valeur\":78.85,\"seuil\":92.55,\"ecart\":45.87}",
+    "operatorCode": "CELCOM",
+    "regionCode": "DLB",
+    "isResolved": true
+  }
+]

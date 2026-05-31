@@ -1,0 +1,47 @@
+[
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "MOYENNE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Celcom Guinée dans la région de Boké",
+    "details": "{\"kpi\":\"latence\",\"valeur\":175.7,\"seuil\":93.56,\"ecart\":25.78}",
+    "operatorCode": "CELCOM",
+    "regionCode": "BOK",
+    "isResolved": true
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "MOYENNE",
+    "message": "Couverture insuffisante détectée pour Celcom Guinée dans la région de Koundara",
+    "details": "{\"kpi\":\"rsrp\",\"valeur\":126.29,\"seuil\":98.12,\"ecart\":30.78}",
+    "operatorCode": "CELCOM",
+    "regionCode": "KDR",
+    "isResolved": false
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "MOYENNE",
+    "message": "Indisponibilité prolongée du réseau Celcom Guinée dans la région de Labé",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":108.48,\"seuil\":95.79,\"ecart\":12.81}",
+    "operatorCode": "CELCOM",
+    "regionCode": "LAB",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "MOYENNE",
+    "message": "Indisponibilité prolongée du réseau Celcom Guinée dans la région de Mali",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":12.3,\"seuil\":92.97,\"ecart\":17.99}",
+    "operatorCode": "CELCOM",
+    "regionCode": "MLI",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "MOYENNE",
+    "message": "Indisponibilité prolongée du réseau Celcom Guinée dans la région de Dalaba",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":125.17,\"seuil\":58.08,\"ecart\":32.79}",
+    "operatorCode": "CELCOM",
+    "regionCode": "DLB",
+    "isResolved": true
+  }
+]

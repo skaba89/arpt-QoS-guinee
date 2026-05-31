@@ -1,162 +1,102 @@
 [
   {
-    "nom": "Drive Test Conakry 2025-Q2",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne Stationnaire MTN Guinée Conakry 2025-Q2",
+    "type": "STATIONNAIRE",
     "operateur": "MTN",
     "region": "CON",
     "dateDebut": "2025-04-01",
-    "dateFin": "2025-05-01",
+    "dateFin": "2025-04-27",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Conakry"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Coyah 2025-Q2",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne Stationnaire MTN Guinée Coyah 2025-Q2",
+    "type": "STATIONNAIRE",
     "operateur": "MTN",
     "region": "CYA",
     "dateDebut": "2025-04-01",
-    "dateFin": "2025-05-05",
+    "dateFin": "2025-04-21",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Coyah"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Kindia 2025-Q2",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne Stationnaire MTN Guinée Kindia 2025-Q2",
+    "type": "STATIONNAIRE",
     "operateur": "MTN",
     "region": "KIN",
     "dateDebut": "2025-04-01",
-    "dateFin": "2025-04-22",
+    "dateFin": "2025-05-05",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Kindia"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Boké 2025-Q2",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne Stationnaire MTN Guinée Boké 2025-Q2",
+    "type": "STATIONNAIRE",
     "operateur": "MTN",
-    "region": "BKE",
+    "region": "BOK",
     "dateDebut": "2025-04-01",
-    "dateFin": "2025-04-17",
+    "dateFin": "2025-04-18",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Boké"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Koundara 2025-Q2",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne Stationnaire MTN Guinée Labé 2025-Q2",
+    "type": "STATIONNAIRE",
     "operateur": "MTN",
-    "region": "KDR",
+    "region": "LAB",
     "dateDebut": "2025-04-01",
-    "dateFin": "2025-04-25",
+    "dateFin": "2025-04-26",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Koundara"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Labé 2025-Q2",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne Stationnaire MTN Guinée Mamou 2025-Q2",
+    "type": "STATIONNAIRE",
     "operateur": "MTN",
-    "region": "LBE",
+    "region": "MAM",
     "dateDebut": "2025-04-01",
-    "dateFin": "2025-05-01",
+    "dateFin": "2025-05-04",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Labé"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Mali 2025-Q2",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne Stationnaire MTN Guinée Kankan 2025-Q2",
+    "type": "STATIONNAIRE",
     "operateur": "MTN",
-    "region": "MLI",
-    "dateDebut": "2025-04-01",
-    "dateFin": "2025-04-28",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN Mali"
-  },
-  {
-    "nom": "Drive Test Dalaba 2025-Q2",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "DLB",
-    "dateDebut": "2025-04-01",
-    "dateFin": "2025-04-16",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN Dalaba"
-  },
-  {
-    "nom": "Drive Test Mamou 2025-Q2",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "MMU",
-    "dateDebut": "2025-04-01",
-    "dateFin": "2025-04-24",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN Mamou"
-  },
-  {
-    "nom": "Drive Test Faranah 2025-Q2",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "FRN",
-    "dateDebut": "2025-04-01",
-    "dateFin": "2025-05-10",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN Faranah"
-  },
-  {
-    "nom": "Drive Test Kissidougou 2025-Q2",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "KDG",
-    "dateDebut": "2025-04-01",
-    "dateFin": "2025-04-23",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN Kissidougou"
-  },
-  {
-    "nom": "Drive Test Kankan 2025-Q2",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "KKA",
-    "dateDebut": "2025-04-01",
-    "dateFin": "2025-04-17",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN Kankan"
-  },
-  {
-    "nom": "Drive Test Siguiri 2025-Q2",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "SGR",
+    "region": "KAN",
     "dateDebut": "2025-04-01",
     "dateFin": "2025-04-27",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Siguiri"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Guéckédou 2025-Q2",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne Stationnaire MTN Guinée Siguiri 2025-Q2",
+    "type": "STATIONNAIRE",
     "operateur": "MTN",
-    "region": "GKD",
+    "region": "SGR",
     "dateDebut": "2025-04-01",
-    "dateFin": "2025-05-01",
+    "dateFin": "2025-04-29",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Guéckédou"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Beyla 2025-Q2",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne Stationnaire MTN Guinée Beyla 2025-Q2",
+    "type": "STATIONNAIRE",
     "operateur": "MTN",
     "region": "BLA",
     "dateDebut": "2025-04-01",
     "dateFin": "2025-04-22",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Beyla"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test N'Zérékoré 2025-Q2",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne Stationnaire MTN Guinée N'Zérékoré 2025-Q2",
+    "type": "STATIONNAIRE",
     "operateur": "MTN",
-    "region": "ZKR",
+    "region": "NZE",
     "dateDebut": "2025-04-01",
-    "dateFin": "2025-05-05",
+    "dateFin": "2025-04-25",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN N'Zérékoré"
+    "responsable": "Equipe MTN Guinée"
   }
 ]

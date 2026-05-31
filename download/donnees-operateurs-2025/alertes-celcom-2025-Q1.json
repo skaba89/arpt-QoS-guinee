@@ -1,0 +1,56 @@
+[
+  {
+    "type": "DEGRADATION",
+    "severity": "HAUTE",
+    "message": "Dégradation significative de la qualité de service pour Celcom Guinée dans la région de Boké",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":158.86,\"seuil\":65.38,\"ecart\":16.11}",
+    "operatorCode": "CELCOM",
+    "regionCode": "BOK",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "HAUTE",
+    "message": "Indisponibilité prolongée du réseau Celcom Guinée dans la région de Koundara",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":107.43,\"seuil\":83.77,\"ecart\":46.79}",
+    "operatorCode": "CELCOM",
+    "regionCode": "KDR",
+    "isResolved": true
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "MOYENNE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Celcom Guinée dans la région de Labé",
+    "details": "{\"kpi\":\"latence\",\"valeur\":180.21,\"seuil\":59.85,\"ecart\":35.64}",
+    "operatorCode": "CELCOM",
+    "regionCode": "LAB",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "HAUTE",
+    "message": "Indisponibilité prolongée du réseau Celcom Guinée dans la région de Mali",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":72.12,\"seuil\":85.51,\"ecart\":44.02}",
+    "operatorCode": "CELCOM",
+    "regionCode": "MLI",
+    "isResolved": true
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "MOYENNE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Celcom Guinée dans la région de Dalaba",
+    "details": "{\"kpi\":\"latence\",\"valeur\":56.72,\"seuil\":94.13,\"ecart\":33.04}",
+    "operatorCode": "CELCOM",
+    "regionCode": "DLB",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "MOYENNE",
+    "message": "Indisponibilité prolongée du réseau Celcom Guinée dans la région de Mamou",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":47.4,\"seuil\":62.4,\"ecart\":29.89}",
+    "operatorCode": "CELCOM",
+    "regionCode": "MAM",
+    "isResolved": true
+  }
+]

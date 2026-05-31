@@ -1,0 +1,20 @@
+[
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "BASSE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour MTN Guinée dans la région de Coyah",
+    "details": "{\"kpi\":\"latence\",\"valeur\":184.83,\"seuil\":53.47,\"ecart\":29.36}",
+    "operatorCode": "MTN",
+    "regionCode": "CYA",
+    "isResolved": false
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "BASSE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour MTN Guinée dans la région de Mali",
+    "details": "{\"kpi\":\"latence\",\"valeur\":169.07,\"seuil\":53.33,\"ecart\":23.62}",
+    "operatorCode": "MTN",
+    "regionCode": "MLI",
+    "isResolved": false
+  }
+]

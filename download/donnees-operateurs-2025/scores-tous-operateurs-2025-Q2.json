@@ -1,0 +1,42 @@
+[
+  {
+    "operateur": "ORANGE",
+    "periode": "2025-Q2",
+    "scoreGlobal": 81.11,
+    "scoreCouverture": 97.21,
+    "scoreQoS": 78.11,
+    "scoreQoE": 69.43,
+    "scoreConformite": 80.06,
+    "recommandation": "Performances satisfaisantes. Maintenir le niveau de qualité de service."
+  },
+  {
+    "operateur": "MTN",
+    "periode": "2025-Q2",
+    "scoreGlobal": 75.64,
+    "scoreCouverture": 80.13,
+    "scoreQoS": 85.01,
+    "scoreQoE": 62.59,
+    "scoreConformite": 72.26,
+    "recommandation": "Performances satisfaisantes. Maintenir le niveau de qualité de service."
+  },
+  {
+    "operateur": "CELCOM",
+    "periode": "2025-Q2",
+    "scoreGlobal": 59.67,
+    "scoreCouverture": 57.65,
+    "scoreQoS": 67.78,
+    "scoreQoE": 48.66,
+    "scoreConformite": 63.77,
+    "recommandation": "Performances insuffisantes. Plan d'amélioration requis sous 90 jours."
+  },
+  {
+    "operateur": "INTERCEL",
+    "periode": "2025-Q2",
+    "scoreGlobal": 45.89,
+    "scoreCouverture": 42.27,
+    "scoreQoS": 54.17,
+    "scoreQoE": 33.6,
+    "scoreConformite": 53.34,
+    "recommandation": "Performances insuffisantes. Plan d'amélioration requis sous 90 jours."
+  }
+]

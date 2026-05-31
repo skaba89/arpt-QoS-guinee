@@ -1,0 +1,20 @@
+[
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "BASSE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Orange Guinée dans la région de Coyah",
+    "details": "{\"kpi\":\"latence\",\"valeur\":169.38,\"seuil\":72.19,\"ecart\":17.25}",
+    "operatorCode": "ORANGE",
+    "regionCode": "CYA",
+    "isResolved": false
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "MOYENNE",
+    "message": "Indisponibilité prolongée du réseau Orange Guinée dans la région de Mamou",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":114.13,\"seuil\":88.31,\"ecart\":18.3}",
+    "operatorCode": "ORANGE",
+    "regionCode": "MAM",
+    "isResolved": false
+  }
+]

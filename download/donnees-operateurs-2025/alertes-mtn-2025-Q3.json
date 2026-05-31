@@ -1,0 +1,29 @@
+[
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "BASSE",
+    "message": "Indisponibilité prolongée du réseau MTN Guinée dans la région de Kindia",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":143.56,\"seuil\":66.49,\"ecart\":39.85}",
+    "operatorCode": "MTN",
+    "regionCode": "KIN",
+    "isResolved": true
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "BASSE",
+    "message": "Dégradation significative de la qualité de service pour MTN Guinée dans la région de Koundara",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":71.05,\"seuil\":63.72,\"ecart\":29.78}",
+    "operatorCode": "MTN",
+    "regionCode": "KDR",
+    "isResolved": true
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "BASSE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour MTN Guinée dans la région de Mali",
+    "details": "{\"kpi\":\"latence\",\"valeur\":122.55,\"seuil\":78.4,\"ecart\":45.39}",
+    "operatorCode": "MTN",
+    "regionCode": "MLI",
+    "isResolved": true
+  }
+]

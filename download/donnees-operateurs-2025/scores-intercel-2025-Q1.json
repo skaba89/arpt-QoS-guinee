@@ -1,13 +1,13 @@
 {
-  "operateur": "INTERCEL",
-  "operateurNom": "Intercel Guinée",
-  "periode": "2025-Q1",
-  "dateDebut": "2025-01-01",
-  "dateFin": "2025-03-31",
-  "scoreGlobal": 28,
-  "scoreCouverture": 22,
-  "scoreQoS": 35,
-  "scoreQoE": 32,
-  "scoreConformite": 27,
-  "recommandation": "Plan de redressement à soumettre à l'ARPT — délai 60 jours"
+  "scores": [
+    {
+      "periode": "2025-Q1",
+      "scoreGlobal": 46.28,
+      "scoreCouverture": 30.21,
+      "scoreQoS": 60.25,
+      "scoreQoE": 30,
+      "scoreConformite": 65.78,
+      "recommandation": "Performances insuffisantes. Plan d'amélioration requis sous 90 jours."
+    }
+  ]
 }

@@ -1,0 +1,65 @@
+[
+  {
+    "type": "DEGRADATION",
+    "severity": "HAUTE",
+    "message": "Dégradation significative de la qualité de service pour Intercel Guinée dans la région de Boké",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":165.37,\"seuil\":69.97,\"ecart\":42.93}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "BOK",
+    "isResolved": false
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "message": "Dégradation significative de la qualité de service pour Intercel Guinée dans la région de Koundara",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":87.31,\"seuil\":88,\"ecart\":43.65}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "KDR",
+    "isResolved": false
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "HAUTE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Intercel Guinée dans la région de Labé",
+    "details": "{\"kpi\":\"latence\",\"valeur\":161.12,\"seuil\":87.27,\"ecart\":47.04}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "LAB",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "CRITIQUE",
+    "message": "Indisponibilité prolongée du réseau Intercel Guinée dans la région de Mali",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":81.14,\"seuil\":94.09,\"ecart\":25.63}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "MLI",
+    "isResolved": true
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "message": "Dégradation significative de la qualité de service pour Intercel Guinée dans la région de Dalaba",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":137.17,\"seuil\":87.98,\"ecart\":22.66}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "DLB",
+    "isResolved": true
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "CRITIQUE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Intercel Guinée dans la région de Faranah",
+    "details": "{\"kpi\":\"latence\",\"valeur\":29.02,\"seuil\":89.91,\"ecart\":36.88}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "FAR",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "HAUTE",
+    "message": "Indisponibilité prolongée du réseau Intercel Guinée dans la région de Kissidougou",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":54.45,\"seuil\":96.39,\"ecart\":12.51}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "KDG",
+    "isResolved": false
+  }
+]

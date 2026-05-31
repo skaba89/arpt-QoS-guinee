@@ -1,0 +1,29 @@
+[
+  {
+    "type": "DEGRADATION",
+    "severity": "MOYENNE",
+    "message": "Dégradation significative de la qualité de service pour Orange Guinée dans la région de Kindia",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":39.09,\"seuil\":61.23,\"ecart\":21.78}",
+    "operatorCode": "ORANGE",
+    "regionCode": "KIN",
+    "isResolved": true
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "BASSE",
+    "message": "Dégradation significative de la qualité de service pour Orange Guinée dans la région de Labé",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":12.52,\"seuil\":66.7,\"ecart\":27.76}",
+    "operatorCode": "ORANGE",
+    "regionCode": "LAB",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "MOYENNE",
+    "message": "Indisponibilité prolongée du réseau Orange Guinée dans la région de Dalaba",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":81.72,\"seuil\":61.74,\"ecart\":32.38}",
+    "operatorCode": "ORANGE",
+    "regionCode": "DLB",
+    "isResolved": true
+  }
+]

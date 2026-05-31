@@ -1,0 +1,42 @@
+[
+  {
+    "operateur": "ORANGE",
+    "periode": "2025-Q4",
+    "scoreGlobal": 90.35,
+    "scoreCouverture": 99.84,
+    "scoreQoS": 100,
+    "scoreQoE": 83.41,
+    "scoreConformite": 72.71,
+    "recommandation": "Performances satisfaisantes. Maintenir le niveau de qualité de service."
+  },
+  {
+    "operateur": "MTN",
+    "periode": "2025-Q4",
+    "scoreGlobal": 80.44,
+    "scoreCouverture": 87.61,
+    "scoreQoS": 82.98,
+    "scoreQoE": 75.84,
+    "scoreConformite": 73.41,
+    "recommandation": "Performances satisfaisantes. Maintenir le niveau de qualité de service."
+  },
+  {
+    "operateur": "CELCOM",
+    "periode": "2025-Q4",
+    "scoreGlobal": 69.56,
+    "scoreCouverture": 68.91,
+    "scoreQoS": 81.07,
+    "scoreQoE": 52.03,
+    "scoreConformite": 75.01,
+    "recommandation": "Performances acceptables. Des améliorations sont recommandées sur la couverture rurale."
+  },
+  {
+    "operateur": "INTERCEL",
+    "periode": "2025-Q4",
+    "scoreGlobal": 46.31,
+    "scoreCouverture": 29.28,
+    "scoreQoS": 55.37,
+    "scoreQoE": 37.79,
+    "scoreConformite": 64.67,
+    "recommandation": "Performances insuffisantes. Plan d'amélioration requis sous 90 jours."
+  }
+]

@@ -1,162 +1,102 @@
 [
   {
-    "nom": "Drive Test Conakry 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet MTN Guinée Conakry 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "MTN",
     "region": "CON",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-15",
+    "dateFin": "2025-08-04",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Conakry"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Coyah 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet MTN Guinée Coyah 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "MTN",
     "region": "CYA",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-10",
+    "dateFin": "2025-07-26",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Coyah"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Kindia 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet MTN Guinée Kindia 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "MTN",
     "region": "KIN",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-14",
+    "dateFin": "2025-07-15",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Kindia"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Boké 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "BKE",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-01",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN Boké"
-  },
-  {
-    "nom": "Drive Test Koundara 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet MTN Guinée Koundara 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "MTN",
     "region": "KDR",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-03",
+    "dateFin": "2025-07-23",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Koundara"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Labé 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet MTN Guinée Labé 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "MTN",
-    "region": "LBE",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-28",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN Labé"
-  },
-  {
-    "nom": "Drive Test Mali 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "MLI",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-16",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN Mali"
-  },
-  {
-    "nom": "Drive Test Dalaba 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "DLB",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-21",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN Dalaba"
-  },
-  {
-    "nom": "Drive Test Mamou 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "MMU",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-28",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN Mamou"
-  },
-  {
-    "nom": "Drive Test Faranah 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "FRN",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-17",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN Faranah"
-  },
-  {
-    "nom": "Drive Test Kissidougou 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "KDG",
+    "region": "LAB",
     "dateDebut": "2025-07-01",
     "dateFin": "2025-07-20",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Kissidougou"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Kankan 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet MTN Guinée Mamou 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "MTN",
-    "region": "KKA",
+    "region": "MAM",
     "dateDebut": "2025-07-01",
     "dateFin": "2025-08-02",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Kankan"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Siguiri 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet MTN Guinée Faranah 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "MTN",
-    "region": "SGR",
+    "region": "FAR",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-08-09",
+    "dateFin": "2025-07-24",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Siguiri"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Guéckédou 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet MTN Guinée Kankan 2025-Q3",
+    "type": "QOS_INTERNET",
+    "operateur": "MTN",
+    "region": "KAN",
+    "dateDebut": "2025-07-01",
+    "dateFin": "2025-07-31",
+    "statut": "TERMINEE",
+    "responsable": "Equipe MTN Guinée"
+  },
+  {
+    "nom": "Campagne QoS Internet MTN Guinée Guéckédou 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "MTN",
     "region": "GKD",
     "dateDebut": "2025-07-01",
     "dateFin": "2025-07-24",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Guéckédou"
+    "responsable": "Equipe MTN Guinée"
   },
   {
-    "nom": "Drive Test Beyla 2025-Q3",
-    "type": "DRIVE_TEST",
+    "nom": "Campagne QoS Internet MTN Guinée N'Zérékoré 2025-Q3",
+    "type": "QOS_INTERNET",
     "operateur": "MTN",
-    "region": "BLA",
+    "region": "NZE",
     "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-24",
+    "dateFin": "2025-07-25",
     "statut": "TERMINEE",
-    "responsable": "Équipe MTN Beyla"
-  },
-  {
-    "nom": "Drive Test N'Zérékoré 2025-Q3",
-    "type": "DRIVE_TEST",
-    "operateur": "MTN",
-    "region": "ZKR",
-    "dateDebut": "2025-07-01",
-    "dateFin": "2025-07-24",
-    "statut": "TERMINEE",
-    "responsable": "Équipe MTN N'Zérékoré"
+    "responsable": "Equipe MTN Guinée"
   }
 ]

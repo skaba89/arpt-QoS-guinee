@@ -1,0 +1,56 @@
+[
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "message": "Dégradation significative de la qualité de service pour Intercel Guinée dans la région de Conakry",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":98.94,\"seuil\":52.67,\"ecart\":37.99}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "CON",
+    "isResolved": true
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "CRITIQUE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Intercel Guinée dans la région de Boké",
+    "details": "{\"kpi\":\"latence\",\"valeur\":155.7,\"seuil\":85.21,\"ecart\":18.25}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "BOK",
+    "isResolved": false
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "message": "Couverture insuffisante détectée pour Intercel Guinée dans la région de Koundara",
+    "details": "{\"kpi\":\"rsrp\",\"valeur\":97.91,\"seuil\":82.12,\"ecart\":48.53}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "KDR",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "HAUTE",
+    "message": "Indisponibilité prolongée du réseau Intercel Guinée dans la région de Labé",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":129.86,\"seuil\":61.63,\"ecart\":31.95}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "LAB",
+    "isResolved": false
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "HAUTE",
+    "message": "Indisponibilité prolongée du réseau Intercel Guinée dans la région de Mali",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":60.13,\"seuil\":51.29,\"ecart\":40.57}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "MLI",
+    "isResolved": false
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "CRITIQUE",
+    "message": "Indisponibilité prolongée du réseau Intercel Guinée dans la région de Dalaba",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":114.87,\"seuil\":95.93,\"ecart\":10.37}",
+    "operatorCode": "INTERCEL",
+    "regionCode": "DLB",
+    "isResolved": true
+  }
+]

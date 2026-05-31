@@ -1,162 +1,82 @@
 [
   {
-    "nom": "Drive Test Conakry 2025-Q4",
+    "nom": "Campagne Drive Test Intercel Guinée Conakry 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "INTERCEL",
     "region": "CON",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-11-15",
+    "dateFin": "2025-11-03",
     "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Conakry"
+    "responsable": "Equipe Intercel Guinée"
   },
   {
-    "nom": "Drive Test Coyah 2025-Q4",
+    "nom": "Campagne Drive Test Intercel Guinée Coyah 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "INTERCEL",
     "region": "CYA",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-22",
+    "dateFin": "2025-11-01",
     "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Coyah"
+    "responsable": "Equipe Intercel Guinée"
   },
   {
-    "nom": "Drive Test Kindia 2025-Q4",
+    "nom": "Campagne Drive Test Intercel Guinée Kindia 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "INTERCEL",
     "region": "KIN",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-21",
+    "dateFin": "2025-11-02",
     "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Kindia"
+    "responsable": "Equipe Intercel Guinée"
   },
   {
-    "nom": "Drive Test Boké 2025-Q4",
-    "type": "DRIVE_TEST",
-    "operateur": "INTERCEL",
-    "region": "BKE",
-    "dateDebut": "2025-10-01",
-    "dateFin": "2025-11-13",
-    "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Boké"
-  },
-  {
-    "nom": "Drive Test Koundara 2025-Q4",
+    "nom": "Campagne Drive Test Intercel Guinée Koundara 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "INTERCEL",
     "region": "KDR",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-23",
+    "dateFin": "2025-10-30",
     "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Koundara"
+    "responsable": "Equipe Intercel Guinée"
   },
   {
-    "nom": "Drive Test Labé 2025-Q4",
+    "nom": "Campagne Drive Test Intercel Guinée Mamou 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "INTERCEL",
-    "region": "LBE",
+    "region": "MAM",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-31",
+    "dateFin": "2025-10-22",
     "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Labé"
+    "responsable": "Equipe Intercel Guinée"
   },
   {
-    "nom": "Drive Test Mali 2025-Q4",
+    "nom": "Campagne Drive Test Intercel Guinée Kankan 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "INTERCEL",
-    "region": "MLI",
+    "region": "KAN",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-27",
+    "dateFin": "2025-10-22",
     "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Mali"
+    "responsable": "Equipe Intercel Guinée"
   },
   {
-    "nom": "Drive Test Dalaba 2025-Q4",
-    "type": "DRIVE_TEST",
-    "operateur": "INTERCEL",
-    "region": "DLB",
-    "dateDebut": "2025-10-01",
-    "dateFin": "2025-11-03",
-    "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Dalaba"
-  },
-  {
-    "nom": "Drive Test Mamou 2025-Q4",
-    "type": "DRIVE_TEST",
-    "operateur": "INTERCEL",
-    "region": "MMU",
-    "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-25",
-    "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Mamou"
-  },
-  {
-    "nom": "Drive Test Faranah 2025-Q4",
-    "type": "DRIVE_TEST",
-    "operateur": "INTERCEL",
-    "region": "FRN",
-    "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-27",
-    "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Faranah"
-  },
-  {
-    "nom": "Drive Test Kissidougou 2025-Q4",
-    "type": "DRIVE_TEST",
-    "operateur": "INTERCEL",
-    "region": "KDG",
-    "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-25",
-    "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Kissidougou"
-  },
-  {
-    "nom": "Drive Test Kankan 2025-Q4",
-    "type": "DRIVE_TEST",
-    "operateur": "INTERCEL",
-    "region": "KKA",
-    "dateDebut": "2025-10-01",
-    "dateFin": "2025-11-03",
-    "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Kankan"
-  },
-  {
-    "nom": "Drive Test Siguiri 2025-Q4",
+    "nom": "Campagne Drive Test Intercel Guinée Siguiri 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "INTERCEL",
     "region": "SGR",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-29",
+    "dateFin": "2025-10-18",
     "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Siguiri"
+    "responsable": "Equipe Intercel Guinée"
   },
   {
-    "nom": "Drive Test Guéckédou 2025-Q4",
+    "nom": "Campagne Drive Test Intercel Guinée N'Zérékoré 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "INTERCEL",
-    "region": "GKD",
+    "region": "NZE",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-21",
+    "dateFin": "2025-10-23",
     "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Guéckédou"
-  },
-  {
-    "nom": "Drive Test Beyla 2025-Q4",
-    "type": "DRIVE_TEST",
-    "operateur": "INTERCEL",
-    "region": "BLA",
-    "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-29",
-    "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL Beyla"
-  },
-  {
-    "nom": "Drive Test N'Zérékoré 2025-Q4",
-    "type": "DRIVE_TEST",
-    "operateur": "INTERCEL",
-    "region": "ZKR",
-    "dateDebut": "2025-10-01",
-    "dateFin": "2025-11-03",
-    "statut": "TERMINEE",
-    "responsable": "Équipe INTERCEL N'Zérékoré"
+    "responsable": "Equipe Intercel Guinée"
   }
 ]

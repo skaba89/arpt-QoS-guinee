@@ -192,3 +192,28 @@ Stage Summary:
 - Server is now stable and serving the ONIT-PNG application with theme toggle (light/dark/system)
 - Both preview URLs are accessible: space.chatglm.site and space-z.ai
 - All API endpoints working: health (200), scoring (200), map (200), users (401)
+---
+Task ID: quarterly-data-generation
+Agent: Main Agent
+Task: Supprimer les données existantes et créer les fichiers de données trimestrielles 2025 pour import manuel
+
+Work Log:
+- Reset database with prisma migrate reset + db push + seed-minimal.ts
+- Added 8 missing regions to reach 16 CNT regions (CYA, KDR, MLI, DLB, KDG, SGR, GKD, BLA)
+- Stored API key SHA-256 hashes in Operateur.cleApi for all 4 operators
+- Created generate-quarterly-data.ts script with realistic Guinea QoS data profiles
+- Generated 3 format types per measurement set: admin CSV, prestataire CSV, API JSON
+- Fixed RF metric generation (dead zones should have worse signal, not better)
+- Fixed JSON format for API compatibility: wrapped in {mesures:[...]}/{scores:[...]}, removed null fields, added campagneNom
+- Fixed alert type mapping (ZONE_BLANCHE, DEGRADATION, NON_CONFORMITE instead of invalid types)
+- Tested full import via API Prestataire: 1191 mesures, 16 scores, 16 campagnes created
+- Cleared database for fresh start so user can import themselves
+- Updated import scripts (import-par-api.sh, import-par-admin.sh)
+- Updated GUIDE-IMPORT.md with complete instructions
+
+Stage Summary:
+- Database is clean: 0 mesures, 0 scores, 0 campagnes, 0 alertes
+- Infrastructure preserved: 4 operateurs, 16 regions, 11 users, 9 roles
+- API keys stored and validated: onit-ORANGE-..., onit-MTN-..., onit-CELCOM-..., onit-INTERCEL-...
+- Data files in /home/z/my-project/download/donnees-operateurs-2025/ (107 files)
+- All import methods verified working: API Prestataire, Admin session, scripts

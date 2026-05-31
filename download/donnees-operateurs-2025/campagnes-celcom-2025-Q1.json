@@ -1,162 +1,82 @@
 [
   {
-    "nom": "Drive Test Conakry 2025-Q1",
+    "nom": "Campagne Drive Test Celcom Guinée Conakry 2025-Q1",
     "type": "DRIVE_TEST",
     "operateur": "CELCOM",
     "region": "CON",
     "dateDebut": "2025-01-01",
-    "dateFin": "2025-02-13",
+    "dateFin": "2025-01-29",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Conakry"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Coyah 2025-Q1",
+    "nom": "Campagne Drive Test Celcom Guinée Coyah 2025-Q1",
     "type": "DRIVE_TEST",
     "operateur": "CELCOM",
     "region": "CYA",
     "dateDebut": "2025-01-01",
-    "dateFin": "2025-01-24",
+    "dateFin": "2025-02-01",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Coyah"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Kindia 2025-Q1",
+    "nom": "Campagne Drive Test Celcom Guinée Kindia 2025-Q1",
     "type": "DRIVE_TEST",
     "operateur": "CELCOM",
     "region": "KIN",
     "dateDebut": "2025-01-01",
-    "dateFin": "2025-01-27",
+    "dateFin": "2025-01-21",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Kindia"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Boké 2025-Q1",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "BKE",
-    "dateDebut": "2025-01-01",
-    "dateFin": "2025-02-02",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Boké"
-  },
-  {
-    "nom": "Drive Test Koundara 2025-Q1",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "KDR",
-    "dateDebut": "2025-01-01",
-    "dateFin": "2025-02-12",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Koundara"
-  },
-  {
-    "nom": "Drive Test Labé 2025-Q1",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "LBE",
-    "dateDebut": "2025-01-01",
-    "dateFin": "2025-02-09",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Labé"
-  },
-  {
-    "nom": "Drive Test Mali 2025-Q1",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "MLI",
-    "dateDebut": "2025-01-01",
-    "dateFin": "2025-02-15",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Mali"
-  },
-  {
-    "nom": "Drive Test Dalaba 2025-Q1",
+    "nom": "Campagne Drive Test Celcom Guinée Dalaba 2025-Q1",
     "type": "DRIVE_TEST",
     "operateur": "CELCOM",
     "region": "DLB",
     "dateDebut": "2025-01-01",
-    "dateFin": "2025-02-14",
+    "dateFin": "2025-01-22",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Dalaba"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Mamou 2025-Q1",
+    "nom": "Campagne Drive Test Celcom Guinée Mamou 2025-Q1",
     "type": "DRIVE_TEST",
     "operateur": "CELCOM",
-    "region": "MMU",
+    "region": "MAM",
     "dateDebut": "2025-01-01",
-    "dateFin": "2025-01-29",
+    "dateFin": "2025-01-19",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Mamou"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Faranah 2025-Q1",
+    "nom": "Campagne Drive Test Celcom Guinée Kankan 2025-Q1",
     "type": "DRIVE_TEST",
     "operateur": "CELCOM",
-    "region": "FRN",
+    "region": "KAN",
     "dateDebut": "2025-01-01",
-    "dateFin": "2025-01-30",
+    "dateFin": "2025-02-02",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Faranah"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Kissidougou 2025-Q1",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "KDG",
-    "dateDebut": "2025-01-01",
-    "dateFin": "2025-01-18",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Kissidougou"
-  },
-  {
-    "nom": "Drive Test Kankan 2025-Q1",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "KKA",
-    "dateDebut": "2025-01-01",
-    "dateFin": "2025-02-14",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Kankan"
-  },
-  {
-    "nom": "Drive Test Siguiri 2025-Q1",
+    "nom": "Campagne Drive Test Celcom Guinée Siguiri 2025-Q1",
     "type": "DRIVE_TEST",
     "operateur": "CELCOM",
     "region": "SGR",
     "dateDebut": "2025-01-01",
-    "dateFin": "2025-02-11",
+    "dateFin": "2025-01-23",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Siguiri"
+    "responsable": "Equipe Celcom Guinée"
   },
   {
-    "nom": "Drive Test Guéckédou 2025-Q1",
+    "nom": "Campagne Drive Test Celcom Guinée N'Zérékoré 2025-Q1",
     "type": "DRIVE_TEST",
     "operateur": "CELCOM",
-    "region": "GKD",
+    "region": "NZE",
     "dateDebut": "2025-01-01",
-    "dateFin": "2025-02-08",
+    "dateFin": "2025-01-27",
     "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Guéckédou"
-  },
-  {
-    "nom": "Drive Test Beyla 2025-Q1",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "BLA",
-    "dateDebut": "2025-01-01",
-    "dateFin": "2025-01-20",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM Beyla"
-  },
-  {
-    "nom": "Drive Test N'Zérékoré 2025-Q1",
-    "type": "DRIVE_TEST",
-    "operateur": "CELCOM",
-    "region": "ZKR",
-    "dateDebut": "2025-01-01",
-    "dateFin": "2025-01-24",
-    "statut": "TERMINEE",
-    "responsable": "Équipe CELCOM N'Zérékoré"
+    "responsable": "Equipe Celcom Guinée"
   }
 ]

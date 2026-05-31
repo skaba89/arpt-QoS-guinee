@@ -1,162 +1,152 @@
 [
   {
-    "nom": "Drive Test Conakry 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Conakry 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
     "region": "CON",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-25",
+    "dateFin": "2025-10-21",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Conakry"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Coyah 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Coyah 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
     "region": "CYA",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-11-15",
+    "dateFin": "2025-10-24",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Coyah"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Kindia 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Kindia 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
     "region": "KIN",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-26",
+    "dateFin": "2025-10-28",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Kindia"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Boké 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Boké 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
-    "region": "BKE",
+    "region": "BOK",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-11-11",
+    "dateFin": "2025-10-28",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Boké"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Koundara 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Koundara 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
     "region": "KDR",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-26",
+    "dateFin": "2025-10-20",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Koundara"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Labé 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Labé 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
-    "region": "LBE",
+    "region": "LAB",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-11-02",
+    "dateFin": "2025-11-03",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Labé"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Mali 2025-Q4",
-    "type": "DRIVE_TEST",
-    "operateur": "ORANGE",
-    "region": "MLI",
-    "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-21",
-    "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Mali"
-  },
-  {
-    "nom": "Drive Test Dalaba 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Dalaba 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
     "region": "DLB",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-11-14",
+    "dateFin": "2025-11-04",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Dalaba"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Mamou 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Mamou 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
-    "region": "MMU",
+    "region": "MAM",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-24",
+    "dateFin": "2025-10-23",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Mamou"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Faranah 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Faranah 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
-    "region": "FRN",
+    "region": "FAR",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-28",
+    "dateFin": "2025-10-26",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Faranah"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Kissidougou 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Kissidougou 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
     "region": "KDG",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-11-14",
+    "dateFin": "2025-10-29",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Kissidougou"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Kankan 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Kankan 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
-    "region": "KKA",
+    "region": "KAN",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-19",
+    "dateFin": "2025-10-21",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Kankan"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Siguiri 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Siguiri 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
     "region": "SGR",
     "dateDebut": "2025-10-01",
     "dateFin": "2025-10-29",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Siguiri"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Guéckédou 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Guéckédou 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
     "region": "GKD",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-11-02",
+    "dateFin": "2025-10-16",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Guéckédou"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test Beyla 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée Beyla 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
     "region": "BLA",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-15",
+    "dateFin": "2025-10-31",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE Beyla"
+    "responsable": "Equipe Orange Guinée"
   },
   {
-    "nom": "Drive Test N'Zérékoré 2025-Q4",
+    "nom": "Campagne Drive Test Orange Guinée N'Zérékoré 2025-Q4",
     "type": "DRIVE_TEST",
     "operateur": "ORANGE",
-    "region": "ZKR",
+    "region": "NZE",
     "dateDebut": "2025-10-01",
-    "dateFin": "2025-10-24",
+    "dateFin": "2025-10-31",
     "statut": "TERMINEE",
-    "responsable": "Équipe ORANGE N'Zérékoré"
+    "responsable": "Equipe Orange Guinée"
   }
 ]

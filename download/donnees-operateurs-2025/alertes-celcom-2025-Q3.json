@@ -1,0 +1,38 @@
+[
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "HAUTE",
+    "message": "Couverture insuffisante détectée pour Celcom Guinée dans la région de Conakry",
+    "details": "{\"kpi\":\"rsrp\",\"valeur\":108.07,\"seuil\":52.16,\"ecart\":47.69}",
+    "operatorCode": "CELCOM",
+    "regionCode": "CON",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "HAUTE",
+    "message": "Indisponibilité prolongée du réseau Celcom Guinée dans la région de Coyah",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":156.85,\"seuil\":75.02,\"ecart\":31.21}",
+    "operatorCode": "CELCOM",
+    "regionCode": "CYA",
+    "isResolved": true
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "MOYENNE",
+    "message": "Dégradation significative de la qualité de service pour Celcom Guinée dans la région de Kindia",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":155.8,\"seuil\":86.14,\"ecart\":19.07}",
+    "operatorCode": "CELCOM",
+    "regionCode": "KIN",
+    "isResolved": true
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "HAUTE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour Celcom Guinée dans la région de Boké",
+    "details": "{\"kpi\":\"latence\",\"valeur\":124.03,\"seuil\":62.16,\"ecart\":21.72}",
+    "operatorCode": "CELCOM",
+    "regionCode": "BOK",
+    "isResolved": true
+  }
+]

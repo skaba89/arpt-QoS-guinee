@@ -1,0 +1,20 @@
+[
+  {
+    "type": "DEGRADATION",
+    "severity": "BASSE",
+    "message": "Dégradation significative de la qualité de service pour MTN Guinée dans la région de Conakry",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":133.56,\"seuil\":56.34,\"ecart\":48.67}",
+    "operatorCode": "MTN",
+    "regionCode": "CON",
+    "isResolved": true
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "MOYENNE",
+    "message": "Dégradation significative de la qualité de service pour MTN Guinée dans la région de Kindia",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":110.78,\"seuil\":82.06,\"ecart\":14.6}",
+    "operatorCode": "MTN",
+    "regionCode": "KIN",
+    "isResolved": true
+  }
+]

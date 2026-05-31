@@ -1,0 +1,20 @@
+[
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "MOYENNE",
+    "message": "Le seuil réglementaire de QoS est dépassé pour MTN Guinée dans la région de Kindia",
+    "details": "{\"kpi\":\"latence\",\"valeur\":43.45,\"seuil\":79.69,\"ecart\":34.38}",
+    "operatorCode": "MTN",
+    "regionCode": "KIN",
+    "isResolved": true
+  },
+  {
+    "type": "NON_CONFORMITE",
+    "severity": "MOYENNE",
+    "message": "Indisponibilité prolongée du réseau MTN Guinée dans la région de Faranah",
+    "details": "{\"kpi\":\"scoreQoE\",\"valeur\":198.87,\"seuil\":87.49,\"ecart\":27.12}",
+    "operatorCode": "MTN",
+    "regionCode": "FAR",
+    "isResolved": true
+  }
+]
