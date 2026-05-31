@@ -1,0 +1,13 @@
+{
+  "operateur": "MTN",
+  "operateurNom": "MTN Guinée",
+  "periode": "2025-Q4",
+  "dateDebut": "2025-10-01",
+  "dateFin": "2025-12-31",
+  "scoreGlobal": 72,
+  "scoreCouverture": 70,
+  "scoreQoS": 76,
+  "scoreQoE": 74,
+  "scoreConformite": 71,
+  "recommandation": "Améliorer la couverture en région forestière"
+}

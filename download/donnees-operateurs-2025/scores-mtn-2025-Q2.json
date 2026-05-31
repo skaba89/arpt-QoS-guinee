@@ -1,0 +1,13 @@
+{
+  "operateur": "MTN",
+  "operateurNom": "MTN Guinée",
+  "periode": "2025-Q2",
+  "dateDebut": "2025-04-01",
+  "dateFin": "2025-06-30",
+  "scoreGlobal": 65,
+  "scoreCouverture": 62,
+  "scoreQoS": 69,
+  "scoreQoE": 67,
+  "scoreConformite": 65,
+  "recommandation": "Accélérer le déploiement 4G en zone semi-urbaine"
+}

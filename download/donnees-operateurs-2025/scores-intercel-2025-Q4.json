@@ -1,0 +1,13 @@
+{
+  "operateur": "INTERCEL",
+  "operateurNom": "Intercel Guinée",
+  "periode": "2025-Q4",
+  "dateDebut": "2025-10-01",
+  "dateFin": "2025-12-31",
+  "scoreGlobal": 38,
+  "scoreCouverture": 32,
+  "scoreQoS": 46,
+  "scoreQoE": 41,
+  "scoreConformite": 37,
+  "recommandation": "MISE EN DEMEURE : Restructuration complète du réseau requise"
+}

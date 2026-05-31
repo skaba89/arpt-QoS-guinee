@@ -1,0 +1,13 @@
+{
+  "operateur": "CELCOM",
+  "operateurNom": "Celcom Guinée",
+  "periode": "2025-Q1",
+  "dateDebut": "2025-01-01",
+  "dateFin": "2025-03-31",
+  "scoreGlobal": 42,
+  "scoreCouverture": 38,
+  "scoreQoS": 48,
+  "scoreQoE": 44,
+  "scoreConformite": 40,
+  "recommandation": "Présenter un plan d'investissement crédible à l'ARPT sous 30 jours"
+}

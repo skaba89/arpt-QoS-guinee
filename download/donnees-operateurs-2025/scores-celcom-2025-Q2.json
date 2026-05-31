@@ -1,0 +1,13 @@
+{
+  "operateur": "CELCOM",
+  "operateurNom": "Celcom Guinée",
+  "periode": "2025-Q2",
+  "dateDebut": "2025-04-01",
+  "dateFin": "2025-06-30",
+  "scoreGlobal": 45,
+  "scoreCouverture": 42,
+  "scoreQoS": 52,
+  "scoreQoE": 48,
+  "scoreConformite": 44,
+  "recommandation": "Résorber les zones blanches à Labé, Dalaba et Faranah"
+}

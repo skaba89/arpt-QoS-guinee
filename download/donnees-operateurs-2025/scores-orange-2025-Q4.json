@@ -1,0 +1,13 @@
+{
+  "operateur": "ORANGE",
+  "operateurNom": "Orange Guinée",
+  "periode": "2025-Q4",
+  "dateDebut": "2025-10-01",
+  "dateFin": "2025-12-31",
+  "scoreGlobal": 82,
+  "scoreCouverture": 80,
+  "scoreQoS": 85,
+  "scoreQoE": 84,
+  "scoreConformite": 82,
+  "recommandation": "Maintenir les investissements en infrastructure 4G+"
+}

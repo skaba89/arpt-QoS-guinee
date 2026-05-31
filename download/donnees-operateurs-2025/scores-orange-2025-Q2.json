@@ -1,0 +1,13 @@
+{
+  "operateur": "ORANGE",
+  "operateurNom": "Orange Guinée",
+  "periode": "2025-Q2",
+  "dateDebut": "2025-04-01",
+  "dateFin": "2025-06-30",
+  "scoreGlobal": 75,
+  "scoreCouverture": 73,
+  "scoreQoS": 78,
+  "scoreQoE": 77,
+  "scoreConformite": 74,
+  "recommandation": "Déployer la 5G à Conakry en 2026"
+}

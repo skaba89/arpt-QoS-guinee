@@ -1,0 +1,13 @@
+{
+  "operateur": "CELCOM",
+  "operateurNom": "Celcom Guinée",
+  "periode": "2025-Q4",
+  "dateDebut": "2025-10-01",
+  "dateFin": "2025-12-31",
+  "scoreGlobal": 55,
+  "scoreCouverture": 50,
+  "scoreQoS": 60,
+  "scoreQoE": 57,
+  "scoreConformite": 52,
+  "recommandation": "Plan de déploiement URGENT en zone rurale"
+}

@@ -1,0 +1,13 @@
+{
+  "operateur": "INTERCEL",
+  "operateurNom": "Intercel Guinée",
+  "periode": "2025-Q3",
+  "dateDebut": "2025-07-01",
+  "dateFin": "2025-09-30",
+  "scoreGlobal": 33,
+  "scoreCouverture": 28,
+  "scoreQoS": 42,
+  "scoreQoE": 38,
+  "scoreConformite": 33,
+  "recommandation": "Extension géographique PRIORITAIRE — 85% du territoire non couvert"
+}

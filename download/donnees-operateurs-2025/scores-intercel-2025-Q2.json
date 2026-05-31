@@ -1,0 +1,13 @@
+{
+  "operateur": "INTERCEL",
+  "operateurNom": "Intercel Guinée",
+  "periode": "2025-Q2",
+  "dateDebut": "2025-04-01",
+  "dateFin": "2025-06-30",
+  "scoreGlobal": 30,
+  "scoreCouverture": 25,
+  "scoreQoS": 38,
+  "scoreQoE": 35,
+  "scoreConformite": 30,
+  "recommandation": "Remplacement des équipements obsolètes (2G vers minimum 3G)"
+}

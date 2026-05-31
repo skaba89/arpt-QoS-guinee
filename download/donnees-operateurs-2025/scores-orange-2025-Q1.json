@@ -1,0 +1,13 @@
+{
+  "operateur": "ORANGE",
+  "operateurNom": "Orange Guinée",
+  "periode": "2025-Q1",
+  "dateDebut": "2025-01-01",
+  "dateFin": "2025-03-31",
+  "scoreGlobal": 72,
+  "scoreCouverture": 70,
+  "scoreQoS": 74,
+  "scoreQoE": 73,
+  "scoreConformite": 71,
+  "recommandation": "Poursuivre la politique tarifaire compétitive"
+}

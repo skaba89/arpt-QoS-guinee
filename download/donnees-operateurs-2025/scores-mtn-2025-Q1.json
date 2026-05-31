@@ -1,0 +1,13 @@
+{
+  "operateur": "MTN",
+  "operateurNom": "MTN Guinée",
+  "periode": "2025-Q1",
+  "dateDebut": "2025-01-01",
+  "dateFin": "2025-03-31",
+  "scoreGlobal": 62,
+  "scoreCouverture": 58,
+  "scoreQoS": 65,
+  "scoreQoE": 63,
+  "scoreConformite": 61,
+  "recommandation": "Renforcer la redondance du réseau à Conakry"
+}
