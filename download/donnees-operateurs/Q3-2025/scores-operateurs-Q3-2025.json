@@ -1,0 +1,46 @@
+{
+  "description": "Scores opérateurs T3 2025 (Juillet - Septembre)",
+  "type": "scoring_operateur",
+  "scores": [
+    {
+      "operateur": "ORANGE",
+      "periode": "2025-Q3",
+      "scoreGlobal": 78.6,
+      "scoreCouverture": 79,
+      "scoreQoS": 79,
+      "scoreQoE": 71,
+      "scoreConformite": 87,
+      "recommandation": "Performance acceptable mais des améliorations sont nécessaires. Priorité: renforcer la couverture en zone rurale et améliorer la QoE."
+    },
+    {
+      "operateur": "MTN",
+      "periode": "2025-Q3",
+      "scoreGlobal": 71.2,
+      "scoreCouverture": 76,
+      "scoreQoS": 69,
+      "scoreQoE": 62,
+      "scoreConformite": 81,
+      "recommandation": "Performance acceptable mais des améliorations sont nécessaires. Priorité: renforcer la couverture en zone rurale et améliorer la QoE."
+    },
+    {
+      "operateur": "CELCOM",
+      "periode": "2025-Q3",
+      "scoreGlobal": 52.8,
+      "scoreCouverture": 53,
+      "scoreQoS": 53,
+      "scoreQoE": 42,
+      "scoreConformite": 66,
+      "recommandation": "Performance critique. Sanctions réglementaires recommandées. Plan de redressement exigé sous 90 jours."
+    },
+    {
+      "operateur": "INTERCEL",
+      "periode": "2025-Q3",
+      "scoreGlobal": 40.6,
+      "scoreCouverture": 41,
+      "scoreQoS": 41,
+      "scoreQoE": 30,
+      "scoreConformite": 53,
+      "recommandation": "Performance critique. Sanctions réglementaires recommandées. Plan de redressement exigé sous 90 jours."
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "ORANGE",
+    "region": "FAR",
+    "message": "Dégradation significative du réseau ORANGE à Faranah: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -313.7 dBm (seuil: -100 dBm). Débit moyen: 7.1 Mbps. Impact estimé: 74% des abonnés de la zone.",
+    "createdAt": "2025-05-04T15:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "MTN",
+    "region": "FAR",
+    "message": "Dégradation significative du réseau MTN à Faranah: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -313.7 dBm (seuil: -100 dBm). Débit moyen: 5.6 Mbps. Impact estimé: 74% des abonnés de la zone.",
+    "createdAt": "2025-05-16T08:00:00Z"
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateur": "MTN",
+    "region": "MAM",
+    "message": "Zone blanche détectée: absence de signal MTN dans la région de Mamou. Aucune couverture mobile ni data sur plusieurs localités.",
+    "details": "RSRP mesuré: -115 à -125 dBm. Taux de couverture: 12%. Localités affectées détectées par drive test.",
+    "createdAt": "2025-04-12T15:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "CELCOM",
+    "region": "BOK",
+    "message": "Dégradation significative du réseau CELCOM à Boké: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -235.3 dBm (seuil: -100 dBm). Débit moyen: 4.8 Mbps. Impact estimé: 66% des abonnés de la zone.",
+    "createdAt": "2025-05-24T11:00:00Z"
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateur": "CELCOM",
+    "region": "LAB",
+    "message": "Zone blanche détectée: absence de signal CELCOM dans la région de Labé. Aucune couverture mobile ni data sur plusieurs localités.",
+    "details": "RSRP mesuré: -115 à -125 dBm. Taux de couverture: 17%. Localités affectées détectées par drive test.",
+    "createdAt": "2025-05-20T15:00:00Z"
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateur": "CELCOM",
+    "region": "FAR",
+    "message": "Zone blanche détectée: absence de signal CELCOM dans la région de Faranah. Aucune couverture mobile ni data sur plusieurs localités.",
+    "details": "RSRP mesuré: -115 à -125 dBm. Taux de couverture: 10%. Localités affectées détectées par drive test.",
+    "createdAt": "2025-04-14T18:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "INTERCEL",
+    "region": "BOK",
+    "message": "Dégradation significative du réseau INTERCEL à Boké: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -235.3 dBm (seuil: -100 dBm). Débit moyen: 2.7 Mbps. Impact estimé: 66% des abonnés de la zone.",
+    "createdAt": "2025-05-27T14:00:00Z"
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateur": "INTERCEL",
+    "region": "LAB",
+    "message": "Zone blanche détectée: absence de signal INTERCEL dans la région de Labé. Aucune couverture mobile ni data sur plusieurs localités.",
+    "details": "RSRP mesuré: -115 à -125 dBm. Taux de couverture: 17%. Localités affectées détectées par drive test.",
+    "createdAt": "2025-05-10T12:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "INTERCEL",
+    "region": "NZE",
+    "message": "Dégradation significative du réseau INTERCEL à Nzérékoré: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -209.2 dBm (seuil: -100 dBm). Débit moyen: 3.1 Mbps. Impact estimé: 62% des abonnés de la zone.",
+    "createdAt": "2025-07-02T18:00:00Z"
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateur": "INTERCEL",
+    "region": "FAR",
+    "message": "Zone blanche détectée: absence de signal INTERCEL dans la région de Faranah. Aucune couverture mobile ni data sur plusieurs localités.",
+    "details": "RSRP mesuré: -115 à -125 dBm. Taux de couverture: 10%. Localités affectées détectées par drive test.",
+    "createdAt": "2025-05-23T10:00:00Z"
+  }
+]

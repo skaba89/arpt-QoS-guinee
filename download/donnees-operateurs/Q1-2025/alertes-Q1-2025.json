@@ -1,0 +1,74 @@
+[
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "ORANGE",
+    "region": "LAB",
+    "message": "Dégradation significative du réseau ORANGE à Labé: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -160.0 dBm (seuil: -100 dBm). Débit moyen: 14.0 Mbps. Impact estimé: 50% des abonnés de la zone.",
+    "createdAt": "2025-03-13T11:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "ORANGE",
+    "region": "FAR",
+    "message": "Dégradation significative du réseau ORANGE à Faranah: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -266.7 dBm (seuil: -100 dBm). Débit moyen: 8.4 Mbps. Impact estimé: 70% des abonnés de la zone.",
+    "createdAt": "2025-03-17T10:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "MOYENNE",
+    "operateur": "MTN",
+    "region": "KIN",
+    "message": "Dégradation significative du réseau MTN à Kindia: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -114.3 dBm (seuil: -100 dBm). Débit moyen: 15.4 Mbps. Impact estimé: 30% des abonnés de la zone.",
+    "createdAt": "2025-03-05T12:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "MOYENNE",
+    "operateur": "MTN",
+    "region": "KAN",
+    "message": "Dégradation significative du réseau MTN à Kankan: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -133.3 dBm (seuil: -100 dBm). Débit moyen: 13.2 Mbps. Impact estimé: 40% des abonnés de la zone.",
+    "createdAt": "2025-01-20T15:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "MOYENNE",
+    "operateur": "CELCOM",
+    "region": "KIN",
+    "message": "Dégradation significative du réseau CELCOM à Kindia: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -114.3 dBm (seuil: -100 dBm). Débit moyen: 9.8 Mbps. Impact estimé: 30% des abonnés de la zone.",
+    "createdAt": "2025-03-07T14:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "CELCOM",
+    "region": "MAM",
+    "message": "Dégradation significative du réseau CELCOM à Mamou: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -228.6 dBm (seuil: -100 dBm). Débit moyen: 4.9 Mbps. Impact estimé: 65% des abonnés de la zone.",
+    "createdAt": "2025-02-01T16:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "HAUTE",
+    "operateur": "INTERCEL",
+    "region": "KIN",
+    "message": "Dégradation significative du réseau INTERCEL à Kindia: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -114.3 dBm (seuil: -100 dBm). Débit moyen: 5.6 Mbps. Impact estimé: 30% des abonnés de la zone.",
+    "createdAt": "2025-04-09T17:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "INTERCEL",
+    "region": "BOK",
+    "message": "Dégradation significative du réseau INTERCEL à Boké: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -200.0 dBm (seuil: -100 dBm). Débit moyen: 3.2 Mbps. Impact estimé: 60% des abonnés de la zone.",
+    "createdAt": "2025-03-26T14:00:00Z"
+  }
+]

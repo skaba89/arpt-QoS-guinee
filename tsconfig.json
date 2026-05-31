@@ -44,6 +44,7 @@
     "skills",
     "agent-ctx",
     "e2e",
+    "scripts",
     "playwright.config.ts"
   ]
 }

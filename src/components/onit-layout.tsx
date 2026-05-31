@@ -23,6 +23,7 @@ import {
   Info,
   XCircle,
   Zap,
+  Upload,
 } from 'lucide-react';
 import { DashboardDG } from './dashboard-dg';
 import { DashboardQoS } from './dashboard-qos';
@@ -33,6 +34,7 @@ import { DashboardReports } from './dashboard-reports';
 import { DashboardPublic } from './dashboard-public';
 import { DashboardCyber } from './dashboard-cyber';
 import { DashboardAdmin } from './dashboard-admin';
+import { DataImport } from './data-import';
 import { ErrorBoundary } from './error-boundary';
 import { UserMenu } from './user-menu';
 import { ThemeToggle } from './theme-toggle';
@@ -59,6 +61,8 @@ const navTabs: NavTab[] = [
   { id: 'scoring', label: 'Scoring Opérateurs', icon: 'Award', requireAuth: true, minRole: null, section: 'ANALYSE' },
   { id: 'audit', label: 'Audit Terrain', icon: 'ClipboardCheck', requireAuth: true, minRole: null, section: 'ANALYSE' },
   { id: 'reports', label: 'Rapports', icon: 'FileText', requireAuth: true, minRole: null, section: 'ANALYSE' },
+  // DONNÉES
+  { id: 'import', label: 'Import Données', icon: 'Upload', requireAuth: true, minRole: null, section: 'DONNÉES' },
   // ADMINISTRATION
   { id: 'cyber', label: 'Cybersécurité', icon: 'Shield', requireAuth: true, minRole: 'DIRECTEUR_TECHNIQUE', section: 'ADMINISTRATION' },
   { id: 'admin', label: 'Administration', icon: 'Users', requireAuth: true, minRole: 'SUPER_ADMIN', section: 'ADMINISTRATION' },
@@ -66,20 +70,21 @@ const navTabs: NavTab[] = [
   { id: 'public', label: 'Portail Public', icon: 'Globe', requireAuth: false, minRole: null, section: 'PUBLIC' },
 ];
 
-const sectionOrder = ['SUPERVISION', 'ANALYSE', 'ADMINISTRATION', 'PUBLIC'];
+const sectionOrder = ['SUPERVISION', 'ANALYSE', 'DONNÉES', 'ADMINISTRATION', 'PUBLIC'];
 
 const sectionDescriptions: Record<string, string> = {
   SUPERVISION: 'Temps réel',
   ANALYSE: 'Données & insights',
+  DONNÉES: 'Import & alimentation',
   ADMINISTRATION: 'Gestion & sécurité',
   PUBLIC: 'Portail citoyen',
 };
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  LayoutDashboard, Activity, Map, Award, ClipboardCheck, FileText, Globe, Shield, Users,
+  LayoutDashboard, Activity, Map, Award, ClipboardCheck, FileText, Globe, Shield, Users, Upload,
 };
 
-type TabId = 'dashboard' | 'qos' | 'sig' | 'scoring' | 'audit' | 'reports' | 'public' | 'cyber' | 'admin';
+type TabId = 'dashboard' | 'qos' | 'sig' | 'scoring' | 'audit' | 'reports' | 'import' | 'public' | 'cyber' | 'admin';
 
 const dashboardComponents: Record<string, React.ComponentType> = {
   dashboard: DashboardDG,
@@ -88,6 +93,7 @@ const dashboardComponents: Record<string, React.ComponentType> = {
   scoring: DashboardScoring,
   audit: DashboardAudit,
   reports: DashboardReports,
+  import: DataImport,
   public: DashboardPublic,
   cyber: DashboardCyber,
   admin: DashboardAdmin,

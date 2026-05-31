@@ -1,0 +1,191 @@
+[
+  {
+    "type": "DEGRADATION",
+    "severity": "HAUTE",
+    "operateur": "ORANGE",
+    "region": "KIN",
+    "message": "Dégradation significative du réseau ORANGE à Kindia: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -124.2 dBm (seuil: -100 dBm). Débit moyen: 18.0 Mbps. Impact estimé: 36% des abonnés de la zone.",
+    "createdAt": "2025-09-18T17:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "ORANGE",
+    "region": "BOK",
+    "message": "Dégradation significative du réseau ORANGE à Boké: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -266.7 dBm (seuil: -100 dBm). Débit moyen: 8.4 Mbps. Impact estimé: 70% des abonnés de la zone.",
+    "createdAt": "2025-07-31T14:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "ORANGE",
+    "region": "LAB",
+    "message": "Dégradation significative du réseau ORANGE à Labé: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -213.3 dBm (seuil: -100 dBm). Débit moyen: 10.5 Mbps. Impact estimé: 62% des abonnés de la zone.",
+    "createdAt": "2025-08-24T08:00:00Z"
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateur": "ORANGE",
+    "region": "NZE",
+    "message": "Zone blanche détectée: absence de signal ORANGE dans la région de Nzérékoré. Aucune couverture mobile ni data sur plusieurs localités.",
+    "details": "RSRP mesuré: -115 à -125 dBm. Taux de couverture: 14%. Localités affectées détectées par drive test.",
+    "createdAt": "2025-08-27T16:00:00Z"
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "BASSE",
+    "operateur": "MTN",
+    "region": "CON",
+    "message": "Seuil réglementaire dépassé pour MTN à Conakry: débit descendant moyen en dessous de la valeur minimale requise.",
+    "details": "Débit moyen: 20.2 Mbps (seuil réglementaire: 5 Mbps). Latence: 46 ms. Score QoE: 68/100.",
+    "createdAt": "2025-08-14T08:00:00Z"
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "HAUTE",
+    "operateur": "MTN",
+    "region": "KIN",
+    "message": "Seuil réglementaire dépassé pour MTN à Kindia: débit descendant moyen en dessous de la valeur minimale requise.",
+    "details": "Débit moyen: 14.2 Mbps (seuil réglementaire: 5 Mbps). Latence: 65 ms. Score QoE: 47/100.",
+    "createdAt": "2025-08-02T08:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "MTN",
+    "region": "BOK",
+    "message": "Dégradation significative du réseau MTN à Boké: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -266.7 dBm (seuil: -100 dBm). Débit moyen: 6.6 Mbps. Impact estimé: 70% des abonnés de la zone.",
+    "createdAt": "2025-07-18T12:00:00Z"
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateur": "MTN",
+    "region": "NZE",
+    "message": "Zone blanche détectée: absence de signal MTN dans la région de Nzérékoré. Aucune couverture mobile ni data sur plusieurs localités.",
+    "details": "RSRP mesuré: -115 à -125 dBm. Taux de couverture: 14%. Localités affectées détectées par drive test.",
+    "createdAt": "2025-09-23T10:00:00Z"
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateur": "MTN",
+    "region": "FAR",
+    "message": "Zone blanche détectée: absence de signal MTN dans la région de Faranah. Aucune couverture mobile ni data sur plusieurs localités.",
+    "details": "RSRP mesuré: -115 à -125 dBm. Taux de couverture: 9%. Localités affectées détectées par drive test.",
+    "createdAt": "2025-08-20T18:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "MTN",
+    "region": "MAM",
+    "message": "Dégradation significative du réseau MTN à Mamou: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -304.8 dBm (seuil: -100 dBm). Débit moyen: 5.8 Mbps. Impact estimé: 74% des abonnés de la zone.",
+    "createdAt": "2025-07-13T15:00:00Z"
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "BASSE",
+    "operateur": "CELCOM",
+    "region": "CON",
+    "message": "Seuil réglementaire dépassé pour CELCOM à Conakry: débit descendant moyen en dessous de la valeur minimale requise.",
+    "details": "Débit moyen: 12.9 Mbps (seuil réglementaire: 5 Mbps). Latence: 63 ms. Score QoE: 55/100.",
+    "createdAt": "2025-07-30T18:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "CELCOM",
+    "region": "BOK",
+    "message": "Dégradation significative du réseau CELCOM à Boké: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -266.7 dBm (seuil: -100 dBm). Débit moyen: 4.2 Mbps. Impact estimé: 70% des abonnés de la zone.",
+    "createdAt": "2025-09-29T15:00:00Z"
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateur": "CELCOM",
+    "region": "FAR",
+    "message": "Zone blanche détectée: absence de signal CELCOM dans la région de Faranah. Aucune couverture mobile ni data sur plusieurs localités.",
+    "details": "RSRP mesuré: -115 à -125 dBm. Taux de couverture: 9%. Localités affectées détectées par drive test.",
+    "createdAt": "2025-08-06T10:00:00Z"
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateur": "CELCOM",
+    "region": "MAM",
+    "message": "Zone blanche détectée: absence de signal CELCOM dans la région de Mamou. Aucune couverture mobile ni data sur plusieurs localités.",
+    "details": "RSRP mesuré: -115 à -125 dBm. Taux de couverture: 10%. Localités affectées détectées par drive test.",
+    "createdAt": "2025-08-19T10:00:00Z"
+  },
+  {
+    "type": "SEUIL_DEPASSE",
+    "severity": "BASSE",
+    "operateur": "INTERCEL",
+    "region": "CON",
+    "message": "Seuil réglementaire dépassé pour INTERCEL à Conakry: débit descendant moyen en dessous de la valeur minimale requise.",
+    "details": "Débit moyen: 7.4 Mbps (seuil réglementaire: 5 Mbps). Latence: 85 ms. Score QoE: 44/100.",
+    "createdAt": "2025-08-03T10:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "MOYENNE",
+    "operateur": "INTERCEL",
+    "region": "KIN",
+    "message": "Dégradation significative du réseau INTERCEL à Kindia: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -124.2 dBm (seuil: -100 dBm). Débit moyen: 5.2 Mbps. Impact estimé: 36% des abonnés de la zone.",
+    "createdAt": "2025-08-18T12:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "INTERCEL",
+    "region": "BOK",
+    "message": "Dégradation significative du réseau INTERCEL à Boké: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -266.7 dBm (seuil: -100 dBm). Débit moyen: 2.4 Mbps. Impact estimé: 70% des abonnés de la zone.",
+    "createdAt": "2025-09-21T18:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "INTERCEL",
+    "region": "KAN",
+    "message": "Dégradation significative du réseau INTERCEL à Kankan: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -144.9 dBm (seuil: -100 dBm). Débit moyen: 4.4 Mbps. Impact estimé: 45% des abonnés de la zone.",
+    "createdAt": "2025-09-08T13:00:00Z"
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateur": "INTERCEL",
+    "region": "NZE",
+    "message": "Zone blanche détectée: absence de signal INTERCEL dans la région de Nzérékoré. Aucune couverture mobile ni data sur plusieurs localités.",
+    "details": "RSRP mesuré: -115 à -125 dBm. Taux de couverture: 14%. Localités affectées détectées par drive test.",
+    "createdAt": "2025-09-10T16:00:00Z"
+  },
+  {
+    "type": "DEGRADATION",
+    "severity": "CRITIQUE",
+    "operateur": "INTERCEL",
+    "region": "FAR",
+    "message": "Dégradation significative du réseau INTERCEL à Faranah: RSRP moyen inférieur au seuil réglementaire. Plusieurs quartiers affectés.",
+    "details": "RSRP moyen: -355.6 dBm (seuil: -100 dBm). Débit moyen: 1.8 Mbps. Impact estimé: 78% des abonnés de la zone.",
+    "createdAt": "2025-08-23T17:00:00Z"
+  },
+  {
+    "type": "ZONE_BLANCHE",
+    "severity": "CRITIQUE",
+    "operateur": "INTERCEL",
+    "region": "MAM",
+    "message": "Zone blanche détectée: absence de signal INTERCEL dans la région de Mamou. Aucune couverture mobile ni data sur plusieurs localités.",
+    "details": "RSRP mesuré: -115 à -125 dBm. Taux de couverture: 10%. Localités affectées détectées par drive test.",
+    "createdAt": "2025-07-15T15:00:00Z"
+  }
+]

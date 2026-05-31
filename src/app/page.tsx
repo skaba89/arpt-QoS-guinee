@@ -7,7 +7,7 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { LoginModal } from '@/components/login-modal';
 import { useSession } from 'next-auth/react';
 
-type TabId = 'dashboard' | 'qos' | 'sig' | 'scoring' | 'audit' | 'reports' | 'public' | 'cyber' | 'admin';
+type TabId = 'dashboard' | 'qos' | 'sig' | 'scoring' | 'audit' | 'reports' | 'import' | 'public' | 'cyber' | 'admin';
 
 // Use useSyncExternalStore for hydration-safe mounted detection
 const emptySubscribe = () => () => {};
